@@ -1,3 +1,5 @@
+import SpaceDefender from "./components/SpaceDefender";
+
 function App() {
   return (
     <div className="page">
@@ -17,6 +19,10 @@ function App() {
           Designing thoughtful software and documenting the journey.
         </p>
       </section>
+
+      <div style={{ maxWidth: 760, margin: "40px auto" }}>
+        <SpaceDefender />
+      </div>
 
       {/* ---------- Current Mission ---------- */}
       <section className="card">
