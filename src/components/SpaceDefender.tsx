@@ -1,13 +1,6 @@
 import { useEffect, useRef } from "react";
 
-// ---------- Load Assets ----------
-
-const asteroidSources = Object.values(
-  import.meta.glob("../assets/game/asteroids/*.png", {
-    eager: true,
-    import: "default",
-  }),
-) as string[];
+// ---------- Assets ----------
 
 const entitySources = Object.values(
   import.meta.glob("../assets/game/entities/*.png", {
@@ -30,13 +23,6 @@ const backgroundSource = Object.values(
   }),
 )[0] as string;
 
-const asteroidBlastSource = Object.values(
-  import.meta.glob("../assets/game/explosions/asteroid_blast.png", {
-    eager: true,
-    import: "default",
-  }),
-)[0] as string;
-
 const entityBlastSource = Object.values(
   import.meta.glob("../assets/game/explosions/entity_blast.png", {
     eager: true,
@@ -52,19 +38,12 @@ type Entity = {
   alive: boolean;
   exploding: boolean;
   explosionStart: number;
-  type: "entity" | "asteroid";
   sprite: HTMLImageElement;
-  rotation: number;
 };
 
 type Bullet = {
   x: number;
   y: number;
-};
-
-type SpriteAsset = {
-  image: HTMLImageElement;
-  type: "entity" | "asteroid";
 };
 
 export default function SpaceDefender() {
@@ -77,11 +56,9 @@ export default function SpaceDefender() {
     const DPR = window.devicePixelRatio || 1;
 
     const TILE_SIZE = 18;
+    const TEXT_TILE = 14;
     const TILE_PADDING = 1;
-
-    // ---------- Spawn Weights ----------
-    const ASTEROID_WEIGHT = 80;
-    const ENTITY_WEIGHT = 20;
+    const EXPLOSION_TIME = 300;
 
     const resize = () => {
       const width = canvas.clientWidth;
@@ -93,18 +70,29 @@ export default function SpaceDefender() {
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     };
 
-    let isPlaying = false;
+    // ---------- Images ----------
 
-    const ship = {
-      x: 180,
-      targetX: 180,
-      y: 360,
-    };
+    const entityImages = entitySources.map((src) => {
+      const img = new Image();
+      img.src = src;
+      return img;
+    });
 
-    let bullets: Bullet[] = [];
-    let aliens: Entity[] = [];
+    const shipImage = new Image();
+    shipImage.src = shipSource;
 
-    const LOGO = [{ text: "STICK" }, { text: "FORYOU" }];
+    const backgroundImage = new Image();
+    backgroundImage.src = backgroundSource;
+
+    const blastImage = new Image();
+    blastImage.src = entityBlastSource;
+
+    // ---------- Random Pixel Picker ----------
+
+    const nextSprite = () =>
+      entityImages[Math.floor(Math.random() * entityImages.length)];
+
+    // ---------- 5x5 Pixel Font ----------
 
     const FONT: Record<string, string[]> = {
       S: ["11111", "10000", "11110", "00001", "11111"],
@@ -119,129 +107,112 @@ export default function SpaceDefender() {
       U: ["10001", "10001", "10001", "10001", "11111"],
     };
 
-    // ---------- Images ----------
+    // ---------- Big Logo S (11 × 9) ----------
 
-    const asteroidAssets: SpriteAsset[] = asteroidSources.map((src) => {
-      const img = new Image();
-      img.src = src;
-      return { image: img, type: "asteroid" };
-    });
+    const BIG_S = [
+      "001111110",
+      "001111111",
+      "111000000",
+      "111000000",
+      "111111111",
+      "111111111", // extra middle row
+      "000000111",
+      "000000111",
+      "111111100",
+      "011111100",
+    ];
 
-    const entityAssets: SpriteAsset[] = entitySources.map((src) => {
-      const img = new Image();
-      img.src = src;
-      return { image: img, type: "entity" };
-    });
+    // ---------- Game State ----------
 
-    const shipImage = new Image();
-    shipImage.src = shipSource;
+    let aliens: Entity[] = [];
+    let bullets: Bullet[] = [];
+    let isPlaying = false;
+    let lastShot = 0;
 
-    const backgroundImage = new Image();
-    backgroundImage.src = backgroundSource;
-
-    const asteroidBlastImage = new Image();
-    asteroidBlastImage.src = asteroidBlastSource;
-
-    const entityBlastImage = new Image();
-    entityBlastImage.src = entityBlastSource;
-
-    // ---------- Shuffle ----------
-
-    const shuffle = <T,>(array: T[]) => {
-      const copy = [...array];
-
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
-      }
-
-      return copy;
+    const ship = {
+      x: 180,
+      targetX: 180,
+      y: 360,
     };
 
-    // ---------- Weighted Bag ----------
-
-    const buildWeightedBag = () => {
-      const bag: SpriteAsset[] = [];
-
-      const asteroidCopies = Math.round(ASTEROID_WEIGHT / 10);
-      const entityCopies = Math.round(ENTITY_WEIGHT / 10);
-
-      for (let i = 0; i < asteroidCopies; i++) {
-        bag.push(...asteroidAssets);
-      }
-
-      for (let i = 0; i < entityCopies; i++) {
-        bag.push(...entityAssets);
-      }
-
-      return shuffle(bag);
-    };
-
-    let spriteBag = buildWeightedBag();
-
-    const nextSprite = () => {
-      if (spriteBag.length === 0) {
-        spriteBag = buildWeightedBag();
-      }
-
-      return spriteBag.pop()!;
-    };
-
-    // ---------- Logo ----------
+    // ---------- Build StickForYou Logo ----------
 
     const createWave = () => {
       aliens = [];
 
       const width = canvas.clientWidth;
 
-      const base = TILE_SIZE;
-      const letterGap = 8;
-      const wordSpacing = 20;
+      const LEFT_WIDTH = 220;
+      const TEXT_START = LEFT_WIDTH + 10;
 
-      let currentY = 28;
+      // ===== BIG S =====
 
-      LOGO.forEach((line) => {
-        const size = base;
-        const step = size;
+      BIG_S.forEach((row, r) => {
+        [...row].forEach((pixel, c) => {
+          if (pixel === "1") {
+            aliens.push({
+              x: 24 + c * TILE_SIZE,
+              y: 30 + r * TILE_SIZE,
+              alive: true,
+              exploding: false,
+              explosionStart: 0,
+              sprite: nextSprite(),
+            });
+          }
+        });
+      });
 
-        const chars = line.text.split("");
+      const LETTER_GAP = 8;
+      const WORD_GAP = 30;
 
-        const formationWidth =
-          chars.length * 5 * step + (chars.length - 1) * letterGap;
+      const drawWord = (word: string, startX: number, y: number) => {
+        let cursor = startX;
 
-        let cursor = (width - formationWidth) / 2;
-
-        chars.forEach((char) => {
+        word.split("").forEach((char) => {
           const pattern = FONT[char];
 
           pattern.forEach((row, r) => {
             [...row].forEach((pixel, c) => {
               if (pixel === "1") {
-                const asset = nextSprite();
-
                 aliens.push({
-                  x: cursor + c * step,
-                  y: currentY + r * step,
-
+                  x: cursor + c * TEXT_TILE,
+                  y: y + r * TEXT_TILE,
                   alive: true,
                   exploding: false,
                   explosionStart: 0,
-
-                  type: asset.type,
-                  sprite: asset.image,
-
-                  rotation: Math.random() * Math.PI * 2,
+                  sprite: nextSprite(),
                 });
               }
             });
           });
 
-          cursor += 5 * step + letterGap;
+          cursor += 5 * TEXT_TILE + LETTER_GAP;
         });
 
-        currentY += 5 * step + wordSpacing;
-      });
+        return cursor;
+      };
+
+      // ===== STICK =====
+
+      const RIGHT_MARGIN = 20;
+      const textAreaWidth = width - TEXT_START - RIGHT_MARGIN;
+
+      // STICK
+      const stickWidth = 5 * 5 * TEXT_TILE + LETTER_GAP * 4;
+      const stickStart = TEXT_START + (textAreaWidth - stickWidth) / 2;
+      drawWord("STICK", stickStart, 30);
+
+      // FOR YOU
+      const forWidth = 3 * 5 * TEXT_TILE + LETTER_GAP * 2;
+      const youWidth = 3 * 5 * TEXT_TILE + LETTER_GAP * 2;
+      const totalWidth = forWidth + WORD_GAP + youWidth;
+
+      const bottomStart = TEXT_START + (textAreaWidth - totalWidth) / 2;
+      const afterFor = drawWord("FOR", bottomStart, 138);
+      drawWord("YOU", afterFor + WORD_GAP, 138);
     };
+
+    // ---------- Initial Setup ----------
 
     resize();
     createWave();
@@ -252,10 +223,7 @@ export default function SpaceDefender() {
     };
 
     window.addEventListener("resize", handleResize);
-
     // ---------- Controls ----------
-
-    let lastShot = 0;
 
     const moveShip = (clientX: number) => {
       const rect = canvas.getBoundingClientRect();
@@ -292,29 +260,16 @@ export default function SpaceDefender() {
 
       ctx.clearRect(0, 0, width, height);
 
-      // Background Image (Cover)
-      if (backgroundImage.complete) {
-        const scale = Math.max(
-          width / backgroundImage.width,
-          height / backgroundImage.height,
-        );
+      // ===== Background =====
 
-        const sw = width / scale;
-        const sh = height / scale;
+      ctx.drawImage(backgroundImage, 0, 0, width, height);
 
-        const sx = (backgroundImage.width - sw) / 2;
-        const sy = (backgroundImage.height - sh) / 2;
+      // ===== Ship Movement =====
 
-        ctx.drawImage(backgroundImage, sx, sy, sw, sh, 0, 0, width, height);
-      } else {
-        ctx.fillStyle = "#05070D";
-        ctx.fillRect(0, 0, width, height);
-      }
-
-      // Ship
       ship.x += (ship.targetX - ship.x) * 0.18;
 
-      // Fire
+      // ===== Auto Fire =====
+
       const FIRE_RATE = 37;
 
       if (isPlaying && time - lastShot > FIRE_RATE) {
@@ -326,7 +281,8 @@ export default function SpaceDefender() {
         lastShot = time;
       }
 
-      // Bullets
+      // ===== Bullets =====
+
       ctx.strokeStyle = "#60A5FA";
       ctx.lineWidth = 2;
 
@@ -341,33 +297,32 @@ export default function SpaceDefender() {
 
       bullets = bullets.filter((b) => b.y > -20);
 
-      // Aliens
+      // ===== Draw Pixels =====
+
       let aliveCount = 0;
 
       aliens.forEach((a) => {
         if (!a.alive) return;
 
+        aliveCount++;
+
+        // Explosion
         if (a.exploding) {
           const elapsed = time - a.explosionStart;
 
-          if (elapsed > 300) {
+          if (elapsed >= EXPLOSION_TIME) {
             a.alive = false;
             return;
           }
 
-          const blast =
-            a.type === "asteroid" ? asteroidBlastImage : entityBlastImage;
+          const SIZE = TILE_SIZE + 8;
 
-          const SIZE = 24;
+          ctx.drawImage(blastImage, a.x - SIZE / 2, a.y - SIZE / 2, SIZE, SIZE);
 
-          ctx.drawImage(blast, a.x - SIZE / 2, a.y - SIZE / 2, SIZE, SIZE);
-
-          aliveCount++;
           return;
         }
 
-        aliveCount++;
-
+        // Fit image inside tile
         const maxSize = TILE_SIZE - TILE_PADDING * 2;
 
         const aspect = a.sprite.width / a.sprite.height;
@@ -381,25 +336,17 @@ export default function SpaceDefender() {
           drawWidth = maxSize * aspect;
         }
 
-        ctx.save();
-        ctx.translate(a.x, a.y);
-
-        if (a.type === "asteroid") {
-          ctx.rotate(a.rotation);
-        }
-
         ctx.drawImage(
           a.sprite,
-          -drawWidth / 2,
-          -drawHeight / 2,
+          a.x - drawWidth / 2,
+          a.y - drawHeight / 2,
           drawWidth,
           drawHeight,
         );
-
-        ctx.restore();
       });
 
-      // Collision
+      // ===== Collision =====
+
       bullets.forEach((b) => {
         aliens.forEach((a) => {
           if (!a.alive || a.exploding) return;
@@ -410,18 +357,21 @@ export default function SpaceDefender() {
           if (Math.sqrt(dx * dx + dy * dy) < 10) {
             a.exploding = true;
             a.explosionStart = time;
-
             b.y = -100;
           }
         });
       });
 
-      // New Wave
+      // Remove exploded pixels
+      aliens = aliens.filter((a) => a.alive);
+
+      // New Logo
       if (aliveCount === 0) {
         createWave();
       }
 
-      // Ship
+      // ===== Ship =====
+
       const SHIP_SIZE = 42;
 
       ctx.drawImage(
@@ -436,6 +386,8 @@ export default function SpaceDefender() {
     };
 
     requestAnimationFrame(loop);
+
+    // ---------- Cleanup ----------
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -452,8 +404,8 @@ export default function SpaceDefender() {
       style={{
         width: "100%",
         height: "420px",
-        borderRadius: "22px",
         display: "block",
+        borderRadius: "22px",
         touchAction: "none",
       }}
     />
