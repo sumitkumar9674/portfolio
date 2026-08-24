@@ -55,6 +55,8 @@ export default function SpaceDefender() {
 
     const DPR = window.devicePixelRatio || 1;
 
+    const DESIGN_WIDTH = 700;
+
     const TILE_SIZE = 18;
     const TEXT_TILE = 14;
     const TILE_PADDING = 1;
@@ -142,8 +144,16 @@ export default function SpaceDefender() {
 
       const width = canvas.clientWidth;
 
-      const LEFT_WIDTH = 220;
-      const TEXT_START = LEFT_WIDTH + 10;
+      // Scale the entire logo based on the available width.
+      const scale = Math.min(width / DESIGN_WIDTH, 1);
+
+      const tileSize = TILE_SIZE * scale;
+      const textTile = TEXT_TILE * scale;
+
+      const LOGO_WIDTH = DESIGN_WIDTH * scale;
+      const LOGO_LEFT = (width - LOGO_WIDTH) / 2;
+
+      const TEXT_START = LOGO_LEFT + 230 * scale;
 
       // ===== BIG S =====
 
@@ -151,8 +161,8 @@ export default function SpaceDefender() {
         [...row].forEach((pixel, c) => {
           if (pixel === "1") {
             aliens.push({
-              x: 24 + c * TILE_SIZE,
-              y: 30 + r * TILE_SIZE,
+              x: LOGO_LEFT + 24 * scale + c * tileSize,
+              y: 30 * scale + r * tileSize,
               alive: true,
               exploding: false,
               explosionStart: 0,
@@ -162,8 +172,8 @@ export default function SpaceDefender() {
         });
       });
 
-      const LETTER_GAP = 8;
-      const WORD_GAP = 30;
+      const LETTER_GAP = 8 * scale;
+      const WORD_GAP = 30 * scale;
 
       const drawWord = (word: string, startX: number, y: number) => {
         let cursor = startX;
@@ -175,8 +185,8 @@ export default function SpaceDefender() {
             [...row].forEach((pixel, c) => {
               if (pixel === "1") {
                 aliens.push({
-                  x: cursor + c * TEXT_TILE,
-                  y: y + r * TEXT_TILE,
+                  x: cursor + c * textTile,
+                  y: y + r * textTile,
                   alive: true,
                   exploding: false,
                   explosionStart: 0,
@@ -186,7 +196,7 @@ export default function SpaceDefender() {
             });
           });
 
-          cursor += 5 * TEXT_TILE + LETTER_GAP;
+          cursor += 5 * textTile + LETTER_GAP * scale;
         });
 
         return cursor;
@@ -194,22 +204,21 @@ export default function SpaceDefender() {
 
       // ===== STICK =====
 
-      const RIGHT_MARGIN = 20;
+      const RIGHT_MARGIN = 20 * scale;
       const textAreaWidth = width - TEXT_START - RIGHT_MARGIN;
 
       // STICK
-      const stickWidth = 5 * 5 * TEXT_TILE + LETTER_GAP * 4;
+      const stickWidth = 5 * 5 * textTile + LETTER_GAP * 4;
       const stickStart = TEXT_START + (textAreaWidth - stickWidth) / 2;
-      drawWord("STICK", stickStart, 30);
-
+      drawWord("STICK", stickStart, 30 * scale);
       // FOR YOU
-      const forWidth = 3 * 5 * TEXT_TILE + LETTER_GAP * 2;
-      const youWidth = 3 * 5 * TEXT_TILE + LETTER_GAP * 2;
+      const forWidth = 3 * 5 * textTile + LETTER_GAP * 2;
+      const youWidth = 3 * 5 * textTile + LETTER_GAP * 2;
       const totalWidth = forWidth + WORD_GAP + youWidth;
 
       const bottomStart = TEXT_START + (textAreaWidth - totalWidth) / 2;
-      const afterFor = drawWord("FOR", bottomStart, 138);
-      drawWord("YOU", afterFor + WORD_GAP, 138);
+      const afterFor = drawWord("FOR", bottomStart, 138 * scale);
+      drawWord("YOU", afterFor + WORD_GAP, 138 * scale);
     };
 
     // ---------- Initial Setup ----------
