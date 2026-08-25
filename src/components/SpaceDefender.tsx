@@ -56,6 +56,7 @@ export default function SpaceDefender() {
     const DPR = window.devicePixelRatio || 1;
 
     const DESIGN_WIDTH = 700;
+    let currentScale = 1;
 
     const TILE_SIZE = 18;
     const TEXT_TILE = 14;
@@ -144,15 +145,24 @@ export default function SpaceDefender() {
 
       const width = canvas.clientWidth;
 
+      // Keep the entire logo inside a safe margin on both sides.
+      const LOGO_MARGIN = 20;
+      const availableLogoWidth = width - LOGO_MARGIN * 2;
+
       // Scale the entire logo based on the available width.
-      const scale = Math.min(width / DESIGN_WIDTH, 1);
+      const scale = Math.min(
+        width / DESIGN_WIDTH,
+        availableLogoWidth / DESIGN_WIDTH,
+        1,
+      );
+
+      currentScale = scale;
 
       const tileSize = TILE_SIZE * scale;
       const textTile = TEXT_TILE * scale;
 
       const LOGO_WIDTH = DESIGN_WIDTH * scale;
-      const LOGO_LEFT = (width - LOGO_WIDTH) / 2;
-
+      const LOGO_LEFT = Math.round((width - LOGO_WIDTH) / 2);
       const TEXT_START = LOGO_LEFT + 230 * scale;
 
       // ===== BIG S =====
@@ -324,16 +334,14 @@ export default function SpaceDefender() {
             return;
           }
 
-          const SIZE = TILE_SIZE + 8;
-
+          const SIZE = (TILE_SIZE + 8) * currentScale;
           ctx.drawImage(blastImage, a.x - SIZE / 2, a.y - SIZE / 2, SIZE, SIZE);
 
           return;
         }
 
         // Fit image inside tile
-        const maxSize = TILE_SIZE - TILE_PADDING * 2;
-
+        const maxSize = TILE_SIZE * currentScale - TILE_PADDING * 2;
         const aspect = a.sprite.width / a.sprite.height;
 
         let drawWidth = maxSize;
