@@ -97,32 +97,30 @@ export default function SpaceDefender() {
 
     // ---------- 5x5 Pixel Font ----------
 
-    const FONT: Record<string, string[]> = {
-      S: ["11111", "10000", "11110", "00001", "11111"],
-      T: ["11111", "00100", "00100", "00100", "00100"],
-      I: ["11111", "00100", "00100", "00100", "11111"],
-      C: ["11111", "10000", "10000", "10000", "11111"],
-      K: ["10001", "10010", "01100", "10010", "10001"],
-      F: ["11111", "10000", "11110", "10000", "10000"],
-      O: ["11111", "10001", "10001", "10001", "11111"],
-      R: ["11110", "10001", "11110", "10010", "10001"],
-      Y: ["10001", "01010", "00100", "00100", "00100"],
-      U: ["10001", "10001", "10001", "10001", "11111"],
-    };
-
     // ---------- Big Logo S (11 × 9) ----------
 
-    const BIG_S = [
-      "001111110",
-      "001111111",
-      "111000000",
-      "111000000",
-      "111111111",
-      "111111111", // extra middle row
-      "000000111",
-      "000000111",
-      "111111100",
-      "011111100",
+    // ---------- Complete Space Defender Logo ----------
+    // 49 columns × 10 rows
+    //
+    // "1" = pixel / entity
+    // "0" = empty space
+    //
+    // Edit this grid to change the entire logo.
+    // Every row must contain exactly 49 characters.
+
+    const LOGO_PATTERN = [
+      "0001111111100000011111011111011111011111010001000",
+      "0011111111000000010000000100000100010000010010000",
+      "0111111110000000011111000100000100010000011100000",
+      "1110000000000000000001000100000100010000010010000",
+      "1110000000000000011111000100011111011111010001000",
+      "1111111111100000000000000000000000000000000000000",
+      "1111111111100111110111110111110010001011111010001",
+      "0000000011100100000100010100100001010010001010001",
+      "0000000011100111100100010111000000100010001010001",
+      "0011111111000100000100010100100000100010001010001",
+      "0111111110000100000111110100010000100011111011111",
+      "1111111100000000000000000000000000000000000000000",
     ];
 
     // ---------- Game State ----------
@@ -135,7 +133,7 @@ export default function SpaceDefender() {
     const ship = {
       x: 180,
       targetX: 180,
-      y: 360,
+      y: 0,
     };
 
     // ---------- Build StickForYou Logo ----------
@@ -144,35 +142,47 @@ export default function SpaceDefender() {
       aliens = [];
 
       const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      ship.y = height - 40;
 
-      // Keep the entire logo inside a safe margin on both sides.
       const LOGO_MARGIN = 20;
       const availableLogoWidth = width - LOGO_MARGIN * 2;
 
-      // Scale the entire logo based on the available width.
+      // The actual pattern is 49 pixels wide.
+      const patternColumns = LOGO_PATTERN[0].length;
+
+      // Scale the pattern so the entire 49-pixel width fits inside the box.
       const scale = Math.min(
         width / DESIGN_WIDTH,
-        availableLogoWidth / DESIGN_WIDTH,
+        availableLogoWidth / (patternColumns * TILE_SIZE),
         1,
       );
+
+      currentScale = scale;
 
       currentScale = scale;
 
       const tileSize = TILE_SIZE * scale;
       const textTile = TEXT_TILE * scale;
 
-      const LOGO_WIDTH = DESIGN_WIDTH * scale;
-      const LOGO_LEFT = Math.round((width - LOGO_WIDTH) / 2);
-      const TEXT_START = LOGO_LEFT + 230 * scale;
+      const patternRows = LOGO_PATTERN.length;
 
-      // ===== BIG S =====
+      const patternWidth = patternColumns * tileSize;
+      const patternHeight = patternRows * tileSize;
 
-      BIG_S.forEach((row, r) => {
+      const LOGO_LEFT =
+        LOGO_MARGIN + Math.round((availableLogoWidth - patternWidth) / 2) + 7;
+      const LOGO_TOP = 35 * scale;
+      const TEXT_START = LOGO_LEFT;
+
+      // ===== COMPLETE LOGO PATTERN =====
+
+      LOGO_PATTERN.forEach((row, r) => {
         [...row].forEach((pixel, c) => {
           if (pixel === "1") {
             aliens.push({
-              x: LOGO_LEFT + 24 * scale + c * tileSize,
-              y: 30 * scale + r * tileSize,
+              x: LOGO_LEFT + c * tileSize,
+              y: LOGO_TOP + r * tileSize,
               alive: true,
               exploding: false,
               explosionStart: 0,
@@ -185,33 +195,6 @@ export default function SpaceDefender() {
       const LETTER_GAP = 8 * scale;
       const WORD_GAP = 30 * scale;
 
-      const drawWord = (word: string, startX: number, y: number) => {
-        let cursor = startX;
-
-        word.split("").forEach((char) => {
-          const pattern = FONT[char];
-
-          pattern.forEach((row, r) => {
-            [...row].forEach((pixel, c) => {
-              if (pixel === "1") {
-                aliens.push({
-                  x: cursor + c * textTile,
-                  y: y + r * textTile,
-                  alive: true,
-                  exploding: false,
-                  explosionStart: 0,
-                  sprite: nextSprite(),
-                });
-              }
-            });
-          });
-
-          cursor += 5 * textTile + LETTER_GAP * scale;
-        });
-
-        return cursor;
-      };
-
       // ===== STICK =====
 
       const RIGHT_MARGIN = 20 * scale;
@@ -220,15 +203,13 @@ export default function SpaceDefender() {
       // STICK
       const stickWidth = 5 * 5 * textTile + LETTER_GAP * 4;
       const stickStart = TEXT_START + (textAreaWidth - stickWidth) / 2;
-      drawWord("STICK", stickStart, 30 * scale);
+
       // FOR YOU
       const forWidth = 3 * 5 * textTile + LETTER_GAP * 2;
       const youWidth = 3 * 5 * textTile + LETTER_GAP * 2;
       const totalWidth = forWidth + WORD_GAP + youWidth;
 
       const bottomStart = TEXT_START + (textAreaWidth - totalWidth) / 2;
-      const afterFor = drawWord("FOR", bottomStart, 138 * scale);
-      drawWord("YOU", afterFor + WORD_GAP, 138 * scale);
     };
 
     // ---------- Initial Setup ----------
@@ -289,7 +270,7 @@ export default function SpaceDefender() {
 
       // ===== Auto Fire =====
 
-      const FIRE_RATE = 37;
+      const FIRE_RATE = 21;
 
       if (isPlaying && time - lastShot > FIRE_RATE) {
         bullets.push({
@@ -306,7 +287,7 @@ export default function SpaceDefender() {
       ctx.lineWidth = 2;
 
       bullets.forEach((b) => {
-        b.y -= 7;
+        b.y -= 9;
 
         ctx.beginPath();
         ctx.moveTo(b.x, b.y);
@@ -420,7 +401,7 @@ export default function SpaceDefender() {
       ref={canvasRef}
       style={{
         width: "100%",
-        height: "420px",
+        height: "600px",
         display: "block",
         borderRadius: "22px",
         touchAction: "none",

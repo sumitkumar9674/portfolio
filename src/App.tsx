@@ -20,7 +20,7 @@ function App() {
         </p>
       </section>
 
-      <div style={{ maxWidth: 760, margin: "40px auto" }}>
+      <div style={{ maxWidth: "100%", margin: "40px auto" }}>
         <SpaceDefender />
       </div>
 
