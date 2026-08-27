@@ -275,7 +275,7 @@ export default function SpaceDefender() {
       if (isPlaying && time - lastShot > FIRE_RATE) {
         bullets.push({
           x: ship.x,
-          y: ship.y - 18,
+          y: ship.y - 21,
         });
 
         lastShot = time;
