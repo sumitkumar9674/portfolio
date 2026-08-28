@@ -9,26 +9,33 @@ const entitySources = Object.values(
   }),
 ) as string[];
 
-const shipSource = Object.values(
-  import.meta.glob("../assets/game/ship/*.png", {
+const bulletSources = Object.values(
+  import.meta.glob("../assets/game/bullets/*.png", {
     eager: true,
     import: "default",
   }),
-)[0] as string;
+) as string[];
 
-const backgroundSource = Object.values(
-  import.meta.glob("../assets/game/background/space_bg.png", {
+const heroSources = Object.values(
+  import.meta.glob("../assets/game/hero/*.png", {
     eager: true,
     import: "default",
   }),
-)[0] as string;
+) as string[];
 
-const entityBlastSource = Object.values(
-  import.meta.glob("../assets/game/explosions/entity_blast.png", {
+const backgroundSources = Object.values(
+  import.meta.glob("../assets/game/background/*.png", {
     eager: true,
     import: "default",
   }),
-)[0] as string;
+) as string[];
+
+const explosionSources = Object.values(
+  import.meta.glob("../assets/game/explosions/*.png", {
+    eager: true,
+    import: "default",
+  }),
+) as string[];
 
 // ---------- Types ----------
 
@@ -44,6 +51,7 @@ type Entity = {
 type Bullet = {
   x: number;
   y: number;
+  sprite: HTMLImageElement;
 };
 
 export default function SpaceDefender() {
@@ -61,7 +69,7 @@ export default function SpaceDefender() {
     const TILE_SIZE = 18;
     const TEXT_TILE = 14;
     const TILE_PADDING = 1;
-    const EXPLOSION_TIME = 300;
+    const EXPLOSION_TIME = 667;
 
     const resize = () => {
       const width = canvas.clientWidth;
@@ -77,24 +85,65 @@ export default function SpaceDefender() {
 
     const entityImages = entitySources.map((src) => {
       const img = new Image();
+
+      img.onerror = () => {
+        console.error("FAILED TO LOAD ENTITY:", src);
+      };
+
+      img.src = src;
+
+      return img;
+    });
+
+    const bulletImages = bulletSources.map((src) => {
+      const img = new Image();
       img.src = src;
       return img;
     });
 
-    const shipImage = new Image();
-    shipImage.src = shipSource;
+    const heroImages = {
+      idle01: new Image(),
+      idle02: new Image(),
+      left: new Image(),
+      right: new Image(),
+    };
+
+    heroImages.idle01.src = heroSources.find((src) =>
+      src.includes("idle_01.png"),
+    )!;
+
+    heroImages.idle02.src = heroSources.find((src) =>
+      src.includes("idle_02.png"),
+    )!;
+
+    heroImages.left.src = heroSources.find((src) =>
+      src.includes("moving_left.png"),
+    )!;
+
+    heroImages.right.src = heroSources.find((src) =>
+      src.includes("moving_right.png"),
+    )!;
 
     const backgroundImage = new Image();
-    backgroundImage.src = backgroundSource;
 
-    const blastImage = new Image();
-    blastImage.src = entityBlastSource;
+    backgroundImage.src =
+      backgroundSources[Math.floor(Math.random() * backgroundSources.length)];
+
+    const blastImages = explosionSources.map((src) => {
+      const img = new Image();
+      img.src = src;
+      return img;
+    });
 
     // ---------- Random Pixel Picker ----------
 
-    const nextSprite = () =>
-      entityImages[Math.floor(Math.random() * entityImages.length)];
+    const nextSprite = () => {
+      const index = Math.floor(Math.random() * entityImages.length);
 
+      console.log("Entity selected:", index, entitySources[index]);
+
+      return entityImages[index];
+    };
     // ---------- 5x5 Pixel Font ----------
 
     // ---------- Big Logo S (11 × 9) ----------
@@ -135,6 +184,10 @@ export default function SpaceDefender() {
       targetX: 180,
       y: 0,
     };
+
+    let heroDirection: "idle" | "left" | "right" = "idle";
+    let idleFrame = 0;
+    let lastIdleSwitch = 0;
 
     // ---------- Build StickForYou Logo ----------
 
@@ -254,6 +307,8 @@ export default function SpaceDefender() {
 
     // ---------- Game Loop ----------
 
+    let animationFrameId: number;
+
     const loop = (time: number) => {
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
@@ -262,11 +317,44 @@ export default function SpaceDefender() {
 
       // ===== Background =====
 
-      ctx.drawImage(backgroundImage, 0, 0, width, height);
+      const bgAspect = backgroundImage.width / backgroundImage.height;
+      const canvasAspect = width / height;
 
+      let bgWidth = width;
+      let bgHeight = height;
+
+      if (bgAspect > canvasAspect) {
+        bgHeight = height;
+        bgWidth = height * bgAspect;
+      } else {
+        bgWidth = width;
+        bgHeight = width / bgAspect;
+      }
+
+      ctx.drawImage(
+        backgroundImage,
+        (width - bgWidth) / 2,
+        (height - bgHeight) / 2,
+        bgWidth,
+        bgHeight,
+      );
       // ===== Ship Movement =====
 
       ship.x += (ship.targetX - ship.x) * 0.18;
+
+      if (Math.abs(ship.targetX - ship.x) < 0.5) {
+        ship.x = ship.targetX;
+        heroDirection = "idle";
+      } else if (ship.targetX < ship.x) {
+        heroDirection = "left";
+      } else {
+        heroDirection = "right";
+      }
+
+      if (heroDirection === "idle" && time - lastIdleSwitch >= 500) {
+        idleFrame = idleFrame === 0 ? 1 : 0;
+        lastIdleSwitch = time;
+      }
 
       // ===== Auto Fire =====
 
@@ -276,6 +364,7 @@ export default function SpaceDefender() {
         bullets.push({
           x: ship.x,
           y: ship.y - 21,
+          sprite: bulletImages[Math.floor(Math.random() * bulletImages.length)],
         });
 
         lastShot = time;
@@ -283,16 +372,18 @@ export default function SpaceDefender() {
 
       // ===== Bullets =====
 
-      ctx.strokeStyle = "#60A5FA";
-      ctx.lineWidth = 2;
-
       bullets.forEach((b) => {
         b.y -= 9;
 
-        ctx.beginPath();
-        ctx.moveTo(b.x, b.y);
-        ctx.lineTo(b.x, b.y - 10);
-        ctx.stroke();
+        const BULLET_SIZE = 7;
+
+        ctx.drawImage(
+          b.sprite,
+          b.x - BULLET_SIZE / 2,
+          b.y - BULLET_SIZE / 2,
+          BULLET_SIZE,
+          BULLET_SIZE,
+        );
       });
 
       bullets = bullets.filter((b) => b.y > -20);
@@ -316,7 +407,11 @@ export default function SpaceDefender() {
           }
 
           const SIZE = (TILE_SIZE + 8) * currentScale;
-          ctx.drawImage(blastImage, a.x - SIZE / 2, a.y - SIZE / 2, SIZE, SIZE);
+
+          const blastFrame =
+            elapsed < EXPLOSION_TIME / 2 ? blastImages[0] : blastImages[1];
+
+          ctx.drawImage(blastFrame, a.x - SIZE / 2, a.y - SIZE / 2, SIZE, SIZE);
 
           return;
         }
@@ -334,13 +429,23 @@ export default function SpaceDefender() {
           drawWidth = maxSize * aspect;
         }
 
-        ctx.drawImage(
-          a.sprite,
-          a.x - drawWidth / 2,
-          a.y - drawHeight / 2,
-          drawWidth,
-          drawHeight,
-        );
+        if (a.sprite.complete && a.sprite.naturalWidth > 0) {
+          ctx.fillStyle = "rgba(106, 143, 173, 0.65)";
+          ctx.fillRect(
+            a.x - drawWidth / 2 + 2,
+            a.y - drawHeight / 2 + 2,
+            drawWidth,
+            drawHeight,
+          );
+
+          ctx.drawImage(
+            a.sprite,
+            a.x - drawWidth / 2,
+            a.y - drawHeight / 2,
+            drawWidth,
+            drawHeight,
+          );
+        }
       });
 
       // ===== Collision =====
@@ -370,17 +475,31 @@ export default function SpaceDefender() {
 
       // ===== Ship =====
 
-      const SHIP_SIZE = 42;
+      const SHIP_SIZE = 67;
 
-      ctx.drawImage(
-        shipImage,
-        ship.x - SHIP_SIZE / 2,
-        ship.y - SHIP_SIZE / 2,
-        SHIP_SIZE,
-        SHIP_SIZE,
-      );
+      let heroImage: HTMLImageElement;
 
-      requestAnimationFrame(loop);
+      if (heroDirection === "left") {
+        heroImage = heroImages.left;
+      } else if (heroDirection === "right") {
+        heroImage = heroImages.right;
+      } else if (idleFrame === 0) {
+        heroImage = heroImages.idle01;
+      } else {
+        heroImage = heroImages.idle02;
+      }
+
+      if (heroImage.complete && heroImage.naturalWidth > 0) {
+        ctx.drawImage(
+          heroImage,
+          ship.x - SHIP_SIZE / 2,
+          ship.y - SHIP_SIZE / 2,
+          SHIP_SIZE,
+          SHIP_SIZE,
+        );
+      }
+
+      animationFrameId = requestAnimationFrame(loop);
     };
 
     requestAnimationFrame(loop);
@@ -388,6 +507,7 @@ export default function SpaceDefender() {
     // ---------- Cleanup ----------
 
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
 
       canvas.removeEventListener("mousemove", mouseMove);
