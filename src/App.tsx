@@ -1,4 +1,5 @@
 import SpaceDefender from "./components/SpaceDefender";
+import DecodeText from "./components/DecodeText/DecodeText";
 
 function App() {
   return (
@@ -19,6 +20,27 @@ function App() {
           Designing thoughtful software and documenting the journey.
         </p>
       </section>
+
+      <div style={{ width: "1100px" }}>
+        <DecodeText
+          text="At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship drifting silently beyond the stars. Is anyone out there? he whispered. A message appeared on the console: RUN-07 // SIGNAL FOUND! He pressed ENTER, and the screen replied, WELCOME, PILOT. For a moment everything was quiet... then the engines started. 3... 2... 1... and the ship disappeared into the darkness. At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship drifting silently beyond the stars. Is anyone out there? he whispered. A message appeared on the console: RUN-07 // SIGNAL FOUND! He pressed ENTER, and the screen replied, WELCOME, PILOT. For a moment everything was quiet... then the engines started. 3... 2... 1... and the ship disappeared into the darkness. At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship drifting silently beyond the stars. Is anyone out there? he whispered. A message appeared on the console: RUN-07 // SIGNAL FOUND! He pressed ENTER, and the screen replied, WELCOME, PILOT. For a moment everything was quiet... then the engines started. 3... 2... 1... and the ship disappeared into the darkness."
+          // text="Stick For You"
+          fontFamily="Arial"
+          fontSize="40px"
+          borderColor="#431616"
+          rotationStartDelay={7}
+          rotationSpeed={10}
+          resolveStartDelay={200}
+          resolveDelay={9}
+        />
+      </div>
+      {/* <DecodeText02
+        text="At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship drifting silently beyond the stars. Is anyone out there? he whispered. A message appeared on the console: RUN-07 // SIGNAL FOUND! He pressed ENTER, and the screen replied, WELCOME, PILOT. I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step. At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship drifting silently beyond the stars. Is anyone out there? he whispered. A message appeared on the console: RUN-07 // SIGNAL FOUND! He pressed ENTER, and the screen replied, WELCOME, PILOT. I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step. At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship drifting silently beyond the stars. Is anyone out there? he whispered. A message appeared on the console: RUN-07 // SIGNAL FOUND! He pressed ENTER, and the screen replied, WELCOME, PILOT. I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step."
+        fontFamily="Arial"
+        borderColor="#431616"
+        clockInterval={7}
+        rotationSpeed={20}
+      /> */}
 
       <div style={{ maxWidth: "100%", margin: "40px auto" }}>
         <SpaceDefender />
