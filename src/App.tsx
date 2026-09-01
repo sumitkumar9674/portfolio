@@ -1,6 +1,7 @@
 import SpaceDefender from "./components/SpaceDefender";
 import DecodeText from "./components/DecodeText/DecodeText";
 import NeonText from "./components/NeonText";
+import NeonFrame from "./components/NeonFrame";
 
 function App() {
   return (
@@ -21,7 +22,36 @@ function App() {
           Designing thoughtful software and documenting the journey.
         </p>
       </section>
-      <div style={{ width: "100%" }}>
+      <NeonFrame
+        width="fit-content"
+        height="fit-content"
+        backgroundColor="#000000"
+        borderColor="#00ffff"
+        cornerColor="#ffad00"
+        borderWidth={6}
+        cornerWidth={6}
+        cornerRadius={18}
+        initialDelay={500}
+        sideDuration={250}
+        glowStrength={0.8}
+        shadowStrength={0.8}
+      >
+        <div style={{ width: "1100px" }}>
+          <DecodeText
+            text="At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship "
+            // text="Stick For You"
+            fontFamily="Arial"
+            fontSize="40px"
+            borderColor="#431616"
+            rotationStartDelay={7}
+            rotationSpeed={10}
+            resolveStartDelay={200}
+            resolveDelay={9}
+          />
+        </div>
+      </NeonFrame>
+
+      {/* <div style={{ width: "100%" }}>
         <NeonText
           text=" I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step."
           fontFamily="Arial"
@@ -32,95 +62,11 @@ function App() {
           flickerDuration={700}
           flickerSpeed={67}
         />
-      </div>
-      <div style={{ width: "100%" }}>
-        <NeonText
-          text=" I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step."
-          fontFamily="Arial"
-          fontSize={16}
-          textColor="#00ffff"
-          backgroundColor="#000000"
-          initialDelay={300}
-          flickerDuration={700}
-          flickerSpeed={67}
-        />
-      </div>
-      <div style={{ width: "100%" }}>
-        <NeonText
-          text=" I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step."
-          fontFamily="Arial"
-          fontSize={16}
-          textColor="#00ffff"
-          backgroundColor="#000000"
-          initialDelay={300}
-          flickerDuration={700}
-          flickerSpeed={67}
-        />
-      </div>
-      <div style={{ width: "100%" }}>
-        <NeonText
-          text=" I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step."
-          fontFamily="Arial"
-          fontSize={16}
-          textColor="#00ffff"
-          backgroundColor="#000000"
-          initialDelay={300}
-          flickerDuration={700}
-          flickerSpeed={67}
-        />
-      </div>
-      <div style={{ width: "100%" }}>
-        <NeonText
-          text=" I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step."
-          fontFamily="Arial"
-          fontSize={16}
-          textColor="#00ffff"
-          backgroundColor="#000000"
-          initialDelay={300}
-          flickerDuration={700}
-          flickerSpeed={67}
-        />
-      </div>
-      <div style={{ width: "100%" }}>
-        <NeonText
-          text=" I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step."
-          fontFamily="Arial"
-          fontSize={16}
-          textColor="#00ffff"
-          backgroundColor="#000000"
-          initialDelay={300}
-          flickerDuration={700}
-          flickerSpeed={67}
-        />
-      </div>
-      <div style={{ width: "100%" }}>
-        <NeonText
-          text=" I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step."
-          fontFamily="Arial"
-          fontSize={16}
-          textColor="#00ffff"
-          backgroundColor="#000000"
-          initialDelay={300}
-          flickerDuration={700}
-          flickerSpeed={67}
-        />
-      </div>
-      <div style={{ width: "100%" }}>
-        <NeonText
-          text=" I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step.  I'm currently building Horizon, a productivity app inspired by a problem I've struggled with myself—the hardest part is rarely the work, it's taking the first step."
-          fontFamily="Arial"
-          fontSize={16}
-          textColor="#00ffff"
-          backgroundColor="#000000"
-          initialDelay={300}
-          flickerDuration={700}
-          flickerSpeed={67}
-        />
-      </div>
-      {/* 
-      <div style={{ width: "1100px" }}>
+      </div> */}
+
+      {/* <div style={{ width: "1100px" }}>
         <DecodeText
-          text="At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship drifting silently beyond the stars. Is anyone out there? he whispered. A message appeared on the console: RUN-07 // SIGNAL FOUND! He pressed ENTER, and the screen replied, WELCOME, PILOT. For a moment everything was quiet... then the engines started. 3... 2... 1... and the ship disappeared into the darkness. At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship drifting silently beyond the stars. Is anyone out there? he whispered. A message appeared on the console: RUN-07 // SIGNAL FOUND! He pressed ENTER, and the screen replied, WELCOME, PILOT. For a moment everything was quiet... then the engines started. 3... 2... 1... and the ship disappeared into the darkness. At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship drifting silently beyond the stars. Is anyone out there? he whispered. A message appeared on the console: RUN-07 // SIGNAL FOUND! He pressed ENTER, and the screen replied, WELCOME, PILOT. For a moment everything was quiet... then the engines started. 3... 2... 1... and the ship disappeared into the darkness."
+          text="At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship "
           // text="Stick For You"
           fontFamily="Arial"
           fontSize="40px"
