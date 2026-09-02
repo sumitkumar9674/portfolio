@@ -22,6 +22,7 @@ function App() {
           Designing thoughtful software and documenting the journey.
         </p>
       </section>
+
       <NeonFrame
         width="fit-content"
         height="fit-content"
@@ -36,19 +37,15 @@ function App() {
         glowStrength={0.8}
         shadowStrength={0.8}
       >
-        <div style={{ width: "1100px" }}>
-          <DecodeText
-            text="At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship At 02:17 AM, the station lights suddenly turned RED. Alex looked through the glass and saw a small ship "
-            // text="Stick For You"
-            fontFamily="Arial"
-            fontSize="40px"
-            borderColor="#431616"
-            rotationStartDelay={7}
-            rotationSpeed={10}
-            resolveStartDelay={200}
-            resolveDelay={9}
-          />
-        </div>
+        <h2
+          style={{
+            margin: 0,
+            color: "#ffffff",
+            fontSize: "48px",
+          }}
+        >
+          SYSTEM ONLINE
+        </h2>
       </NeonFrame>
 
       {/* <div style={{ width: "100%" }}>
@@ -90,47 +87,78 @@ function App() {
       </div>
 
       {/* ---------- Current Mission ---------- */}
-      <section className="card">
-        <span className="tag blue">Current Mission</span>
+      <NeonFrame
+        width="fit-content"
+        height="fit-content"
+        backgroundColor="#ffffff"
+        borderColor="#00ffff"
+        cornerColor="#ffad00"
+        borderWidth={6}
+        cornerWidth={6}
+        cornerRadius={18}
+        initialDelay={500}
+        sideDuration={250}
+        glowStrength={0.8}
+        shadowStrength={0.8}
+      >
+        <section className="card">
+          <span className="tag blue">Current Mission</span>
 
-        <h2>Building Horizon</h2>
+          <h2>Building Horizon</h2>
 
-        <p>
-          I'm currently building Horizon, a productivity app inspired by a
-          problem I've struggled with myself—the hardest part is rarely the
-          work, it's taking the first step.
-        </p>
+          <p>
+            I'm currently building Horizon, a productivity app inspired by a
+            problem I've struggled with myself—the hardest part is rarely the
+            work, it's taking the first step.
+          </p>
 
-        <p>
-          The idea came from a simple observation: we often stretch a task to
-          fill all the time we give it. Horizon is my ongoing experiment in
-          designing a calmer way to begin.
-        </p>
-      </section>
+          <p>
+            The idea came from a simple observation: we often stretch a task to
+            fill all the time we give it. Horizon is my ongoing experiment in
+            designing a calmer way to begin.
+          </p>
+        </section>
+      </NeonFrame>
 
       {/* ---------- About ---------- */}
-      <section className="card">
-        <span className="tag purple">About Me</span>
 
-        <h2>Who I Am</h2>
+      <NeonFrame
+        width="fit-content"
+        height="fit-content"
+        backgroundColor="#ffffff"
+        borderColor="#00ffff"
+        cornerColor="#ffad00"
+        borderWidth={6}
+        cornerWidth={6}
+        cornerRadius={18}
+        initialDelay={500}
+        sideDuration={250}
+        glowStrength={0.8}
+        shadowStrength={0.8}
+      >
+        <section className="card">
+          <span className="tag purple">About Me</span>
 
-        <p>
-          I'm a developer who enjoys understanding how things work. Most of my
-          time is spent exploring new technologies, building side projects, and
-          experimenting with ideas that solve everyday problems.
-        </p>
+          <h2>Who I Am</h2>
 
-        <p>
-          I care deeply about user experience and enjoy creating interfaces that
-          feel calm, visually clean, and intuitive.
-        </p>
+          <p>
+            I'm a developer who enjoys understanding how things work. Most of my
+            time is spent exploring new technologies, building side projects,
+            and experimenting with ideas that solve everyday problems.
+          </p>
 
-        <p>
-          Outside of software, I spend a lot of time reading about emerging
-          technologies and physics research simply because I'm curious about how
-          the world works.
-        </p>
-      </section>
+          <p>
+            I care deeply about user experience and enjoy creating interfaces
+            that feel calm, visually clean, and intuitive.
+          </p>
+
+          <p>
+            Outside of software, I spend a lot of time reading about emerging
+            technologies and physics research simply because I'm curious about
+            how the world works.
+          </p>
+        </section>
+      </NeonFrame>
 
       {/* ---------- Projects ---------- */}
       <section className="card">
