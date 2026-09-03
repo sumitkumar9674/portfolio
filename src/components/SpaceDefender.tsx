@@ -430,7 +430,7 @@ export default function SpaceDefender() {
         }
 
         if (a.sprite.complete && a.sprite.naturalWidth > 0) {
-          ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+          ctx.fillStyle = "rgba(34, 32, 32, 0.69)";
           ctx.fillRect(
             a.x - drawWidth / 2 + 2,
             a.y - drawHeight / 2 + 2,
