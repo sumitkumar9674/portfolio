@@ -2,6 +2,7 @@ import SpaceDefender from "./components/SpaceDefender";
 import DecodeText from "./components/DecodeText/DecodeText";
 import NeonText from "./components/NeonText";
 import NeonFrame from "./components/NeonFrame";
+import ProfilePhoto from "./components/ProfilePhoto";
 
 function App() {
   return (
@@ -22,6 +23,15 @@ function App() {
           Designing thoughtful software and documenting the journey.
         </p>
       </section>
+
+      <ProfilePhoto
+        size={350}
+        timings={{
+          idleDuration: 5679,
+          eyebrowDuration: 999,
+          bulletDuration: 700,
+        }}
+      />
 
       <NeonFrame
         width="fit-content"

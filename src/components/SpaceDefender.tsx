@@ -308,8 +308,14 @@ export default function SpaceDefender() {
     // ---------- Game Loop ----------
 
     let animationFrameId: number;
+    let lastFrameTime = 0;
 
     const loop = (time: number) => {
+      const deltaTime =
+        lastFrameTime === 0 ? 0 : Math.min((time - lastFrameTime) / 1000, 0.05);
+
+      lastFrameTime = time;
+
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
 
@@ -373,9 +379,11 @@ export default function SpaceDefender() {
       // ===== Bullets =====
 
       bullets.forEach((b) => {
-        b.y -= 9;
+        const BULLET_SPEED = 540;
 
-        const BULLET_SIZE = 7;
+        b.y -= BULLET_SPEED * deltaTime;
+
+        const BULLET_SIZE = 9;
 
         ctx.drawImage(
           b.sprite,
