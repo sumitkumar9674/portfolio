@@ -3,10 +3,57 @@ import DecodeText from "./components/DecodeText/DecodeText";
 import NeonText from "./components/NeonText";
 import NeonFrame from "./components/NeonFrame";
 import ProfilePhoto from "./components/ProfilePhoto";
+import { useState } from "react";
+import "./styles.css";
 
 function App() {
+  // Controls whether the SpaceDefender rooftop sign is expanded.
+  const [isSpaceDefenderExpanded, setIsSpaceDefenderExpanded] = useState(false);
   return (
     <div className="page">
+      {/* ---------- SpaceDefender Rooftop ---------- */}
+      <section
+        style={{
+          width: "100%",
+          maxWidth: "1400px",
+          margin: "0 auto",
+        }}
+      >
+        <div
+          className="spaceDefenderBox"
+          onClick={() => setIsSpaceDefenderExpanded(true)}
+          style={{
+            position: "relative",
+            width: "100%",
+            height: isSpaceDefenderExpanded
+              ? "min(80vh, 800px)"
+              : "var(--space-defender-collapsed-height)",
+            overflow: "hidden",
+            cursor: isSpaceDefenderExpanded ? "default" : "pointer",
+            transition: "height 700ms ease",
+          }}
+        >
+          <SpaceDefender isOpen={isSpaceDefenderExpanded} />
+
+          {/* Collapse button */}
+          {isSpaceDefenderExpanded && (
+            <button
+              onClick={(event) => {
+                event.stopPropagation();
+                setIsSpaceDefenderExpanded(false);
+              }}
+              style={{
+                position: "absolute",
+                top: "16px",
+                right: "16px",
+                zIndex: 20,
+              }}
+            >
+              ×
+            </button>
+          )}
+        </div>
+      </section>
       {/* ---------- Hero ---------- */}
       <section className="hero">
         <div className="topButtons">
@@ -91,10 +138,6 @@ function App() {
         clockInterval={7}
         rotationSpeed={20}
       /> */}
-
-      <div style={{ maxWidth: "100%", margin: "40px auto" }}>
-        <SpaceDefender />
-      </div>
 
       {/* ---------- Current Mission ---------- */}
       <NeonFrame

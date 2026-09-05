@@ -188,3 +188,13 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+.spaceDefenderBox {
+  --space-defender-collapsed-height: 276px;
+}
+
+@media (max-width: 640px) {
+  .spaceDefenderBox {
+    --space-defender-collapsed-height: 147px;
+  }
+}

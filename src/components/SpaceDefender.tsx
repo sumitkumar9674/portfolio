@@ -54,9 +54,13 @@ type Bullet = {
   sprite: HTMLImageElement;
 };
 
-export default function SpaceDefender() {
+export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // Keeps the latest open/closed state available to the game loop and input handlers.
+  const isOpenRef = useRef(isOpen);
 
+  // Update the ref whenever App.tsx opens or closes the game.
+  isOpenRef.current = isOpen;
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
@@ -225,7 +229,7 @@ export default function SpaceDefender() {
 
       const LOGO_LEFT =
         LOGO_MARGIN + Math.round((availableLogoWidth - patternWidth) / 2) + 7;
-      const LOGO_TOP = 35 * scale;
+      const LOGO_TOP = 37 * scale;
       const TEXT_START = LOGO_LEFT;
 
       // ===== COMPLETE LOGO PATTERN =====
@@ -288,11 +292,17 @@ export default function SpaceDefender() {
     };
 
     const mouseMove = (e: MouseEvent) => {
+      // Do not play the game while the SpaceDefender box is closed.
+      if (!isOpenRef.current) return;
+
       isPlaying = true;
       moveShip(e.clientX);
     };
 
     const touchMove = (e: TouchEvent) => {
+      // Do not play the game while the SpaceDefender box is closed.
+      if (!isOpenRef.current) return;
+
       e.preventDefault();
       isPlaying = true;
       moveShip(e.touches[0].clientX);
