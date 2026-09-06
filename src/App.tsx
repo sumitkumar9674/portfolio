@@ -5,14 +5,34 @@ import NeonFrame from "./components/NeonFrame";
 import ProfilePhoto from "./components/ProfilePhoto";
 import { useState } from "react";
 import "./styles.css";
+import LogoBanner from "./components/LogoBanner/LogoBanner";
+import companyLogo from "./assets/logo/company-logo.png";
+import logoBackground from "./assets/logo/background.png";
 
 function App() {
   // Controls whether the SpaceDefender rooftop sign is expanded.
   const [isSpaceDefenderExpanded, setIsSpaceDefenderExpanded] = useState(false);
   return (
     <div className="page">
+      <NeonFrame
+        width="100%"
+        height="fit-content"
+        backgroundColor="#000000"
+        borderColor="#e99fca"
+        cornerColor="#a02346"
+        borderWidth={6}
+        cornerWidth={6}
+        cornerRadius={18}
+        initialDelay={500}
+        sideDuration={250}
+        glowStrength={0.8}
+        shadowStrength={0.8}
+      >
+        <LogoBanner image={companyLogo} backgroundImage={logoBackground} />
+      </NeonFrame>
+
       {/* ---------- SpaceDefender Rooftop ---------- */}
-      <section
+      {/* <section
         style={{
           width: "100%",
           maxWidth: "1400px",
@@ -26,7 +46,7 @@ function App() {
             position: "relative",
             width: "100%",
             height: isSpaceDefenderExpanded
-              ? "min(80vh, 800px)"
+              ? "min(80vh, 637px)"
               : "var(--space-defender-collapsed-height)",
             overflow: "hidden",
             cursor: isSpaceDefenderExpanded ? "default" : "pointer",
@@ -35,7 +55,7 @@ function App() {
         >
           <SpaceDefender isOpen={isSpaceDefenderExpanded} />
 
-          {/* Collapse button */}
+
           {isSpaceDefenderExpanded && (
             <button
               onClick={(event) => {
@@ -53,7 +73,7 @@ function App() {
             </button>
           )}
         </div>
-      </section>
+      </section> */}
       {/* ---------- Hero ---------- */}
       <section className="hero">
         <div className="topButtons">

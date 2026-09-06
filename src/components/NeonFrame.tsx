@@ -407,7 +407,7 @@ export default function NeonFrame({
         padding: "28px",
 
         backgroundColor,
-        margin: "9px",
+        margin: "0px",
 
         boxSizing: "border-box",
 

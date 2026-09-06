@@ -1,5 +1,5 @@
 :root {
-  --bg: #f3f5f8;
+  --bg: #090909;
   --surface: #ffffff;
   --text: #111827;
   --muted: #6b7280;
@@ -19,17 +19,18 @@ body {
 }
 
 .page {
-  max-width: 1200px;
-  margin: auto;
-  padding: 24px;
+  max-width: 767px;
+  margin: 0 auto;
+  padding: 0;
+  background-color: #090909;
+  /* border: 0.5px solid #d3a9c5; */
 }
 
 .hero {
-  background: #111827;
+  background: #090909;
   color: white;
   padding: 48px 32px;
-  border-radius: 24px;
-  margin-bottom: 20px;
+  border: 0.5px solid #d3a9c5;
 }
 
 .topButtons {
@@ -75,9 +76,7 @@ h1 {
 .contact {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 22px;
   padding: 28px;
-  margin-bottom: 20px;
 }
 
 .contact {
@@ -177,7 +176,7 @@ footer {
 
 @media (max-width: 640px) {
   .page {
-    padding: 16px;
+    padding: 0px;
   }
 
   h1 {
@@ -197,4 +196,9 @@ footer {
   .spaceDefenderBox {
     --space-defender-collapsed-height: 147px;
   }
+}
+
+.logoBanner:hover .logoBannerImage {
+  transform: translateY(-4px) scale(1.02);
+  filter: drop-shadow(0px 0px 7px #ff347fd2);
 }

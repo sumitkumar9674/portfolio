@@ -244,7 +244,7 @@ export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
 
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
-      ship.y = height - 40;
+      ship.y = 567;
 
       const LOGO_MARGIN = 20;
       const availableLogoWidth = width - LOGO_MARGIN * 2;
@@ -616,9 +616,9 @@ export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
       ref={canvasRef}
       style={{
         width: "100%",
-        height: "600px",
+        height: "637px",
         display: "block",
-        borderRadius: "22px",
+        borderRadius: "0px",
         touchAction: "none",
       }}
     />
