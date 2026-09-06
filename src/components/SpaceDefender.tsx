@@ -59,8 +59,47 @@ export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
   // Keeps the latest open/closed state available to the game loop and input handlers.
   const isOpenRef = useRef(isOpen);
 
+  // Stores the current animation frame ID so it can be cancelled from anywhere.
+  const animationFrameIdRef = useRef<number | null>(null);
+
+  // Stores the game loop so it can be started and stopped from the component lifecycle.
+  const loopRef = useRef<((time: number) => void) | null>(null);
+
+  // Stores the game reset function so the game can be reset without reloading assets.
+  const resetGameRef = useRef<(() => void) | null>(null);
+
   // Update the ref whenever App.tsx opens or closes the game.
   isOpenRef.current = isOpen;
+
+  // Start, stop, and reset the game when SpaceDefender opens or closes.
+  useEffect(() => {
+    // Do nothing until the game loop has been initialized.
+    if (!loopRef.current) return;
+
+    // If the game is opening, start the continuous game loop.
+    if (isOpen) {
+      // Store the animation frame so it can be cancelled later.
+      animationFrameIdRef.current = requestAnimationFrame(loopRef.current);
+      return;
+    }
+
+    // Cancel any game frame that was already scheduled.
+    if (animationFrameIdRef.current !== null) {
+      cancelAnimationFrame(animationFrameIdRef.current);
+      animationFrameIdRef.current = null;
+    }
+
+    // Reset the game to its original state.
+    // The background image is not reloaded or changed.
+    resetGameRef.current?.();
+
+    // Render the reset billboard one time while the game is closed.
+    // The loop itself will not schedule another frame because isOpen is false.
+    animationFrameIdRef.current = requestAnimationFrame(loopRef.current);
+  }, [isOpen]);
+
+  // Start the continuous game loop when SpaceDefender is opened.
+
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
@@ -127,8 +166,13 @@ export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
     heroImages.right.src = heroSources.find((src) =>
       src.includes("moving_right.png"),
     )!;
-
     const backgroundImage = new Image();
+
+    // Track when the background image has finished loading.
+    backgroundImage.onload = () => {
+      // Render the billboard once the background is ready.
+      requestAnimationFrame(loop);
+    };
 
     backgroundImage.src =
       backgroundSources[Math.floor(Math.random() * backgroundSources.length)];
@@ -217,8 +261,6 @@ export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
 
       currentScale = scale;
 
-      currentScale = scale;
-
       const tileSize = TILE_SIZE * scale;
       const textTile = TEXT_TILE * scale;
 
@@ -269,6 +311,34 @@ export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
       const bottomStart = TEXT_START + (textAreaWidth - totalWidth) / 2;
     };
 
+    // Reset only the game state without touching the background or loaded assets.
+    const resetGame = () => {
+      // Remove all bullets from the previous game.
+      bullets = [];
+
+      // Stop gameplay until the user interacts with the game again.
+      isPlaying = false;
+
+      // Reset the shooting timer.
+      lastShot = 0;
+
+      // Reset the ship to its starting position.
+      ship.x = 180;
+      ship.targetX = 180;
+
+      // Reset the hero animation to its first idle frame.
+      heroDirection = "idle";
+      idleFrame = 0;
+      lastIdleSwitch = 0;
+
+      // Rebuild the complete logo in its original state.
+      // This does not reload or change the background image.
+      createWave();
+    };
+
+    // Make the reset function available to the component lifecycle.
+    resetGameRef.current = resetGame;
+
     // ---------- Initial Setup ----------
 
     resize();
@@ -317,8 +387,9 @@ export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
 
     // ---------- Game Loop ----------
 
-    let animationFrameId: number;
     let lastFrameTime = 0;
+
+    // Tracks whether the continuous game animation is currently running.
 
     const loop = (time: number) => {
       const deltaTime =
@@ -475,7 +546,7 @@ export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
           const dx = b.x - a.x;
           const dy = b.y - a.y;
 
-          if (Math.sqrt(dx * dx + dy * dy) < 10) {
+          if (dx * dx + dy * dy < 100) {
             a.exploding = true;
             a.explosionStart = time;
             b.y = -100;
@@ -516,16 +587,22 @@ export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
           SHIP_SIZE,
         );
       }
-
-      animationFrameId = requestAnimationFrame(loop);
+      // Keep the game running only while SpaceDefender is open.
+      if (isOpenRef.current) {
+        // Schedule the next frame so movement, animation, bullets, and collisions continue.
+        animationFrameIdRef.current = requestAnimationFrame(loop);
+      }
     };
 
+    // Make the game loop available to the component lifecycle.
+    loopRef.current = loop;
+
+    // Render the initial billboard once when the component loads.
     requestAnimationFrame(loop);
 
     // ---------- Cleanup ----------
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
 
       canvas.removeEventListener("mousemove", mouseMove);
