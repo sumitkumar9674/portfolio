@@ -200,5 +200,5 @@ footer {
 
 .logoBanner:hover .logoBannerImage {
   transform: translateY(-4px) scale(1.02);
-  filter: drop-shadow(0px 0px 7px #ff347fd2);
+  filter: drop-shadow(0px 0px 9px #ff347fd2);
 }
