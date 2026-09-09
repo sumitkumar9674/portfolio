@@ -65,11 +65,11 @@
 }
 
 .cubeTop {
-  transform: rotateX(90deg) translateZ(150px);
+  transform: rotateX(-90deg) translateZ(150px);
 }
 
 .cubeBottom {
-  transform: rotateX(-90deg) translateZ(150px);
+  transform: rotateX(90deg) translateZ(150px);
 }
 
 .cubeScreen {
@@ -167,6 +167,53 @@
   pointer-events: none;
 }
 
+.cubeScreenNavigation {
+  position: absolute;
+  left: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  z-index: 20;
+}
+.cubeScreenNavigation button {
+  min-width: 120px;
+  padding: 10px 16px;
+
+  border: 1px solid rgba(0, 255, 255, 0.5);
+  border-radius: 8px;
+
+  background: rgba(15, 23, 42, 0.95);
+  color: white;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+
+  cursor: pointer;
+
+  transition:
+    background 120ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+.cubeScreenNavigation button:hover {
+  background: rgba(30, 41, 59, 1);
+
+  box-shadow:
+    0 0 8px rgba(0, 255, 255, 0.4),
+    inset 0 0 8px rgba(0, 255, 255, 0.1);
+
+  transform: translateX(4px);
+}
+.cubeScreenNavigation button:active {
+  transform: translateX(4px) scale(0.96);
+}
+
 @media (max-width: 800px) {
   .cubeJoystick {
     right: 25px;
@@ -207,11 +254,11 @@
   }
 
   .cubeTop {
-    transform: rotateX(90deg) translateZ(120px);
+    transform: rotateX(-90deg) translateZ(120px);
   }
 
   .cubeBottom {
-    transform: rotateX(-90deg) translateZ(120px);
+    transform: rotateX(90deg) translateZ(120px);
   }
 
   .cubeScreen {

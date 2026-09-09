@@ -1158,6 +1158,27 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           TEMPORARY TEST JOYSTICK
       ----------------------------------------------------- */}
 
+      {/* --------------------------------------------------------
+    Temporary screen navigation.
+
+    These buttons directly test the target-screen navigation
+    system before we build the final navigation dock.
+--------------------------------------------------------- */}
+
+      <div className="cubeScreenNavigation">
+        <button onClick={() => navigateToScreen("home")}>HOME</button>
+
+        <button onClick={() => navigateToScreen("projects")}>PROJECTS</button>
+
+        <button onClick={() => navigateToScreen("skills")}>SKILLS</button>
+
+        <button onClick={() => navigateToScreen("about")}>ABOUT</button>
+
+        <button onClick={() => navigateToScreen("blog")}>BLOG</button>
+
+        <button onClick={() => navigateToScreen("contact")}>CONTACT</button>
+      </div>
+
       <div className="cubeJoystick">
         <button
           className="joystickButton joystickUp"
