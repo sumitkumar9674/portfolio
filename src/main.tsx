@@ -12,5 +12,7 @@ import "./styles.css";
 const isCubeTest = window.location.pathname === "/cube-test";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>{isCubeTest ? <CubeTest /> : <App />}</StrictMode>,
+  <StrictMode>
+    {isCubeTest ? <CubeTest rotationDuration={350} /> : <App />}
+  </StrictMode>,
 );

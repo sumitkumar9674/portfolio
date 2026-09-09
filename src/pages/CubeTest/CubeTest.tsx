@@ -1,17 +1,21 @@
 // ------------------------------------------------------------
 // CubeTest
 // ------------------------------------------------------------
-// This is a standalone test screen for the 3D portfolio cube.
+// Standalone test screen for the 3D portfolio cube.
 //
 // IMPORTANT ARCHITECTURE:
 //
 // 1. The cube is one rigid 3D object.
 // 2. Every screen is permanently attached to one physical face.
-// 3. We use quaternions for the cube's orientation.
-// 4. Every movement is exactly one 90° roll.
-// 5. SLERP smoothly animates between orientations.
-// 6. We NEVER swap screen content after a rotation.
-// 7. Screen orientation is intentionally NOT corrected yet.
+// 3. Quaternions control the cube's complete orientation.
+// 4. Every navigation movement is exactly one 90° roll.
+// 5. SLERP smoothly animates between exact orientations.
+// 6. Screen content is NEVER swapped after a rotation.
+// 7. Screens are NEVER rotated independently.
+// 8. Orientation is checked only after navigation finishes.
+// 9. Orientation correction rotates the ENTIRE cube.
+// 10. Dragging is handled only by the cube scene.
+// 11. The joystick is temporary testing navigation.
 // ------------------------------------------------------------
 
 import { useEffect, useRef, useState } from "react";
@@ -48,11 +52,17 @@ const screenNames = {
 };
 
 // ------------------------------------------------------------
-// Initial physical face assignment
+// A screen that can be used as a navigation target.
+// ------------------------------------------------------------
+
+type ScreenId = keyof typeof screenNames;
+
+// ------------------------------------------------------------
+// Physical cube face assignment.
 //
-// These are physical faces.
+// These screens NEVER change physical faces.
 //
-// The content stays attached to these faces permanently.
+// The content is permanently attached to these faces.
 // ------------------------------------------------------------
 
 const cubeState = {
@@ -65,7 +75,7 @@ const cubeState = {
 } as const;
 
 // ------------------------------------------------------------
-// Create a quaternion from an axis and angle.
+// Create quaternion from axis + angle.
 // ------------------------------------------------------------
 
 function quaternionFromAxisAngle(
@@ -88,7 +98,7 @@ function quaternionFromAxisAngle(
 // ------------------------------------------------------------
 // Multiply two quaternions.
 //
-// This combines two rotations into one rotation.
+// This combines two rotations.
 // ------------------------------------------------------------
 
 function multiplyQuaternions(a: Quaternion, b: Quaternion): Quaternion {
@@ -104,10 +114,7 @@ function multiplyQuaternions(a: Quaternion, b: Quaternion): Quaternion {
 }
 
 // ------------------------------------------------------------
-// Normalize a quaternion.
-//
-// This keeps the quaternion numerically stable after
-// repeated rotations.
+// Normalize quaternion.
 // ------------------------------------------------------------
 
 function normalizeQuaternion(quaternion: Quaternion): Quaternion {
@@ -127,7 +134,7 @@ function normalizeQuaternion(quaternion: Quaternion): Quaternion {
 }
 
 // ------------------------------------------------------------
-// Dot product between two quaternions.
+// Quaternion dot product.
 // ------------------------------------------------------------
 
 function quaternionDot(a: Quaternion, b: Quaternion): number {
@@ -136,9 +143,6 @@ function quaternionDot(a: Quaternion, b: Quaternion): number {
 
 // ------------------------------------------------------------
 // Spherical interpolation between two quaternions.
-//
-// This gives us smooth movement from one exact cube
-// orientation to another exact cube orientation.
 // ------------------------------------------------------------
 
 function slerpQuaternion(
@@ -151,10 +155,8 @@ function slerpQuaternion(
   let dot = quaternionDot(start, endQuaternion);
 
   // ----------------------------------------------------------
-  // Quaternions q and -q represent the same rotation.
-  //
-  // If the dot product is negative, use the opposite
-  // quaternion so that SLERP takes the shorter path.
+  // q and -q represent the same rotation.
+  // Use the shortest path.
   // ----------------------------------------------------------
 
   if (dot < 0) {
@@ -169,15 +171,18 @@ function slerpQuaternion(
   }
 
   // ----------------------------------------------------------
-  // If the two rotations are extremely close, normal
-  // interpolation is sufficient.
+  // If the rotations are almost identical, use linear
+  // interpolation and normalize the result.
   // ----------------------------------------------------------
 
   if (dot > 0.9995) {
     return normalizeQuaternion({
       x: start.x + amount * (endQuaternion.x - start.x),
+
       y: start.y + amount * (endQuaternion.y - start.y),
+
       z: start.z + amount * (endQuaternion.z - start.z),
+
       w: start.w + amount * (endQuaternion.w - start.w),
     });
   }
@@ -201,7 +206,45 @@ function slerpQuaternion(
 }
 
 // ------------------------------------------------------------
-// Convert quaternion into a CSS matrix3d() value.
+// Rotate a 3D vector by a quaternion.
+// ------------------------------------------------------------
+
+function rotateVectorByQuaternion(
+  quaternion: Quaternion,
+  vector: {
+    x: number;
+    y: number;
+    z: number;
+  },
+) {
+  const vectorQuaternion: Quaternion = {
+    x: vector.x,
+    y: vector.y,
+    z: vector.z,
+    w: 0,
+  };
+
+  const inverse: Quaternion = {
+    x: -quaternion.x,
+    y: -quaternion.y,
+    z: -quaternion.z,
+    w: quaternion.w,
+  };
+
+  const rotated = multiplyQuaternions(
+    multiplyQuaternions(quaternion, vectorQuaternion),
+    inverse,
+  );
+
+  return {
+    x: rotated.x,
+    y: rotated.y,
+    z: rotated.z,
+  };
+}
+
+// ------------------------------------------------------------
+// Convert quaternion to CSS matrix3d().
 // ------------------------------------------------------------
 
 function quaternionToCSSMatrix(quaternion: Quaternion): string {
@@ -242,14 +285,27 @@ function quaternionToCSSMatrix(quaternion: Quaternion): string {
 }
 
 // ------------------------------------------------------------
+// CubeTest props
+// ------------------------------------------------------------
+
+type CubeTestProps = {
+  // ----------------------------------------------------------
+  // Controls the speed of every cube movement.
+  //
+  // Lower value = faster.
+  // Higher value = slower.
+  // ----------------------------------------------------------
+
+  rotationDuration?: number;
+};
+
+// ------------------------------------------------------------
 // CubeTest component
 // ------------------------------------------------------------
 
-export default function CubeTest() {
+export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
   // ----------------------------------------------------------
-  // Current cube orientation.
-  //
-  // The cube starts perfectly flat facing the camera.
+  // Current physical orientation of the entire cube.
   // ----------------------------------------------------------
 
   const [cubeRotation, setCubeRotation] = useState<Quaternion>({
@@ -260,23 +316,20 @@ export default function CubeTest() {
   });
 
   // ----------------------------------------------------------
-  // Prevent multiple rolls from happening simultaneously.
+  // Prevent another movement while an animation is active.
   // ----------------------------------------------------------
 
   const isMoving = useRef(false);
 
   // ----------------------------------------------------------
-  // Store the requestAnimationFrame ID so it can be cancelled
-  // if the component is removed.
+  // Current animation frame.
   // ----------------------------------------------------------
 
   const animationFrame = useRef<number | null>(null);
+  const searchAxisDirection = useRef<Direction>("left");
 
   // ----------------------------------------------------------
-  // Pointer starting position.
-  //
-  // A drag is only used to determine which direction the
-  // user wants. It does NOT create free rotation.
+  // Starting pointer position for drag detection.
   // ----------------------------------------------------------
 
   const pointerStart = useRef<{
@@ -285,9 +338,7 @@ export default function CubeTest() {
   } | null>(null);
 
   // ----------------------------------------------------------
-  // Calculate the target rotation for a LEFT movement.
-  //
-  // This is one exact 90° world-space roll.
+  // LEFT navigation roll.
   // ----------------------------------------------------------
 
   function moveLeft(current: Quaternion): Quaternion {
@@ -297,7 +348,7 @@ export default function CubeTest() {
   }
 
   // ----------------------------------------------------------
-  // Calculate the target rotation for a RIGHT movement.
+  // RIGHT navigation roll.
   // ----------------------------------------------------------
 
   function moveRight(current: Quaternion): Quaternion {
@@ -307,7 +358,7 @@ export default function CubeTest() {
   }
 
   // ----------------------------------------------------------
-  // Calculate the target rotation for an UP movement.
+  // UP navigation roll.
   // ----------------------------------------------------------
 
   function moveUp(current: Quaternion): Quaternion {
@@ -317,7 +368,7 @@ export default function CubeTest() {
   }
 
   // ----------------------------------------------------------
-  // Calculate the target rotation for a DOWN movement.
+  // DOWN navigation roll.
   // ----------------------------------------------------------
 
   function moveDown(current: Quaternion): Quaternion {
@@ -327,68 +378,219 @@ export default function CubeTest() {
   }
 
   // ----------------------------------------------------------
-  // Perform one complete cube roll.
+  // Local geometry of every physical cube face.
   //
-  // IMPORTANT:
-  //
-  // We only rotate the physical cube.
-  //
-  // We do NOT change cubeState after the animation.
-  //
-  // Therefore CONTACT stays physically attached to the
-  // physical top face. When that face rolls into the front,
-  // CONTACT physically arrives at the front with it.
+  // normal = direction the face points
+  // up     = direction considered "up" on that screen
   // ----------------------------------------------------------
 
-  function move(direction: Direction) {
+  function getFaceVectors() {
+    return {
+      front: {
+        normal: {
+          x: 0,
+          y: 0,
+          z: 1,
+        },
+
+        up: {
+          x: 0,
+          y: 1,
+          z: 0,
+        },
+      },
+
+      back: {
+        normal: {
+          x: 0,
+          y: 0,
+          z: -1,
+        },
+
+        up: {
+          x: 0,
+          y: 1,
+          z: 0,
+        },
+      },
+
+      right: {
+        normal: {
+          x: 1,
+          y: 0,
+          z: 0,
+        },
+
+        up: {
+          x: 0,
+          y: 1,
+          z: 0,
+        },
+      },
+
+      left: {
+        normal: {
+          x: -1,
+          y: 0,
+          z: 0,
+        },
+
+        up: {
+          x: 0,
+          y: 1,
+          z: 0,
+        },
+      },
+
+      top: {
+        normal: {
+          x: 0,
+          y: 1,
+          z: 0,
+        },
+
+        up: {
+          x: 0,
+          y: 0,
+          z: -1,
+        },
+      },
+
+      bottom: {
+        normal: {
+          x: 0,
+          y: -1,
+          z: 0,
+        },
+
+        up: {
+          x: 0,
+          y: 0,
+          z: 1,
+        },
+      },
+    };
+  }
+
+  // ----------------------------------------------------------
+  // Determine which physical face is currently facing the
+  // camera.
+  //
+  // The camera sees the face whose normal points most strongly
+  // toward +Z.
+  // ----------------------------------------------------------
+
+  function getFrontFace(rotation: Quaternion): keyof typeof cubeState {
+    const faceVectors = getFaceVectors();
+
+    let bestFace: keyof typeof cubeState | null = null;
+
+    let bestScore = -Infinity;
+
+    (Object.keys(faceVectors) as Array<keyof typeof cubeState>).forEach(
+      (face) => {
+        const transformedNormal = rotateVectorByQuaternion(
+          rotation,
+          faceVectors[face].normal,
+        );
+
+        if (transformedNormal.z > bestScore) {
+          bestScore = transformedNormal.z;
+
+          bestFace = face;
+        }
+      },
+    );
+
+    return bestFace!;
+  }
+
+  // ----------------------------------------------------------
+  // Determine how the current front face is oriented.
+  //
+  // We only care about the screen that is currently facing
+  // the camera.
+  //
+  // The result is rounded to the nearest 90°.
+  // ----------------------------------------------------------
+
+  function getOrientationCorrection(rotation: Quaternion): number {
+    const faceVectors = getFaceVectors();
+
+    const frontFace = getFrontFace(rotation);
+
     // --------------------------------------------------------
-    // Ignore another command while the cube is already moving.
+    // Transform the "up" direction of the physical front face
+    // into world/camera coordinates.
     // --------------------------------------------------------
 
-    if (isMoving.current) {
-      return;
-    }
-
-    isMoving.current = true;
-
-    // --------------------------------------------------------
-    // Save the exact starting orientation.
-    // --------------------------------------------------------
-
-    const startRotation = cubeRotation;
+    const transformedUp = rotateVectorByQuaternion(
+      rotation,
+      faceVectors[frontFace].up,
+    );
 
     // --------------------------------------------------------
-    // Calculate the exact final orientation.
+    // Only the X/Y direction matters on the computer screen.
     // --------------------------------------------------------
 
-    let targetRotation: Quaternion;
+    const screenX = transformedUp.x;
 
-    if (direction === "left") {
-      targetRotation = moveLeft(startRotation);
-    } else if (direction === "right") {
-      targetRotation = moveRight(startRotation);
-    } else if (direction === "up") {
-      targetRotation = moveUp(startRotation);
-    } else {
-      targetRotation = moveDown(startRotation);
-    }
+    const screenY = transformedUp.y;
 
     // --------------------------------------------------------
-    // Animation timing.
+    // Calculate the screen's current rotation.
+    //
+    // 0°   = upright
+    // 90°  = sideways
+    // 180° = upside down
+    // 270° = sideways the other way
     // --------------------------------------------------------
 
-    const duration = 700;
+    const currentAngle = Math.atan2(screenX, screenY);
+
+    // --------------------------------------------------------
+    // Convert to the nearest exact quarter-turn.
+    // --------------------------------------------------------
+
+    const quarterTurns = Math.round(currentAngle / (Math.PI / 2));
+
+    // --------------------------------------------------------
+    // IMPORTANT:
+    //
+    // The previous version used the opposite sign here.
+    //
+    // That worked for 180° because clockwise and
+    // counter-clockwise both produce the same result.
+    //
+    // But for a sideways screen, that made the correction
+    // rotate toward the upside-down orientation instead of
+    // the upright orientation.
+    //
+    // The positive direction is the correct whole-cube
+    // correction for the screen's measured orientation.
+    // --------------------------------------------------------
+
+    return quarterTurns * (Math.PI / 2);
+  }
+
+  // ----------------------------------------------------------
+  // Animate the entire cube to a target quaternion.
+  //
+  // This is shared by navigation and automatic orientation
+  // correction.
+  // ----------------------------------------------------------
+
+  function animateCubeTo(
+    startRotation: Quaternion,
+    targetRotation: Quaternion,
+    onComplete?: () => void,
+  ) {
     const startTime = performance.now();
-
-    // --------------------------------------------------------
-    // Animate from the current orientation to the target
-    // orientation.
-    // --------------------------------------------------------
 
     function animate(currentTime: number) {
       const elapsed = currentTime - startTime;
 
-      const rawProgress = Math.min(elapsed / duration, 1);
+      const rawProgress = Math.min(elapsed / rotationDuration, 1);
 
       // ------------------------------------------------------
       // Smooth ease-in / ease-out.
@@ -400,7 +602,7 @@ export default function CubeTest() {
           : 1 - Math.pow(-2 * rawProgress + 2, 2) / 2;
 
       // ------------------------------------------------------
-      // Calculate the current physical orientation.
+      // Calculate current physical cube orientation.
       // ------------------------------------------------------
 
       const currentRotation = slerpQuaternion(
@@ -412,7 +614,7 @@ export default function CubeTest() {
       setCubeRotation(currentRotation);
 
       // ------------------------------------------------------
-      // Continue until the cube reaches the exact target.
+      // Continue until the exact target.
       // ------------------------------------------------------
 
       if (rawProgress < 1) {
@@ -422,61 +624,452 @@ export default function CubeTest() {
       }
 
       // ------------------------------------------------------
-      // Force the exact final orientation.
-      //
-      // This prevents tiny floating-point errors from
-      // accumulating over many movements.
+      // Force exact final orientation.
       // ------------------------------------------------------
 
       setCubeRotation(targetRotation);
 
-      // ------------------------------------------------------
-      // IMPORTANT:
-      //
-      // We DO NOT change cubeState here.
-      //
-      // The screens are physical objects attached to their
-      // cube faces.
-      //
-      // The quaternion already moved those physical faces
-      // into their new positions.
-      //
-      // Swapping the labels here would make the screen
-      // suddenly change after the animation finishes.
-      // ------------------------------------------------------
-
-      isMoving.current = false;
       animationFrame.current = null;
-    }
 
-    // --------------------------------------------------------
-    // Start animation.
-    // --------------------------------------------------------
+      // ------------------------------------------------------
+      // Only after the animation has fully finished do we
+      // execute the next stage.
+      // ------------------------------------------------------
+
+      if (onComplete) {
+        onComplete();
+      }
+    }
 
     animationFrame.current = requestAnimationFrame(animate);
   }
 
-  // ------------------------------------------------------------
-  // Pointer down
-  // ------------------------------------------------------------
+  // ----------------------------------------------------------
+  // Perform one navigation movement.
+  //
+  // IMPORTANT:
+  //
+  // Orientation is checked ONLY after this navigation roll
+  // completely finishes.
+  //
+  // Later, when multi-roll navigation is added, the same
+  // principle will be used: orientation checking happens only
+  // after the FINAL navigation roll.
+  // ----------------------------------------------------------
 
-  function handlePointerDown(event: React.PointerEvent<HTMLDivElement>) {
+  // ----------------------------------------------------------
+  // Get the physical screen currently facing the camera.
+  //
+  // IMPORTANT:
+  //
+  // This reads the actual physical cube orientation.
+  //
+  // We do NOT change cubeState.
+  // We do NOT swap screens.
+  // ----------------------------------------------------------
+
+  function getFrontScreen(rotation: Quaternion): ScreenId {
+    const frontFace = getFrontFace(rotation);
+
+    return cubeState[frontFace];
+  }
+
+  // ----------------------------------------------------------
+  // Calculate the target quaternion for one 90° roll.
+  // ----------------------------------------------------------
+
+  function getMovementRotation(
+    direction: Direction,
+    currentRotation: Quaternion,
+  ): Quaternion {
+    if (direction === "left") {
+      return moveLeft(currentRotation);
+    }
+
+    if (direction === "right") {
+      return moveRight(currentRotation);
+    }
+
+    if (direction === "up") {
+      return moveUp(currentRotation);
+    }
+
+    return moveDown(currentRotation);
+  }
+
+  // ----------------------------------------------------------
+  // Apply the existing Z-axis orientation correction.
+  //
+  // This is intentionally kept separate from navigation.
+  //
+  // Manual movement calls this after ONE roll.
+  //
+  // Target-screen navigation calls this ONLY after the
+  // requested physical screen has reached the front.
+  // ----------------------------------------------------------
+
+  function correctCubeOrientation(
+    rotation: Quaternion,
+    onComplete: () => void,
+  ) {
+    const correctionAngle = getOrientationCorrection(rotation);
+
+    // --------------------------------------------------------
+    // The screen is already upright.
+    // --------------------------------------------------------
+
+    if (Math.abs(correctionAngle) < 0.01) {
+      onComplete();
+
+      return;
+    }
+
+    // --------------------------------------------------------
+    // Rotate the ENTIRE cube around the front/back axis.
+    //
+    // The screen itself is never rotated independently.
+    // --------------------------------------------------------
+
+    const correctionRotation = quaternionFromAxisAngle(
+      0,
+      0,
+      1,
+      correctionAngle,
+    );
+
+    const correctedTarget = normalizeQuaternion(
+      multiplyQuaternions(correctionRotation, rotation),
+    );
+
+    // --------------------------------------------------------
+    // Animate the final orientation correction.
+    // --------------------------------------------------------
+
+    animateCubeTo(rotation, correctedTarget, onComplete);
+  }
+
+  // ----------------------------------------------------------
+  // Perform ONE physical 90° cube roll.
+  //
+  // This function does NOT perform orientation correction.
+  //
+  // That is extremely important for multi-roll navigation.
+  //
+  // Navigation can therefore do:
+  //
+  // 90° → check
+  // 90° → check
+  // 90° → check
+  //
+  // without the cube being corrected between rolls.
+  // ----------------------------------------------------------
+
+  function performNavigationRoll(
+    direction: Direction,
+    currentRotation: Quaternion,
+    onComplete: (nextRotation: Quaternion) => void,
+  ) {
+    const targetRotation = getMovementRotation(direction, currentRotation);
+
+    animateCubeTo(currentRotation, targetRotation, () => {
+      onComplete(targetRotation);
+    });
+  }
+
+  // ----------------------------------------------------------
+  // Pick a random direction on one axis.
+  //
+  // horizontal = LEFT or RIGHT
+  // vertical   = UP or DOWN
+  // ----------------------------------------------------------
+
+  function getRandomDirection(axis: "horizontal" | "vertical"): Direction {
+    if (axis === "horizontal") {
+      return Math.random() < 0.5 ? "left" : "right";
+    }
+
+    return Math.random() < 0.5 ? "up" : "down";
+  }
+
+  // ----------------------------------------------------------
+  // Navigate to a specific physical screen.
+  //
+  // The search works in two guaranteed finite stages:
+  //
+  // 1. Pick X or Y randomly.
+  // 2. Pick a random direction on that axis.
+  // 3. Roll 90° and check.
+  // 4. Roll another 90° and check.
+  // 5. Roll another 90° and check.
+  //
+  // If the target wasn't found after the 270° sweep,
+  // switch to the other axis.
+  //
+  // Once the target reaches the front:
+  //
+  // ONLY THEN perform the Z-axis orientation correction.
+  //
+  // There is no infinite random loop.
+  // ----------------------------------------------------------
+
+  function navigateToScreen(targetScreen: ScreenId) {
+    // --------------------------------------------------------
+    // Ignore navigation requests while the cube is moving.
+    // --------------------------------------------------------
+
+    if (isMoving.current) {
+      return;
+    }
+
+    // --------------------------------------------------------
+    // If the requested screen is already in front,
+    // we don't need any X/Y movement.
+    //
+    // We only perform the normal orientation correction.
+    // --------------------------------------------------------
+
+    if (getFrontScreen(cubeRotation) === targetScreen) {
+      isMoving.current = true;
+
+      correctCubeOrientation(cubeRotation, () => {
+        isMoving.current = false;
+      });
+
+      return;
+    }
+
+    // --------------------------------------------------------
+    // Lock the cube for the complete navigation sequence.
+    // --------------------------------------------------------
+
+    isMoving.current = true;
+
+    // --------------------------------------------------------
+    // Randomly choose which axis we search first.
+    //
+    // X = vertical movement
+    // Y = horizontal movement
+    // --------------------------------------------------------
+
+    const firstAxis = Math.random() < 0.5 ? "horizontal" : "vertical";
+
+    const secondAxis = firstAxis === "horizontal" ? "vertical" : "horizontal";
+
+    // --------------------------------------------------------
+    // Search one axis.
+    //
+    // Three 90° rolls = 270°.
+    //
+    // The fourth orientation is the original orientation,
+    // so checking after three rolls covers all four positions.
+    // --------------------------------------------------------
+
+    const searchAxis = (
+      axis: "horizontal" | "vertical",
+      currentRotation: Quaternion,
+      rollCount: number,
+      onFinished: (found: boolean, finalRotation: Quaternion) => void,
+    ) => {
+      // ------------------------------------------------------
+      // Check the current physical front face.
+      // ------------------------------------------------------
+
+      if (getFrontScreen(currentRotation) === targetScreen) {
+        onFinished(true, currentRotation);
+
+        return;
+      }
+
+      // ------------------------------------------------------
+      // Three rolls have now been attempted on this axis.
+      //
+      // Switch to the other axis.
+      // ------------------------------------------------------
+
+      if (rollCount >= 3) {
+        onFinished(false, currentRotation);
+
+        return;
+      }
+
+      // ------------------------------------------------------
+      // Pick ONE random direction for this axis sweep.
+      //
+      // The direction stays the same for all three rolls.
+      // ------------------------------------------------------
+
+      const direction =
+        rollCount === 0
+          ? getRandomDirection(axis)
+          : (searchAxisDirection.current as Direction);
+
+      searchAxisDirection.current = direction;
+
+      // ------------------------------------------------------
+      // Perform exactly one physical 90° roll.
+      // ------------------------------------------------------
+
+      performNavigationRoll(direction, currentRotation, (nextRotation) => {
+        // --------------------------------------------------
+        // Check immediately after the completed 90° roll.
+        // --------------------------------------------------
+
+        if (getFrontScreen(nextRotation) === targetScreen) {
+          onFinished(true, nextRotation);
+
+          return;
+        }
+
+        // --------------------------------------------------
+        // Continue the same axis sweep.
+        // --------------------------------------------------
+
+        searchAxis(axis, nextRotation, rollCount + 1, onFinished);
+      });
+    };
+
+    // --------------------------------------------------------
+    // Start with the randomly selected axis.
+    // --------------------------------------------------------
+
+    searchAxis(firstAxis, cubeRotation, 0, (found, rotationAfterFirstAxis) => {
+      if (found) {
+        // ----------------------------------------------
+        // Target reached.
+        //
+        // NOW perform the ONE final Z correction.
+        // ----------------------------------------------
+
+        correctCubeOrientation(rotationAfterFirstAxis, () => {
+          isMoving.current = false;
+        });
+
+        return;
+      }
+
+      // --------------------------------------------------
+      // First axis failed.
+      //
+      // Switch to the other axis.
+      // --------------------------------------------------
+
+      searchAxis(
+        secondAxis,
+        rotationAfterFirstAxis,
+        0,
+        (foundOnSecondAxis, finalRotation) => {
+          if (foundOnSecondAxis) {
+            // --------------------------------------------
+            // Target reached on second axis.
+            //
+            // NOW perform the ONE final Z correction.
+            // --------------------------------------------
+
+            correctCubeOrientation(finalRotation, () => {
+              isMoving.current = false;
+            });
+
+            return;
+          }
+
+          // ------------------------------------------------
+          // This should theoretically never happen for a
+          // valid cube navigation target, because the two
+          // complete axis sweeps cover the cube orientations.
+          //
+          // Keep this as a safety exit.
+          // ------------------------------------------------
+
+          isMoving.current = false;
+        },
+      );
+    });
+  }
+
+  // ----------------------------------------------------------
+  // Direction used during the current axis sweep.
+  //
+  // We intentionally keep the same random direction for all
+  // three 90° rolls of one axis.
+  // ----------------------------------------------------------
+
+  // ----------------------------------------------------------
+  // Manual cube movement.
+  //
+  // Manual movement still performs:
+  //
+  // ONE 90° roll
+  //      ↓
+  // Z orientation correction
+  //
+  // Multi-roll navigation uses navigateToScreen() instead.
+  // ----------------------------------------------------------
+
+  function move(direction: Direction) {
+    // --------------------------------------------------------
+    // Ignore commands while moving.
+    // --------------------------------------------------------
+
+    if (isMoving.current) {
+      return;
+    }
+
+    isMoving.current = true;
+
+    // --------------------------------------------------------
+    // Save current physical orientation.
+    // --------------------------------------------------------
+
+    const startRotation = cubeRotation;
+
+    // --------------------------------------------------------
+    // Calculate the 90° target orientation.
+    // --------------------------------------------------------
+
+    const targetRotation = getMovementRotation(direction, startRotation);
+
+    // --------------------------------------------------------
+    // Perform exactly one physical cube roll.
+    // --------------------------------------------------------
+
+    animateCubeTo(startRotation, targetRotation, () => {
+      // ----------------------------------------------------
+      // Only after the roll completely finishes do we
+      // perform the orientation correction.
+      // ----------------------------------------------------
+
+      correctCubeOrientation(targetRotation, () => {
+        isMoving.current = false;
+      });
+    });
+  }
+
+  // ----------------------------------------------------------
+  // Pointer down for the CUBE ONLY.
+  //
+  // This is deliberately NOT attached to the entire page.
+  // That keeps buttons and the joystick independent.
+  // ----------------------------------------------------------
+
+  function handleCubePointerDown(event: React.PointerEvent<HTMLDivElement>) {
+    // --------------------------------------------------------
+    // Capture the pointer so pointer-up still reaches the cube
+    // even if the pointer leaves the cube while dragging.
+    // --------------------------------------------------------
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+
     pointerStart.current = {
       x: event.clientX,
       y: event.clientY,
     };
   }
 
-  // ------------------------------------------------------------
-  // Pointer up
-  //
-  // The drag distance decides which ONE 90° movement should
-  // happen.
-  //
-  // The user can never stop the cube halfway through.
-  // ------------------------------------------------------------
+  // ----------------------------------------------------------
+  // Pointer up for the CUBE ONLY.
+  // ----------------------------------------------------------
 
-  function handlePointerUp(event: React.PointerEvent<HTMLDivElement>) {
+  function handleCubePointerUp(event: React.PointerEvent<HTMLDivElement>) {
     if (!pointerStart.current) {
       return;
     }
@@ -488,7 +1081,15 @@ export default function CubeTest() {
     pointerStart.current = null;
 
     // --------------------------------------------------------
-    // Ignore very small movements.
+    // Release pointer capture immediately.
+    // --------------------------------------------------------
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    // --------------------------------------------------------
+    // Ignore tiny movements.
     // --------------------------------------------------------
 
     const minimumDrag = 40;
@@ -498,20 +1099,16 @@ export default function CubeTest() {
     }
 
     // --------------------------------------------------------
-    // Whichever axis has the larger movement wins.
-    //
-    // This prevents diagonal drags from accidentally
-    // triggering two movements.
+    // Whichever axis moved more determines the command.
     // --------------------------------------------------------
 
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
-      // --------------------------------------------------------
+      // ------------------------------------------------------
       // Horizontal drag.
       //
-      // The horizontal movement is intentionally mapped opposite
-      // to the physical drag direction so the cube follows the
-      // expected "grab and roll" behavior.
-      // --------------------------------------------------------
+      // Right drag → LEFT cube roll.
+      // Left drag  → RIGHT cube roll.
+      // ------------------------------------------------------
 
       if (deltaX > 0) {
         move("left");
@@ -519,9 +1116,9 @@ export default function CubeTest() {
         move("right");
       }
     } else {
-      // --------------------------------------------------------
-      // Vertical drag is already behaving correctly.
-      // --------------------------------------------------------
+      // ------------------------------------------------------
+      // Vertical drag.
+      // ------------------------------------------------------
 
       if (deltaY > 0) {
         move("down");
@@ -531,9 +1128,17 @@ export default function CubeTest() {
     }
   }
 
-  // ------------------------------------------------------------
+  // ----------------------------------------------------------
+  // Prevent accidental browser drag behavior.
+  // ----------------------------------------------------------
+
+  function handleCubeDragStart(event: React.DragEvent<HTMLDivElement>) {
+    event.preventDefault();
+  }
+
+  // ----------------------------------------------------------
   // Cleanup animation when component is removed.
-  // ------------------------------------------------------------
+  // ----------------------------------------------------------
 
   useEffect(() => {
     return () => {
@@ -543,50 +1148,68 @@ export default function CubeTest() {
     };
   }, []);
 
-  // ------------------------------------------------------------
+  // ----------------------------------------------------------
   // Render
-  // ------------------------------------------------------------
+  // ----------------------------------------------------------
 
   return (
-    <div
-      className="cubeTestPage"
-      onPointerDown={handlePointerDown}
-      onPointerUp={handlePointerUp}
-    >
+    <div className="cubeTestPage">
       {/* ----------------------------------------------------
-          Direction controls
+          TEMPORARY TEST JOYSTICK
       ----------------------------------------------------- */}
 
-      <button className="cubeButton cubeButtonUp" onClick={() => move("up")}>
-        ↑
-      </button>
+      <div className="cubeJoystick">
+        <button
+          className="joystickButton joystickUp"
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={() => move("up")}
+          aria-label="Move cube up"
+        >
+          ↑
+        </button>
 
-      <button
-        className="cubeButton cubeButtonDown"
-        onClick={() => move("down")}
-      >
-        ↓
-      </button>
+        <button
+          className="joystickButton joystickLeft"
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={() => move("left")}
+          aria-label="Move cube left"
+        >
+          ←
+        </button>
 
-      <button
-        className="cubeButton cubeButtonLeft"
-        onClick={() => move("left")}
-      >
-        ←
-      </button>
+        <div className="joystickCenter">●</div>
 
-      <button
-        className="cubeButton cubeButtonRight"
-        onClick={() => move("right")}
-      >
-        →
-      </button>
+        <button
+          className="joystickButton joystickRight"
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={() => move("right")}
+          aria-label="Move cube right"
+        >
+          →
+        </button>
+
+        <button
+          className="joystickButton joystickDown"
+          onPointerDown={(event) => event.stopPropagation()}
+          onClick={() => move("down")}
+          aria-label="Move cube down"
+        >
+          ↓
+        </button>
+      </div>
 
       {/* ----------------------------------------------------
           3D scene
+          
+          ONLY THIS AREA responds to cube dragging.
       ----------------------------------------------------- */}
 
-      <div className="cubeScene">
+      <div
+        className="cubeScene"
+        onPointerDown={handleCubePointerDown}
+        onPointerUp={handleCubePointerUp}
+        onDragStart={handleCubeDragStart}
+      >
         <div
           className="cube"
           style={{

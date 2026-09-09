@@ -1,254 +1,178 @@
-/* ------------------------------------------------------------
-   CubeTest page
------------------------------------------------------------- */
-
 .cubeTestPage {
   width: 100%;
   height: 100vh;
-
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  position: relative;
-
   overflow: hidden;
-
-  background: #111827;
-
-  touch-action: none;
-
+  background: #ffffff;
   user-select: none;
+  touch-action: none;
 }
-
-/* ------------------------------------------------------------
-   3D scene
------------------------------------------------------------- */
 
 .cubeScene {
   width: 300px;
   height: 300px;
-
   position: relative;
-
   perspective: 1000px;
+  touch-action: none;
+  cursor: grab;
 }
 
-/* ------------------------------------------------------------
-   The actual cube.
-//
-// The cube itself is the single rigid 3D object.
-// ------------------------------------------------------------ */
+.cubeScene:active {
+  cursor: grabbing;
+}
 
 .cube {
   width: 300px;
   height: 300px;
-
   position: absolute;
-
   top: 0;
   left: 0;
-
   transform-style: preserve-3d;
-
   will-change: transform;
 }
-
-/* ------------------------------------------------------------
-   Common face styling
------------------------------------------------------------- */
 
 .cubeFace {
   width: 300px;
   height: 300px;
-
   position: absolute;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   box-sizing: border-box;
-
   border: 2px solid rgba(255, 255, 255, 0.25);
-
   background: rgba(15, 23, 42, 0.95);
-
   backface-visibility: hidden;
-
   transform-style: preserve-3d;
 }
-
-/* ------------------------------------------------------------
-   Front face
------------------------------------------------------------- */
 
 .cubeFront {
   transform: translateZ(150px);
 }
 
-/* ------------------------------------------------------------
-   Back face
------------------------------------------------------------- */
-
 .cubeBack {
   transform: rotateY(180deg) translateZ(150px);
 }
-
-/* ------------------------------------------------------------
-   Right face
------------------------------------------------------------- */
 
 .cubeRight {
   transform: rotateY(90deg) translateZ(150px);
 }
 
-/* ------------------------------------------------------------
-   Left face
------------------------------------------------------------- */
-
 .cubeLeft {
   transform: rotateY(-90deg) translateZ(150px);
 }
-
-/* ------------------------------------------------------------
-   Top face
------------------------------------------------------------- */
 
 .cubeTop {
   transform: rotateX(90deg) translateZ(150px);
 }
 
-/* ------------------------------------------------------------
-   Bottom face
------------------------------------------------------------- */
-
 .cubeBottom {
   transform: rotateX(-90deg) translateZ(150px);
 }
 
-/* ------------------------------------------------------------
-   Screen attached to each physical face
------------------------------------------------------------- */
-
 .cubeScreen {
   width: 80%;
   height: 80%;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   border: 2px solid #00ffff;
-
   background: #020617;
-
-  color: #ffffff;
-
+  color: white;
   font-family: Inter, system-ui, sans-serif;
-
   font-size: 32px;
   font-weight: 700;
-
   letter-spacing: 2px;
-
   box-shadow:
     0 0 10px rgba(0, 255, 255, 0.5),
     inset 0 0 15px rgba(0, 255, 255, 0.15);
 }
 
-/* ------------------------------------------------------------
-   Direction buttons
------------------------------------------------------------- */
-
-.cubeButton {
-  width: 52px;
-  height: 52px;
-
+.cubeJoystick {
+  width: 150px;
+  height: 150px;
   position: absolute;
-
+  right: 80px;
+  bottom: 80px;
   z-index: 20;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+  touch-action: none;
+}
 
+.joystickButton {
+  width: 48px;
+  height: 48px;
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-
   border: 1px solid rgba(255, 255, 255, 0.3);
-
-  border-radius: 8px;
-
-  background: rgba(15, 23, 42, 0.85);
-
-  color: white;
-
-  font-size: 28px;
-
-  cursor: pointer;
-
-  transition:
-    transform 150ms ease,
-    background 150ms ease;
-}
-
-.cubeButton:hover {
+  border-radius: 10px;
   background: rgba(30, 41, 59, 0.95);
-
-  transform: scale(1.08);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    background 120ms ease;
 }
 
-.cubeButton:active {
-  transform: scale(0.95);
+.joystickButton:hover {
+  background: rgba(51, 65, 85, 1);
 }
 
-/* ------------------------------------------------------------
-   Button positions
------------------------------------------------------------- */
-
-.cubeButtonUp {
-  top: 30px;
-  left: 50%;
-
-  transform: translateX(-50%);
+.joystickButton:active {
+  transform: scale(0.9);
 }
 
-.cubeButtonDown {
-  bottom: 30px;
-  left: 50%;
-
-  transform: translateX(-50%);
+.joystickUp {
+  top: 8px;
+  left: 51px;
 }
 
-.cubeButtonLeft {
-  left: 30px;
-  top: 50%;
-
-  transform: translateY(-50%);
+.joystickDown {
+  bottom: 8px;
+  left: 51px;
 }
 
-.cubeButtonRight {
-  right: 30px;
-  top: 50%;
-
-  transform: translateY(-50%);
+.joystickLeft {
+  left: 8px;
+  top: 51px;
 }
 
-/* ------------------------------------------------------------
-   Keep hover scale centered for vertical buttons.
------------------------------------------------------------- */
-
-.cubeButtonUp:hover,
-.cubeButtonDown:hover {
-  transform: translateX(-50%) scale(1.08);
+.joystickRight {
+  right: 8px;
+  top: 51px;
 }
 
-.cubeButtonLeft:hover,
-.cubeButtonRight:hover {
-  transform: translateY(-50%) scale(1.08);
+.joystickCenter {
+  width: 38px;
+  height: 38px;
+  position: absolute;
+  top: 56px;
+  left: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: rgba(2, 6, 23, 0.95);
+  border: 1px solid rgba(0, 255, 255, 0.4);
+  color: #00ffff;
+  font-size: 14px;
+  pointer-events: none;
 }
 
-/* ------------------------------------------------------------
-   Mobile
------------------------------------------------------------- */
+@media (max-width: 800px) {
+  .cubeJoystick {
+    right: 25px;
+    bottom: 25px;
+  }
+}
 
 @media (max-width: 600px) {
   .cubeScene {
@@ -256,7 +180,11 @@
     height: 240px;
   }
 
-  .cube,
+  .cube {
+    width: 240px;
+    height: 240px;
+  }
+
   .cubeFace {
     width: 240px;
     height: 240px;
@@ -290,8 +218,43 @@
     font-size: 24px;
   }
 
-  .cubeButton {
-    width: 46px;
-    height: 46px;
+  .cubeJoystick {
+    width: 125px;
+    height: 125px;
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .joystickButton {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .joystickUp {
+    top: 6px;
+    left: 42px;
+  }
+
+  .joystickDown {
+    bottom: 6px;
+    left: 42px;
+  }
+
+  .joystickLeft {
+    left: 6px;
+    top: 42px;
+  }
+
+  .joystickRight {
+    right: 6px;
+    top: 42px;
+  }
+
+  .joystickCenter {
+    width: 32px;
+    height: 32px;
+    top: 46px;
+    left: 46px;
   }
 }
