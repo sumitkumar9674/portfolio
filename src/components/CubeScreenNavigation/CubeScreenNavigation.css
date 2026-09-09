@@ -1,0 +1,55 @@
+/* ------------------------------------------------------------
+   CubeScreenNavigation
+   ------------------------------------------------------------
+   Keeps the navigation dock fixed to the left side of
+   the viewport, completely independent from the cube.
+------------------------------------------------------------ */
+
+.cubeScreenNavigation {
+  position: fixed;
+  left: 24px;
+  top: 50%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  transform: translateY(-50%);
+
+  z-index: 9999;
+}
+
+/* Style every navigation button. */
+.cubeScreenNavigation button {
+  width: 120px;
+  height: 42px;
+
+  border: 1px solid #00ffff;
+  border-radius: 6px;
+
+  background: #020617;
+  color: #ffffff;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+
+  cursor: pointer;
+
+  transition:
+    background 120ms ease,
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+/* Button hover effect. */
+.cubeScreenNavigation button:hover {
+  background: #0f172a;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.35);
+}
+
+/* Button press effect. */
+.cubeScreenNavigation button:active {
+  transform: scale(0.94);
+}

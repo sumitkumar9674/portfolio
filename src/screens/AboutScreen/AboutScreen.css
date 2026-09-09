@@ -1,0 +1,27 @@
+/* ------------------------------------------------------------
+   AboutScreen
+   ------------------------------------------------------------
+   Styles belonging only to the ABOUT screen.
+------------------------------------------------------------ */
+
+.aboutScreen {
+  width: 80%;
+  height: 80%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 2px solid #00ffff;
+  background: #020617;
+  color: white;
+
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 2px;
+
+  box-shadow:
+    0 0 10px rgba(0, 255, 255, 0.5),
+    inset 0 0 15px rgba(0, 255, 255, 0.15);
+}

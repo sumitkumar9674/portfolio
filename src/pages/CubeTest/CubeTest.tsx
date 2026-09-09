@@ -20,6 +20,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import "./CubeTest.css";
+import CubeScreenNavigation from "../../components/CubeScreenNavigation/CubeScreenNavigation";
+import HomeScreen from "../../screens/HomeScreen/HomeScreen";
+import ProjectsScreen from "../../screens/ProjectsScreen/ProjectsScreen";
+import SkillsScreen from "../../screens/SkillsScreen/SkillsScreen";
+import AboutScreen from "../../screens/AboutScreen/AboutScreen";
+import BlogScreen from "../../screens/BlogScreen/BlogScreen";
+import ContactScreen from "../../screens/ContactScreen/ContactScreen";
 
 // ------------------------------------------------------------
 // Quaternion type
@@ -1165,19 +1172,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     system before we build the final navigation dock.
 --------------------------------------------------------- */}
 
-      <div className="cubeScreenNavigation">
-        <button onClick={() => navigateToScreen("home")}>HOME</button>
-
-        <button onClick={() => navigateToScreen("projects")}>PROJECTS</button>
-
-        <button onClick={() => navigateToScreen("skills")}>SKILLS</button>
-
-        <button onClick={() => navigateToScreen("about")}>ABOUT</button>
-
-        <button onClick={() => navigateToScreen("blog")}>BLOG</button>
-
-        <button onClick={() => navigateToScreen("contact")}>CONTACT</button>
-      </div>
+      <CubeScreenNavigation onNavigate={navigateToScreen} />
 
       <div className="cubeJoystick">
         <button
@@ -1242,15 +1237,24 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           ------------------------------------------------- */}
 
           <div className="cubeFace cubeFront">
-            <div className="cubeScreen">{screenNames[cubeState.front]}</div>
+            <HomeScreen />
+
+            {/* Temporary 3D object used to test objects attached to a cube face. */}
+            <div className="test3DObject">
+              <div className="test3DObjectFace test3DObjectFront" />
+              <div className="test3DObjectFace test3DObjectBack" />
+              <div className="test3DObjectFace test3DObjectRight" />
+              <div className="test3DObjectFace test3DObjectLeft" />
+              <div className="test3DObjectFace test3DObjectTop" />
+              <div className="test3DObjectFace test3DObjectBottom" />
+            </div>
           </div>
 
           {/* ------------------------------------------------
               BACK
           ------------------------------------------------- */}
-
           <div className="cubeFace cubeBack">
-            <div className="cubeScreen">{screenNames[cubeState.back]}</div>
+            <ProjectsScreen />
           </div>
 
           {/* ------------------------------------------------
@@ -1258,15 +1262,14 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           ------------------------------------------------- */}
 
           <div className="cubeFace cubeRight">
-            <div className="cubeScreen">{screenNames[cubeState.right]}</div>
+            <AboutScreen />
           </div>
 
           {/* ------------------------------------------------
               LEFT
           ------------------------------------------------- */}
-
           <div className="cubeFace cubeLeft">
-            <div className="cubeScreen">{screenNames[cubeState.left]}</div>
+            <SkillsScreen />
           </div>
 
           {/* ------------------------------------------------
@@ -1274,7 +1277,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           ------------------------------------------------- */}
 
           <div className="cubeFace cubeTop">
-            <div className="cubeScreen">{screenNames[cubeState.top]}</div>
+            <BlogScreen />
           </div>
 
           {/* ------------------------------------------------
@@ -1282,7 +1285,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           ------------------------------------------------- */}
 
           <div className="cubeFace cubeBottom">
-            <div className="cubeScreen">{screenNames[cubeState.bottom]}</div>
+            <ContactScreen />
           </div>
         </div>
       </div>
