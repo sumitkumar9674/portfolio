@@ -1,122 +1,206 @@
+/* ------------------------------------------------------------
+   CubeTest Variables
+   ------------------------------------------------------------ */
+
+/* Main cube size.
+   The cube always uses 70% of whichever viewport dimension
+   is smaller: width or height. */
+:root {
+  --cube-size: min(70vh, 70vw);
+
+  /* Automatically calculates half of the cube size.
+     Used for the distance of each face from the cube center. */
+  --cube-half: calc(var(--cube-size) / 2);
+
+  /* Temporary 3D test object size. */
+  --test-object-size: 70px;
+
+  /* Automatically calculates half of the test object size. */
+  --test-object-half: calc(var(--test-object-size) / 2);
+}
+
+/* ------------------------------------------------------------
+   Cube Test Page
+   ------------------------------------------------------------ */
+
 .cubeTestPage {
   width: 100%;
   height: 100vh;
   position: relative;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   overflow: hidden;
   background: #ffffff;
+
   user-select: none;
   touch-action: none;
 }
 
+/* ------------------------------------------------------------
+   Cube Scene
+   ------------------------------------------------------------ */
+
 .cubeScene {
-  width: 300px;
-  height: 300px;
+  /* Use the shared cube size variable. */
+  width: var(--cube-size);
+  height: var(--cube-size);
+
   position: relative;
-  perspective: 1000px;
+
+  /* Controls how strongly the 3D depth changes apparent size. */
+  perspective: 70000px;
+
   touch-action: none;
-  cursor: grab;
 }
 
-.cubeScene:active {
-  cursor: grabbing;
-}
+/* ------------------------------------------------------------
+   Main Cube
+   ------------------------------------------------------------ */
 
 .cube {
-  width: 300px;
-  height: 300px;
+  /* Keep the actual cube exactly the same size as the scene. */
+  width: var(--cube-size);
+  height: var(--cube-size);
+
   position: absolute;
   top: 0;
   left: 0;
+
   transform-style: preserve-3d;
   will-change: transform;
 }
 
+/* ------------------------------------------------------------
+   Cube Faces
+   ------------------------------------------------------------ */
+
 .cubeFace {
-  width: 300px;
-  height: 300px;
+  /* Every physical face must exactly match the cube size. */
+  width: var(--cube-size);
+  height: var(--cube-size);
+
   position: absolute;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   box-sizing: border-box;
+
   border: 2px solid rgba(255, 255, 255, 0.25);
   background: rgba(15, 23, 42, 0.95);
+
   backface-visibility: hidden;
   transform-style: preserve-3d;
 }
 
+/* ------------------------------------------------------------
+   Cube Face Positions
+   ------------------------------------------------------------ */
+
+/* Every face sits exactly half the cube size away
+   from the center of the cube. */
+
 .cubeFront {
-  transform: translateZ(150px);
+  transform: translateZ(var(--cube-half));
 }
 
 .cubeBack {
-  transform: rotateY(180deg) translateZ(150px);
+  transform: rotateY(180deg) translateZ(var(--cube-half));
 }
 
 .cubeRight {
-  transform: rotateY(90deg) translateZ(150px);
+  transform: rotateY(90deg) translateZ(var(--cube-half));
 }
 
 .cubeLeft {
-  transform: rotateY(-90deg) translateZ(150px);
+  transform: rotateY(-90deg) translateZ(var(--cube-half));
 }
 
 .cubeTop {
-  transform: rotateX(-90deg) translateZ(150px);
+  transform: rotateX(-90deg) translateZ(var(--cube-half));
 }
 
 .cubeBottom {
-  transform: rotateX(90deg) translateZ(150px);
+  transform: rotateX(90deg) translateZ(var(--cube-half));
 }
+
+/* ------------------------------------------------------------
+   Cube Screen
+   ------------------------------------------------------------ */
 
 .cubeScreen {
   width: 80%;
   height: 80%;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   border: 2px solid #00ffff;
   background: #020617;
   color: white;
+
   font-family: Inter, system-ui, sans-serif;
   font-size: 32px;
   font-weight: 700;
   letter-spacing: 2px;
+
   box-shadow:
     0 0 10px rgba(0, 255, 255, 0.5),
     inset 0 0 15px rgba(0, 255, 255, 0.15);
 }
 
+/* ------------------------------------------------------------
+   Cube Joystick
+   ------------------------------------------------------------ */
+
 .cubeJoystick {
   width: 150px;
   height: 150px;
+
   position: absolute;
   right: 80px;
   bottom: 80px;
+
   z-index: 20;
+
   border-radius: 50%;
+
   background: rgba(15, 23, 42, 0.85);
   border: 2px solid rgba(255, 255, 255, 0.25);
+
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+
   touch-action: none;
 }
+
+/* ------------------------------------------------------------
+   Joystick Buttons
+   ------------------------------------------------------------ */
 
 .joystickButton {
   width: 48px;
   height: 48px;
+
   position: absolute;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 10px;
+
   background: rgba(30, 41, 59, 0.95);
   color: white;
+
   font-size: 24px;
   cursor: pointer;
+
   transition:
     transform 120ms ease,
     background 120ms ease;
@@ -129,6 +213,10 @@
 .joystickButton:active {
   transform: scale(0.9);
 }
+
+/* ------------------------------------------------------------
+   Joystick Button Positions
+   ------------------------------------------------------------ */
 
 .joystickUp {
   top: 8px;
@@ -150,37 +238,46 @@
   top: 51px;
 }
 
+/* ------------------------------------------------------------
+   Joystick Center
+   ------------------------------------------------------------ */
+
 .joystickCenter {
   width: 38px;
   height: 38px;
+
   position: absolute;
   top: 56px;
   left: 56px;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   border-radius: 50%;
+
   background: rgba(2, 6, 23, 0.95);
   border: 1px solid rgba(0, 255, 255, 0.4);
+
   color: #00ffff;
   font-size: 14px;
+
   pointer-events: none;
 }
 
-/* --------------------------------------------------------
-   Temporary 3D test object.
+/* ------------------------------------------------------------
+   Temporary 3D Test Object
+   ------------------------------------------------------------ */
 
-   This object is physically attached to the HOME face.
-   It is intentionally simple so we can test how a
-   3D object behaves when the cube rolls.
---------------------------------------------------------- */
+/* This object is physically attached to the HOME face.
+   It is intentionally simple so we can test how a 3D object
+   behaves when the cube rolls. */
 
 .test3DObject {
-  width: 70px;
-  height: 70px;
+  width: var(--test-object-size);
+  height: var(--test-object-size);
 
   position: absolute;
-
   top: 200px;
   right: 200px;
 
@@ -190,9 +287,10 @@
 }
 
 /* Each element represents one physical side of the test cube. */
+
 .test3DObjectFace {
-  width: 70px;
-  height: 70px;
+  width: var(--test-object-size);
+  height: var(--test-object-size);
 
   position: absolute;
 
@@ -211,32 +309,36 @@
   backface-visibility: visible;
 }
 
+/* Each test-object face sits half the object size
+   away from the object's center. */
+
 .test3DObjectFront {
-  transform: translateZ(35px);
+  transform: translateZ(var(--test-object-half));
 }
 
 .test3DObjectBack {
-  transform: rotateY(180deg) translateZ(35px);
+  transform: rotateY(180deg) translateZ(var(--test-object-half));
 }
 
 .test3DObjectRight {
-  transform: rotateY(90deg) translateZ(35px);
+  transform: rotateY(90deg) translateZ(var(--test-object-half));
 }
 
 .test3DObjectLeft {
-  transform: rotateY(-90deg) translateZ(35px);
+  transform: rotateY(-90deg) translateZ(var(--test-object-half));
 }
 
 .test3DObjectTop {
-  transform: rotateX(-90deg) translateZ(35px);
+  transform: rotateX(-90deg) translateZ(var(--test-object-half));
 }
 
 .test3DObjectBottom {
-  transform: rotateX(90deg) translateZ(35px);
+  transform: rotateX(90deg) translateZ(var(--test-object-half));
 }
 
 /* Small floating motion so we can clearly see that the
    object is independent content attached to the face. */
+
 @keyframes test3DObjectFloat {
   0%,
   100% {
@@ -248,6 +350,10 @@
   }
 }
 
+/* ------------------------------------------------------------
+   Tablet / Smaller Desktop
+   ------------------------------------------------------------ */
+
 @media (max-width: 800px) {
   .cubeJoystick {
     right: 25px;
@@ -255,46 +361,11 @@
   }
 }
 
+/* ------------------------------------------------------------
+   Mobile
+   ------------------------------------------------------------ */
+
 @media (max-width: 600px) {
-  .cubeScene {
-    width: 240px;
-    height: 240px;
-  }
-
-  .cube {
-    width: 240px;
-    height: 240px;
-  }
-
-  .cubeFace {
-    width: 240px;
-    height: 240px;
-  }
-
-  .cubeFront {
-    transform: translateZ(120px);
-  }
-
-  .cubeBack {
-    transform: rotateY(180deg) translateZ(120px);
-  }
-
-  .cubeRight {
-    transform: rotateY(90deg) translateZ(120px);
-  }
-
-  .cubeLeft {
-    transform: rotateY(-90deg) translateZ(120px);
-  }
-
-  .cubeTop {
-    transform: rotateX(-90deg) translateZ(120px);
-  }
-
-  .cubeBottom {
-    transform: rotateX(90deg) translateZ(120px);
-  }
-
   .cubeScreen {
     font-size: 24px;
   }
@@ -302,6 +373,7 @@
   .cubeJoystick {
     width: 125px;
     height: 125px;
+
     right: 15px;
     bottom: 15px;
   }
@@ -309,6 +381,7 @@
   .joystickButton {
     width: 40px;
     height: 40px;
+
     font-size: 20px;
   }
 
@@ -335,6 +408,7 @@
   .joystickCenter {
     width: 32px;
     height: 32px;
+
     top: 46px;
     left: 46px;
   }
