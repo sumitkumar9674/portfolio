@@ -339,11 +339,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
   // Starting pointer position for drag detection.
   // ----------------------------------------------------------
 
-  const pointerStart = useRef<{
-    x: number;
-    y: number;
-  } | null>(null);
-
   // ----------------------------------------------------------
   // LEFT navigation roll.
   // ----------------------------------------------------------
@@ -1051,102 +1046,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     });
   }
 
-  // ----------------------------------------------------------
-  // Pointer down for the CUBE ONLY.
-  //
-  // This is deliberately NOT attached to the entire page.
-  // That keeps buttons and the joystick independent.
-  // ----------------------------------------------------------
-
-  function handleCubePointerDown(event: React.PointerEvent<HTMLDivElement>) {
-    // --------------------------------------------------------
-    // Capture the pointer so pointer-up still reaches the cube
-    // even if the pointer leaves the cube while dragging.
-    // --------------------------------------------------------
-
-    event.currentTarget.setPointerCapture(event.pointerId);
-
-    pointerStart.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-  }
-
-  // ----------------------------------------------------------
-  // Pointer up for the CUBE ONLY.
-  // ----------------------------------------------------------
-
-  function handleCubePointerUp(event: React.PointerEvent<HTMLDivElement>) {
-    if (!pointerStart.current) {
-      return;
-    }
-
-    const deltaX = event.clientX - pointerStart.current.x;
-
-    const deltaY = event.clientY - pointerStart.current.y;
-
-    pointerStart.current = null;
-
-    // --------------------------------------------------------
-    // Release pointer capture immediately.
-    // --------------------------------------------------------
-
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-
-    // --------------------------------------------------------
-    // Ignore tiny movements.
-    // --------------------------------------------------------
-
-    const minimumDrag = 40;
-
-    if (Math.abs(deltaX) < minimumDrag && Math.abs(deltaY) < minimumDrag) {
-      return;
-    }
-
-    // --------------------------------------------------------
-    // Whichever axis moved more determines the command.
-    // --------------------------------------------------------
-
-    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-      // ------------------------------------------------------
-      // Horizontal drag.
-      //
-      // Right drag → LEFT cube roll.
-      // Left drag  → RIGHT cube roll.
-      // ------------------------------------------------------
-
-      if (deltaX > 0) {
-        move("left");
-      } else {
-        move("right");
-      }
-    } else {
-      // ------------------------------------------------------
-      // Vertical drag.
-      // ------------------------------------------------------
-
-      if (deltaY > 0) {
-        move("down");
-      } else {
-        move("up");
-      }
-    }
-  }
-
-  // ----------------------------------------------------------
-  // Prevent accidental browser drag behavior.
-  // ----------------------------------------------------------
-
-  function handleCubeDragStart(event: React.DragEvent<HTMLDivElement>) {
-    event.preventDefault();
-  }
-
-  // ----------------------------------------------------------
-  // Cleanup animation when component is removed.
-  // ----------------------------------------------------------
-
   useEffect(() => {
     return () => {
       if (animationFrame.current !== null) {
@@ -1220,12 +1119,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           ONLY THIS AREA responds to cube dragging.
       ----------------------------------------------------- */}
 
-      <div
-        className="cubeScene"
-        onPointerDown={handleCubePointerDown}
-        onPointerUp={handleCubePointerUp}
-        onDragStart={handleCubeDragStart}
-      >
+      <div className="cubeScene">
         <div
           className="cube"
           style={{
