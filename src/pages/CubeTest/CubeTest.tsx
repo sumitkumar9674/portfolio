@@ -306,6 +306,14 @@ type CubeTestProps = {
   rotationDuration?: number;
 };
 
+const NAVIGATION_TRANSITION_DURATION = 500;
+
+const waitForNavigationToSettle = (): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, NAVIGATION_TRANSITION_DURATION);
+  });
+};
+
 // ------------------------------------------------------------
 // CubeTest component
 // ------------------------------------------------------------
@@ -334,6 +342,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
 
   const animationFrame = useRef<number | null>(null);
   const searchAxisDirection = useRef<Direction>("left");
+  const [activeScreen, setActiveScreen] = useState<ScreenId>("home");
 
   // ----------------------------------------------------------
   // Starting pointer position for drag detection.
@@ -814,13 +823,36 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
   // There is no infinite random loop.
   // ----------------------------------------------------------
 
-  function navigateToScreen(targetScreen: ScreenId) {
+  async function navigateToScreen(targetScreen: ScreenId) {
     // --------------------------------------------------------
     // Ignore navigation requests while the cube is moving.
     // --------------------------------------------------------
-
     if (isMoving.current) {
       return;
+    }
+
+    // --------------------------------------------------------
+    // Remember which screen is currently active.
+    // This determines whether we are leaving HOME or returning
+    // to HOME.
+    // --------------------------------------------------------
+    const leavingHome = activeScreen === "home" && targetScreen !== "home";
+
+    const returningHome = activeScreen !== "home" && targetScreen === "home";
+
+    // --------------------------------------------------------
+    // LEAVING HOME
+    //
+    // Change activeScreen first so the navigation buttons move
+    // to the left side.
+    //
+    // Then wait for that visual transition to finish before
+    // starting the cube rotation.
+    // --------------------------------------------------------
+    if (leavingHome) {
+      setActiveScreen(targetScreen);
+
+      await waitForNavigationToSettle();
     }
 
     // --------------------------------------------------------
@@ -834,6 +866,16 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
       isMoving.current = true;
 
       correctCubeOrientation(cubeRotation, () => {
+        // ----------------------------------------------------
+        // RETURNING HOME
+        //
+        // Only move the navigation back after the cube has
+        // completely finished reaching HOME.
+        // ----------------------------------------------------
+        if (returningHome) {
+          setActiveScreen("home");
+        }
+
         isMoving.current = false;
       });
 
@@ -943,6 +985,12 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
         // ----------------------------------------------
 
         correctCubeOrientation(rotationAfterFirstAxis, () => {
+          // HOME is updated only after the cube has completely
+          // reached and corrected its final orientation.
+          if (returningHome) {
+            setActiveScreen("home");
+          }
+
           isMoving.current = false;
         });
 
@@ -968,6 +1016,12 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
             // --------------------------------------------
 
             correctCubeOrientation(finalRotation, () => {
+              // HOME is updated only after the cube has completely
+              // reached and corrected its final orientation.
+              if (returningHome) {
+                setActiveScreen("home");
+              }
+
               isMoving.current = false;
             });
 
@@ -1071,7 +1125,10 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     system before we build the final navigation dock.
 --------------------------------------------------------- */}
 
-      <CubeScreenNavigation onNavigate={navigateToScreen} />
+      <CubeScreenNavigation
+        onNavigate={navigateToScreen}
+        isHome={activeScreen === "home"}
+      />
 
       <div className="cubeJoystick">
         <button
