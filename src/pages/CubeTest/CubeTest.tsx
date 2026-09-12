@@ -1189,16 +1189,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
 
           <div className="cubeFace cubeFront">
             <HomeScreen />
-
-            {/* Temporary 3D object used to test objects attached to a cube face. */}
-            <div className="test3DObject">
-              <div className="test3DObjectFace test3DObjectFront" />
-              <div className="test3DObjectFace test3DObjectBack" />
-              <div className="test3DObjectFace test3DObjectRight" />
-              <div className="test3DObjectFace test3DObjectLeft" />
-              <div className="test3DObjectFace test3DObjectTop" />
-              <div className="test3DObjectFace test3DObjectBottom" />
-            </div>
           </div>
 
           {/* ------------------------------------------------
