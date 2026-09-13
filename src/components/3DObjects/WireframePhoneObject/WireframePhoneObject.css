@@ -1,0 +1,94 @@
+.wireframe-phone {
+  --phone-size: 150px;
+  --phone-color: #00f0ff;
+
+  position: absolute;
+
+  width: var(--phone-size);
+  height: calc(var(--phone-size) * 1.85);
+
+  left: 50%;
+  top: 50%;
+
+  transform-style: preserve-3d;
+
+  /* Position the entire phone as one object */
+  transform: translate3d(
+    calc(-50% + var(--phone-x)),
+    calc(-50% + var(--phone-y)),
+    var(--phone-z)
+  );
+}
+
+.wireframe-phone__object {
+  width: 100%;
+  height: 100%;
+
+  transform-style: preserve-3d;
+
+  /*
+    One rotation controls the entire phone.
+    The parent scene can also rotate this object.
+  */
+  transform: rotateX(var(--phone-rotate-x)) rotateY(var(--phone-rotate-y))
+    rotateZ(var(--phone-rotate-z));
+
+  transition: transform 300ms ease;
+}
+
+.wireframe-phone__svg {
+  width: 100%;
+  height: 100%;
+
+  overflow: visible;
+
+  transform-style: preserve-3d;
+}
+
+/* Main neon geometry */
+
+.wireframe-phone__main rect,
+.wireframe-phone__main path,
+.wireframe-phone__main circle {
+  fill: none;
+  stroke: var(--phone-color);
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Screen */
+
+.wireframe-phone__screen {
+  stroke-width: 2 !important;
+}
+
+/* Speaker, camera, buttons */
+
+.wireframe-phone__detail {
+  stroke-width: 1.8 !important;
+}
+
+/* Rear outline */
+
+.wireframe-phone__depth rect,
+.wireframe-phone__depth path {
+  fill: none;
+  stroke: var(--phone-color);
+  stroke-width: 2;
+  opacity: 0.65;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Neon glow */
+
+.wireframe-phone__glow rect,
+.wireframe-phone__glow path {
+  fill: none;
+  stroke: var(--phone-color);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.9;
+}

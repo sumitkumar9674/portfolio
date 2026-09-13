@@ -1,0 +1,77 @@
+.objectCubeScene {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /*
+    This creates a local 3D coordinate system
+    for the reusable object.
+  */
+  transform-style: preserve-3d;
+}
+
+.objectCube {
+  width: var(--object-cube-size);
+  height: var(--object-cube-size);
+  position: relative;
+
+  transform-style: preserve-3d;
+
+  /*
+    The angle exposes the front, right, and top faces.
+    There is no animation for now.
+  */
+  transform: rotateX(-20deg) rotateY(-35deg);
+}
+
+.objectCubeFace {
+  width: var(--object-cube-size);
+  height: var(--object-cube-size);
+  position: absolute;
+
+  box-sizing: border-box;
+  border: 2px solid var(--object-cube-glow);
+
+  background: var(--object-cube-color);
+
+  box-shadow:
+    0 0 8px var(--object-cube-glow),
+    inset 0 0 12px var(--object-cube-glow);
+
+  backface-visibility: visible;
+}
+
+/* Front face */
+.objectCubeFront {
+  transform: translateZ(var(--object-cube-half));
+}
+
+/* Back face */
+.objectCubeBack {
+  transform: rotateY(180deg) translateZ(var(--object-cube-half));
+}
+
+/* Right face */
+.objectCubeRight {
+  transform: rotateY(90deg) translateZ(var(--object-cube-half));
+  filter: brightness(0.75);
+}
+
+/* Left face */
+.objectCubeLeft {
+  transform: rotateY(-90deg) translateZ(var(--object-cube-half));
+  filter: brightness(0.6);
+}
+
+/* Top face */
+.objectCubeTop {
+  transform: rotateX(-90deg) translateZ(var(--object-cube-half));
+  filter: brightness(1.25);
+}
+
+/* Bottom face */
+.objectCubeBottom {
+  transform: rotateX(90deg) translateZ(var(--object-cube-half));
+  filter: brightness(0.45);
+}

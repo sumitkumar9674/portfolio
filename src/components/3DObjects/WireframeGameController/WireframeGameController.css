@@ -1,0 +1,298 @@
+.wireframeControllerScene {
+  position: relative;
+
+  width: var(--controller-size);
+  height: var(--controller-size);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.wireframeController {
+  position: relative;
+
+  width: var(--controller-size);
+  height: var(--controller-size);
+
+  transform-style: preserve-3d;
+
+  /*
+    Only a slight rotation.
+    The controller geometry creates most of the 3D appearance.
+  */
+
+  transform: translateZ(20px) rotateX(8deg) rotateY(-6deg);
+}
+
+/* =========================================================
+   CONTROLLER BODY
+   ========================================================= */
+
+.wireframeControllerBody {
+  position: absolute;
+
+  left: 5%;
+  top: 22%;
+
+  width: 90%;
+  height: 56%;
+
+  transform-style: preserve-3d;
+}
+
+/* Main center body */
+
+.wireframeControllerMain {
+  position: absolute;
+
+  left: 18%;
+  top: 0;
+
+  width: 64%;
+  height: 100%;
+
+  border: 2px solid var(--controller-glow);
+  border-radius: 22%;
+
+  background: var(--controller-color);
+
+  box-shadow:
+    inset 0 0 12px var(--controller-glow),
+    0 0 8px var(--controller-glow);
+
+  z-index: 2;
+}
+
+/* Left and right handles */
+
+.wireframeControllerHandle {
+  position: absolute;
+
+  top: 20%;
+
+  width: 38%;
+  height: 82%;
+
+  border: 2px solid var(--controller-glow);
+  border-radius: 42% 42% 48% 48%;
+
+  background: var(--controller-color);
+
+  box-shadow:
+    inset 0 0 10px var(--controller-glow),
+    0 0 8px var(--controller-glow);
+
+  z-index: 1;
+}
+
+.wireframeControllerHandleLeft {
+  left: 0;
+
+  transform: rotate(20deg);
+  transform-origin: top right;
+}
+
+.wireframeControllerHandleRight {
+  right: 0;
+
+  transform: rotate(-20deg);
+  transform-origin: top left;
+}
+
+/* =========================================================
+   3D DEPTH
+   ========================================================= */
+
+.wireframeControllerDepth {
+  position: absolute;
+
+  left: 4%;
+  top: 6%;
+
+  width: 92%;
+  height: 94%;
+
+  border: 1px solid var(--controller-glow);
+  border-radius: 24%;
+
+  background: transparent;
+
+  transform: translateZ(-10px) skewY(-2deg);
+
+  opacity: 0.5;
+}
+
+/* =========================================================
+   ANALOG STICKS
+   ========================================================= */
+
+.wireframeControllerStick {
+  position: absolute;
+
+  width: 16%;
+  aspect-ratio: 1;
+
+  border: 2px solid var(--controller-glow);
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.04);
+
+  box-shadow:
+    inset 0 0 8px var(--controller-glow),
+    0 0 6px var(--controller-glow);
+
+  z-index: 4;
+}
+
+.wireframeControllerStickLeft {
+  left: 27%;
+  top: 38%;
+}
+
+.wireframeControllerStickRight {
+  right: 27%;
+  top: 38%;
+}
+
+/* =========================================================
+   D-PAD
+   ========================================================= */
+
+.wireframeControllerDpad {
+  position: absolute;
+
+  left: 14%;
+  top: 40%;
+
+  width: 20%;
+  height: 28%;
+
+  z-index: 4;
+}
+
+.wireframeControllerDpadHorizontal,
+.wireframeControllerDpadVertical {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+
+  border: 1px solid var(--controller-glow);
+
+  background: rgba(255, 255, 255, 0.04);
+
+  box-shadow: 0 0 5px var(--controller-glow);
+}
+
+.wireframeControllerDpadHorizontal {
+  width: 100%;
+  height: 34%;
+}
+
+.wireframeControllerDpadVertical {
+  width: 34%;
+  height: 100%;
+}
+
+/* =========================================================
+   FACE BUTTONS
+   ========================================================= */
+
+.wireframeControllerButtons {
+  position: absolute;
+
+  right: 13%;
+  top: 33%;
+
+  width: 25%;
+  height: 42%;
+
+  z-index: 4;
+}
+
+.wireframeControllerButton {
+  position: absolute;
+
+  width: 28%;
+  aspect-ratio: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--controller-glow);
+  border-radius: 50%;
+
+  color: var(--controller-glow);
+  font-size: calc(var(--controller-size) * 0.045);
+  font-weight: 600;
+
+  background: rgba(255, 255, 255, 0.03);
+
+  box-shadow: 0 0 5px var(--controller-glow);
+}
+
+.buttonTop {
+  left: 50%;
+  top: 0;
+
+  transform: translateX(-50%);
+}
+
+.buttonRight {
+  right: 0;
+  top: 50%;
+
+  transform: translateY(-50%);
+}
+
+.buttonBottom {
+  left: 50%;
+  bottom: 0;
+
+  transform: translateX(-50%);
+}
+
+.buttonLeft {
+  left: 0;
+  top: 50%;
+
+  transform: translateY(-50%);
+}
+
+/* =========================================================
+   CENTER BUTTONS
+   ========================================================= */
+
+.wireframeControllerCenterButtons {
+  position: absolute;
+
+  left: 50%;
+  bottom: 12%;
+
+  width: 22%;
+  height: 8%;
+
+  display: flex;
+  justify-content: space-between;
+
+  transform: translateX(-50%);
+
+  z-index: 5;
+}
+
+.wireframeControllerCenterButtons div {
+  width: 28%;
+  height: 100%;
+
+  border: 1px solid var(--controller-glow);
+  border-radius: 50%;
+
+  box-shadow: 0 0 4px var(--controller-glow);
+}

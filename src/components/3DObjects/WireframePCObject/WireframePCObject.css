@@ -1,0 +1,157 @@
+.wireframePCScene {
+  position: relative;
+
+  width: var(--pc-size);
+  height: var(--pc-size);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.wireframePC {
+  position: relative;
+
+  width: var(--pc-size);
+  height: var(--pc-size);
+
+  transform-style: preserve-3d;
+
+  /*
+    Move the PC tower outward from the HOME face.
+
+    Positive Z moves it toward the viewer.
+  */
+
+  transform: translateZ(7px) rotateX(-3deg) rotateY(-9deg);
+}
+
+/* =========================================================
+   PC TOWER
+   ========================================================= */
+
+.wireframePCTower {
+  position: absolute;
+
+  right: 20%;
+  bottom: 8%;
+
+  width: 33%;
+  height: 70%;
+
+  transform-style: preserve-3d;
+
+  /*
+    Gives the tower visible depth.
+  */
+
+  transform: rotateY(-2deg);
+}
+
+/* Main tower front */
+
+.wireframePCTowerFront {
+  position: absolute;
+  inset: 0;
+
+  border: 2px solid var(--pc-glow);
+
+  background: var(--pc-color);
+
+  box-shadow:
+    inset 0 0 10px var(--pc-glow),
+    0 0 8px var(--pc-glow);
+
+  opacity: 0.45;
+}
+
+/* Tower side creates depth */
+
+.wireframePCTowerSide {
+  position: absolute;
+
+  top: 0;
+  right: -18%;
+
+  width: 18%;
+  height: 100%;
+
+  border-top: 2px solid var(--pc-glow);
+  border-right: 2px solid var(--pc-glow);
+  border-bottom: 2px solid var(--pc-glow);
+
+  background: transparent;
+
+  transform-origin: left center;
+  transform: skewY(-28deg);
+
+  box-shadow: 0 0 6px var(--pc-glow);
+}
+
+/* Tower top */
+
+.wireframePCTowerTop {
+  position: absolute;
+
+  top: -9%;
+  left: 0;
+
+  width: 100%;
+  height: 18%;
+
+  border: 2px solid var(--pc-glow);
+
+  background: transparent;
+
+  transform: skewX(-28deg);
+
+  box-shadow: 0 0 6px var(--pc-glow);
+}
+
+/* Decorative horizontal lines on tower */
+
+.wireframePCTowerLine {
+  position: absolute;
+
+  left: 15%;
+  width: 70%;
+  height: 1px;
+
+  background: var(--pc-glow);
+
+  box-shadow: 0 0 5px var(--pc-glow);
+}
+
+.wireframePCTowerLineOne {
+  top: 18%;
+}
+
+.wireframePCTowerLineTwo {
+  top: 28%;
+}
+
+/* Power button */
+
+.wireframePCTowerButton {
+  position: absolute;
+
+  left: 50%;
+  top: 8%;
+
+  width: 10%;
+  aspect-ratio: 1;
+
+  border: 1px solid var(--pc-glow);
+  border-radius: 50%;
+
+  transform: translateX(-50%);
+
+  box-shadow:
+    0 0 5px var(--pc-glow),
+    0 0 10px var(--pc-glow);
+
+  background: var(--pc-glow);
+}

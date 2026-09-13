@@ -1,0 +1,197 @@
+.wireframeMonitorScene {
+  position: relative;
+
+  width: var(--monitor-size);
+  height: var(--monitor-size);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.wireframeMonitor {
+  position: relative;
+
+  width: var(--monitor-size);
+  height: var(--monitor-size);
+
+  transform-style: preserve-3d;
+
+  /*
+    Only a small rotation is needed.
+    Most of the 3D appearance comes from the monitor geometry itself.
+  */
+
+  transform: translateZ(20px) rotateX(-3deg) rotateY(-8deg);
+}
+
+/* =========================================================
+   MONITOR BODY
+   ========================================================= */
+
+.wireframeMonitorBody {
+  position: absolute;
+
+  left: 8%;
+  top: 10%;
+
+  width: 84%;
+  height: 50%;
+
+  transform-style: preserve-3d;
+}
+
+/* Main front frame */
+
+.wireframeMonitorFrame {
+  position: absolute;
+  inset: 0;
+
+  border: 2px solid var(--monitor-glow);
+
+  background: var(--monitor-screen);
+
+  box-shadow:
+    inset 0 0 14px var(--monitor-glow),
+    0 0 8px var(--monitor-glow);
+
+  transform: translateZ(0);
+
+  z-index: 2;
+}
+
+/* Inner screen */
+
+.wireframeMonitorScreen {
+  position: absolute;
+
+  inset: 7%;
+
+  border: 1px solid var(--monitor-glow);
+
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08),
+    transparent 45%,
+    rgba(0, 255, 255, 0.04)
+  );
+
+  box-shadow:
+    inset 0 0 10px var(--monitor-glow),
+    0 0 5px var(--monitor-glow);
+
+  opacity: 0.75;
+}
+
+/* =========================================================
+   MONITOR DEPTH
+   ========================================================= */
+
+/*
+  Creates the visible right-side thickness of the monitor.
+*/
+
+.wireframeMonitorSide {
+  position: absolute;
+
+  top: 0;
+  right: -5%;
+
+  width: 5%;
+  height: 100%;
+
+  border-top: 2px solid var(--monitor-glow);
+  border-right: 2px solid var(--monitor-glow);
+  border-bottom: 2px solid var(--monitor-glow);
+
+  background: transparent;
+
+  transform-origin: left center;
+  transform: skewY(-18deg) translateZ(-2px);
+
+  box-shadow: 0 0 6px var(--monitor-glow);
+
+  z-index: 1;
+}
+
+/*
+  Creates the visible top thickness of the monitor.
+*/
+
+.wireframeMonitorTop {
+  position: absolute;
+
+  top: -5%;
+  left: 0;
+
+  width: 100%;
+  height: 5%;
+
+  border: 2px solid var(--monitor-glow);
+
+  background: transparent;
+
+  transform: skewX(-18deg);
+
+  box-shadow: 0 0 6px var(--monitor-glow);
+
+  z-index: 1;
+}
+
+/* =========================================================
+   MONITOR STAND
+   ========================================================= */
+
+.wireframeMonitorStand {
+  position: absolute;
+
+  left: 38%;
+  top: 60%;
+
+  width: 24%;
+  height: 28%;
+
+  transform-style: preserve-3d;
+}
+
+/* Vertical support */
+
+.wireframeMonitorStandNeck {
+  position: absolute;
+
+  left: 30%;
+  top: 0;
+
+  width: 40%;
+  height: 75%;
+
+  border-left: 2px solid var(--monitor-glow);
+  border-right: 2px solid var(--monitor-glow);
+
+  background: transparent;
+
+  box-shadow: 0 0 5px var(--monitor-glow);
+}
+
+/* Monitor base */
+
+.wireframeMonitorStandBase {
+  position: absolute;
+
+  left: -100%;
+  bottom: 0;
+
+  width: 300%;
+  height: 22%;
+
+  border: 2px solid var(--monitor-glow);
+
+  background: transparent;
+
+  box-shadow:
+    0 0 5px var(--monitor-glow),
+    0 0 10px var(--monitor-glow);
+}
