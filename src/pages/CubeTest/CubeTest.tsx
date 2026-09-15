@@ -18,7 +18,7 @@
 // 11. The joystick is temporary testing navigation.
 // ------------------------------------------------------------
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import "./CubeTest.css";
 import CubeScreenNavigation from "../../components/CubeScreenNavigation/CubeScreenNavigation";
 import HomeScreen from "../../screens/HomeScreen/HomeScreen";
@@ -27,6 +27,7 @@ import SkillsScreen from "../../screens/SkillsScreen/SkillsScreen";
 import AboutScreen from "../../screens/AboutScreen/AboutScreen";
 import BlogScreen from "../../screens/BlogScreen/BlogScreen";
 import ContactScreen from "../../screens/ContactScreen/ContactScreen";
+import WireframeCubeObject from "../../components/3DObjects/WireframeCubeObject/WireframeCubeObject";
 
 // ------------------------------------------------------------
 // Quaternion type
@@ -329,6 +330,45 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     z: 0,
     w: 1,
   });
+  // ----------------------------------------------------------
+  // Actual rendered size of the main portfolio cube.
+  //
+  // This becomes the size reference that screens and their
+  // 3D components can use for responsive positioning.
+  // ----------------------------------------------------------
+
+  const cubeElementRef = useRef<HTMLDivElement | null>(null);
+
+  const [cubeSize, setCubeSize] = useState(0);
+
+  // ----------------------------------------------------------
+  // Keep cubeSize synchronized with the actual rendered cube.
+  //
+  // ResizeObserver reacts automatically when the browser,
+  // tablet, or mobile viewport changes size.
+  // ----------------------------------------------------------
+
+  useLayoutEffect(() => {
+    const cubeElement = cubeElementRef.current;
+
+    if (!cubeElement) {
+      return;
+    }
+
+    const updateCubeSize = () => {
+      setCubeSize(cubeElement.getBoundingClientRect().width);
+    };
+
+    updateCubeSize();
+
+    const resizeObserver = new ResizeObserver(updateCubeSize);
+
+    resizeObserver.observe(cubeElement);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   // ----------------------------------------------------------
   // Prevent another movement while an animation is active.
@@ -1178,6 +1218,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
 
       <div className="cubeScene">
         <div
+          ref={cubeElementRef}
           className="cube"
           style={{
             transform: quaternionToCSSMatrix(cubeRotation),
@@ -1188,7 +1229,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           ------------------------------------------------- */}
 
           <div className="cubeFace cubeFront">
-            <HomeScreen />
+            <HomeScreen cubeSize={cubeSize} />
           </div>
 
           {/* ------------------------------------------------
@@ -1227,6 +1268,46 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
 
           <div className="cubeFace cubeBottom">
             <ContactScreen />
+          </div>
+          {/* ------------------------------------------------
+    OUTER WIREFRAME CUBE
+
+    This lives directly inside the main .cube.
+
+    Therefore it rotates with the exact same
+    quaternion as the portfolio cube.
+
+    It is slightly larger than the main cube
+    so the main cube appears to float inside it.
+------------------------------------------------- */}
+
+          <div
+            className="outerWireframeCubeAnchor"
+            style={{
+              width: `${cubeSize * 1.21}px`,
+              height: `${cubeSize * 1.21}px`,
+            }}
+          >
+            <WireframeCubeObject
+              size={cubeSize * 1.21}
+              color="#00ffff"
+              lineWidth={2}
+              x={0}
+              y={0}
+              z={0}
+              /*
+      IMPORTANT:
+
+      We do NOT give this cube its own angle.
+
+      The parent .cube already has the quaternion
+      rotation, so this wireframe cube naturally
+      follows the main portfolio cube.
+    */
+              rotateX={0}
+              rotateY={0}
+              rotateZ={0}
+            />
           </div>
         </div>
       </div>

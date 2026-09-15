@@ -6,7 +6,7 @@
    The cube always uses 70% of whichever viewport dimension
    is smaller: width or height. */
 :root {
-  --cube-size: min(70vh, 70vw);
+  --cube-size: min(80vh, 80vw);
 
   /* Automatically calculates half of the cube size.
      Used for the distance of each face from the cube center. */
@@ -51,7 +51,7 @@
   position: relative;
 
   /* Controls how strongly the 3D depth changes apparent size. */
-  perspective: 70000px;
+  perspective: 21000px;
 
   touch-action: none;
 }
@@ -263,6 +263,47 @@
   font-size: 14px;
 
   pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   Outer Wireframe Cube
+   ------------------------------------------------------------ */
+
+/*
+  This anchor sits at the exact center of the main cube.
+
+  The outer wireframe cube is therefore centered
+  around the main portfolio cube instead of being
+  positioned relative to one particular screen face.
+*/
+.outerWireframeCubeAnchor {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  /*
+    Move the anchor back by half of its own size.
+
+    This makes its center line up with the center
+    of the main portfolio cube.
+  */
+  transform: translate(-50%, -50%);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  transform-style: preserve-3d;
+
+  pointer-events: none;
+
+  /*
+    Keep this in the same 3D coordinate system
+    as the main cube.
+  */
+  z-index: 10;
 }
 
 /* ------------------------------------------------------------

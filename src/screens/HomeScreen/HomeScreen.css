@@ -3,76 +3,19 @@
 
   width: 100%;
   height: 100%;
+
   background: #000000;
 
   transform-style: preserve-3d;
 
-  /*
-    Allows cubes to extend slightly beyond the screen.
-  */
   overflow: visible;
 }
-.homeScreenCubeAnchor {
-  position: absolute;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  transform: translate(-50%, -50%) scale(var(--cube-scale, 1));
-
-  transform-style: preserve-3d;
-}
-
-/*
-  Normal content remains separate from the decorative
-  3D objects.
-*/
 .homeScreenContent {
   position: relative;
 
+  width: 100%;
+  height: 100%;
+
   z-index: 1;
-}
-
-/*
-  Full-screen 3D decoration layer.
-*/
-.homeScreenObjects {
-  position: absolute;
-
-  inset: 0;
-
-  pointer-events: none;
-
-  overflow: visible;
-
-  /*
-    Perspective makes the cubes visibly 3D
-    instead of appearing like flat squares.
-  */
-  perspective: 1000px;
-  -webkit-perspective: 1000px;
-
-  transform-style: preserve-3d;
-
-  z-index: 2;
-}
-
-/*
-  Each cube is positioned relative to the
-  complete Home screen.
-*/
-.homeScreenCubeAnchor {
-  position: absolute;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /*
-    Centers the cube on its assigned coordinate.
-  */
-  transform: translate(-50%, -50%);
-
-  transform-style: preserve-3d;
 }
