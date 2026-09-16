@@ -1289,8 +1289,8 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
             }}
           >
             <WireframeCubeObject
-              size={cubeSize * 1.21}
-              color="#00ffff"
+              size={cubeSize * 1.09}
+              color="#ffffff"
               lineWidth={2}
               x={0}
               y={0}

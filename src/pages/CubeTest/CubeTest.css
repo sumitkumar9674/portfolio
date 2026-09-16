@@ -6,7 +6,7 @@
    The cube always uses 70% of whichever viewport dimension
    is smaller: width or height. */
 :root {
-  --cube-size: min(80vh, 80vw);
+  --cube-size: min(77vh, 85vw);
 
   /* Automatically calculates half of the cube size.
      Used for the distance of each face from the cube center. */
@@ -26,6 +26,7 @@
 .cubeTestPage {
   width: 100%;
   height: 100vh;
+
   position: relative;
 
   display: flex;
@@ -33,7 +34,27 @@
   align-items: center;
 
   overflow: hidden;
-  background: #000000;
+
+  /*
+    Portfolio background image.
+  */
+  background-image: url("../../assets/background/05.png");
+
+  /*
+    Cover the entire browser window while preserving
+    the image's aspect ratio.
+  */
+  background-size: cover;
+
+  /*
+    Keep the important center area of the image visible.
+  */
+  background-position: center;
+
+  /*
+    Prevent the image from repeating.
+  */
+  background-repeat: no-repeat;
 
   user-select: none;
   touch-action: none;
