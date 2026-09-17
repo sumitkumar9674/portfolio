@@ -74,6 +74,38 @@ export default function HomeScreen({ cubeSize: _cubeSize }: HomeScreenProps) {
               <div>SQL</div>
             </div>
           </div>
+          <div className="homeCurrentFocusSection">
+            <div className="homeCurrentFocusHeader">
+              <div>Currently Building</div>
+              <div>Horizon</div>
+            </div>
+
+            <div className="homeCurrentFocusDescription">
+              <div>
+                Building Horizon, a productivity and social accountability
+                application with daily task management, streak tracking, friend
+                relationships, and a timezone-aware backend system.
+              </div>
+            </div>
+          </div>
+          <div className="homeContactSection">
+            <div className="homeContactTitle">
+              <div>Contact</div>
+            </div>
+
+            <div className="homeContactDetails">
+              <div>sumitkumar9674@gmail.com</div>
+              <div>9764536604</div>
+            </div>
+
+            <div className="homeContactSocials">
+              <div>Instagram</div>
+              <div>Twitter</div>
+              <div>Reddit</div>
+              <div>GitHub</div>
+              <div>LinkedIn</div>
+            </div>
+          </div>
         </main>
 
         {/* ------------------------------------------------

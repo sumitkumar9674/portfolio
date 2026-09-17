@@ -6,7 +6,7 @@
    The cube always uses 70% of whichever viewport dimension
    is smaller: width or height. */
 :root {
-  --cube-size: min(70vh, 85vw);
+  --cube-size: min(67vh, 85vw);
 
   /* Automatically calculates half of the cube size.
      Used for the distance of each face from the cube center. */

@@ -249,3 +249,108 @@
 .homeSkillsList > div:last-child {
   border-right: none;
 }
+.homeCurrentFocusHeader {
+  width: 100%;
+  display: flex;
+}
+
+.homeCurrentFocusHeader > div {
+  border: 1px solid #555;
+  box-sizing: border-box;
+  padding: 6px 10px;
+
+  font-size: calc(var(--cube-size) * 0.018);
+  color: #ffffff;
+}
+
+.homeCurrentFocusHeader > div:first-child {
+  width: 25%;
+}
+
+.homeCurrentFocusHeader > div:last-child {
+  flex: 1;
+}
+.homeCurrentFocusDescription {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid #555;
+}
+
+.homeCurrentFocusDescription > div {
+  width: 100%;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+
+  padding: 6px 10px;
+  box-sizing: border-box;
+
+  font-size: calc(var(--cube-size) * 0.012);
+  color: #aaaaaa;
+}
+.homeContactSection {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.homeContactTitle {
+  width: 100%;
+  display: flex;
+}
+
+.homeContactTitle > div {
+  width: 100%;
+
+  border: 1px solid #555;
+  box-sizing: border-box;
+
+  padding: 6px 10px;
+
+  font-size: calc(var(--cube-size) * 0.018);
+  color: #ffffff;
+}
+
+.homeContactDetails {
+  width: 100%;
+  display: flex;
+}
+
+.homeContactDetails > div {
+  flex: 1;
+
+  border: 1px solid #555;
+  box-sizing: border-box;
+
+  padding: 6px 10px;
+
+  font-size: calc(var(--cube-size) * 0.012);
+  color: #aaaaaa;
+}
+
+.homeContactSocials {
+  width: 100%;
+  display: flex;
+
+  border: 1px solid #555;
+  box-sizing: border-box;
+}
+
+.homeContactSocials > div {
+  flex: 1;
+
+  border-right: 1px solid #555;
+  box-sizing: border-box;
+
+  padding: 6px 10px;
+
+  font-size: calc(var(--cube-size) * 0.012);
+  color: #aaaaaa;
+
+  text-align: center;
+}
+
+.homeContactSocials > div:last-child {
+  border-right: none;
+}
