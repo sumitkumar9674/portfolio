@@ -1,21 +1,251 @@
+/* ------------------------------------------------------------
+   HOME SCREEN
+   ------------------------------------------------------------ */
+
 .homeScreen {
   position: relative;
 
   width: 100%;
   height: 100%;
 
-  background: #000000;
+  /*
+    The page background is handled by CubeTest.
+    Home itself remains transparent.
+  */
+  background: transparent;
 
+  /*
+    Keep this face inside the cube's 3D coordinate system.
+  */
   transform-style: preserve-3d;
 
+  /*
+    Future 3D objects are allowed to extend outside
+    the Home face.
+  */
   overflow: visible;
 }
 
+/* ------------------------------------------------------------
+   3D OBJECT LAYER
+   ------------------------------------------------------------ */
+
+.homeScreen3DLayer {
+  position: absolute;
+
+  inset: 0;
+
+  /*
+    Everything placed here participates in the
+    Home face's 3D coordinate system.
+  */
+  transform-style: preserve-3d;
+
+  overflow: visible;
+
+  /*
+    3D decorations should not block UI interaction.
+  */
+  pointer-events: none;
+
+  z-index: 1;
+}
+
+/* ------------------------------------------------------------
+   NORMAL CONTENT LAYER
+   ------------------------------------------------------------ */
+
 .homeScreenContent {
-  position: relative;
+  position: absolute;
+
+  inset: 0;
 
   width: 100%;
   height: 100%;
 
-  z-index: 1;
+  /*
+    Content sits above the future 3D objects.
+  */
+  z-index: 10;
+
+  pointer-events: auto;
+}
+
+/* ------------------------------------------------------------
+   STICKFORYOU HEADER
+   ------------------------------------------------------------ */
+
+.homeScreenHeader {
+  width: 100%;
+  height: 11%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 2% 2%;
+}
+
+/* ------------------------------------------------------------
+   STICKFORYOU LOGO
+   ------------------------------------------------------------ */
+
+.homeScreenLogo {
+  /*
+    Wide logo with a deliberately modest width.
+
+    This can be adjusted after we see the actual
+    asset inside the cube.
+  */
+  width: 32%;
+
+  height: auto;
+
+  display: block;
+
+  object-fit: contain;
+}
+
+/* ------------------------------------------------------------
+   MAIN CONTENT AREA
+   ------------------------------------------------------------ */
+
+.homeScreenMain {
+  position: relative;
+
+  width: 100%;
+
+  /*
+    Remaining space after the thin logo header.
+  */
+  height: 89%;
+
+  box-sizing: border-box;
+}
+
+.homeProfileSection {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+.homeProfileFrame {
+  display: flex;
+  padding: 2px;
+
+  /* Outer square */
+  border: 1px solid #ffffff;
+  box-sizing: border-box;
+}
+
+/* ProfilePhoto is the direct child of the frame */
+.homeProfileFrame > * {
+  /* Inner circle */
+  border: 1px solid #fefefe;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.homeProfileInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.homeProfileInfo > div {
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid #fefefe;
+  box-sizing: border-box;
+  padding: 4px 8px;
+}
+
+.homeProfileInfo > div:nth-child(1) {
+  font-size: calc(var(--cube-size) * 0.041);
+  color: #ffffff;
+}
+
+.homeProfileInfo > div:nth-child(2) {
+  font-size: calc(var(--cube-size) * 0.033);
+  color: #aaaaaa;
+}
+
+.homeProfileInfo > div:nth-child(3) {
+  font-size: calc(var(--cube-size) * 0.024);
+  color: #888888;
+}
+
+.homeGreetingSection {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+
+  /* Keep the greeting directly attached to the section above */
+  margin-top: 0;
+}
+
+.homeGreetingSection > div {
+  width: 100%;
+
+  border: 1px solid #ffffff;
+  box-sizing: border-box;
+
+  padding: 6px 10px;
+
+  font-size: calc(var(--cube-size) * 0.025);
+  color: #ffffff;
+
+  text-align: left;
+}
+.homeSkillsSection {
+  width: 100%;
+  margin-top: 0;
+
+  box-sizing: border-box;
+}
+
+.homeSkillsHeader {
+  width: 100%;
+  display: flex;
+}
+
+.homeSkillsHeader > div {
+  border: 1px solid #555;
+  box-sizing: border-box;
+  padding: 6px 10px;
+
+  font-size: calc(var(--cube-size) * 0.018);
+  color: #ffffff;
+}
+
+.homeSkillsHeader > div:first-child {
+  width: 25%;
+}
+
+.homeSkillsHeader > div:last-child {
+  flex: 1;
+}
+
+.homeSkillsList {
+  width: 100%;
+  display: flex;
+
+  border: 1px solid #555;
+  box-sizing: border-box;
+}
+
+.homeSkillsList > div {
+  flex: 1;
+
+  border-right: 1px solid #555;
+  box-sizing: border-box;
+  padding: 6px 10px;
+
+  font-size: calc(var(--cube-size) * 0.012);
+  color: #aaaaaa;
+}
+
+.homeSkillsList > div:last-child {
+  border-right: none;
 }

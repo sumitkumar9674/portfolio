@@ -1,87 +1,48 @@
-:root {
-  --navigation-transition-duration: 500ms;
-}
+/* ------------------------------------------------------------
+   Base navigation
+------------------------------------------------------------ */
 
 .cubeScreenNavigation {
   position: fixed;
-  z-index: 9999;
-
+  z-index: 100;
   display: flex;
   gap: 10px;
-
-  transition:
-    left var(--navigation-transition-duration) ease,
-    top var(--navigation-transition-duration) ease,
-    transform var(--navigation-transition-duration) ease;
-
-  pointer-events: auto;
 }
 
 /* ------------------------------------------------------------
-   HOME POSITION
+   LANDSCAPE
+   width > height
 
-   Buttons are arranged horizontally at the top.
-   ------------------------------------------------------------ */
+   Navigation sits on the left side.
+------------------------------------------------------------ */
 
-.cubeScreenNavigationHome {
-  left: 50%;
+.cubeScreenNavigationLandscape {
+  left: 20px;
   top: 50%;
-
-  width: var(--cube-size);
-  padding: 0 10px;
-
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 8px;
-
-  transform: translate(-50%, calc(-50% - var(--cube-size) / 2 + 45px));
-}
-
-/* ------------------------------------------------------------
-   OTHER SCREEN POSITION
-
-   Buttons move to the left side and become vertical.
-   ------------------------------------------------------------ */
-
-.cubeScreenNavigationAway {
-  left: 24px;
-  top: 50%;
+  transform: translateY(-50%);
 
   flex-direction: column;
-
-  transform: translateY(-50%);
 }
+
+/* ------------------------------------------------------------
+   PORTRAIT
+   height >= width
+
+   Navigation sits at the top.
+------------------------------------------------------------ */
+
+.cubeScreenNavigationPortrait {
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+
+  flex-direction: row;
+}
+
+/* ------------------------------------------------------------
+   Temporary button styling
+------------------------------------------------------------ */
 
 .cubeScreenNavigation button {
-  flex: 1;
-  min-width: 0;
-  height: clamp(28px, calc(var(--cube-size) * 0.065), 42px);
-
-  aspect-ratio: 2.85 / 1;
-
-  border: 1px solid #00ffff;
-  border-radius: 6px;
-
-  background: #020617;
-  color: #ffffff;
-
-  font-family: Inter, system-ui, sans-serif;
-  font-size: clamp(8px, calc(var(--cube-size) * 0.018), 12px);
-  font-weight: 700;
-  letter-spacing: clamp(0.4px, calc(var(--cube-size) * 0.0015), 1px);
   cursor: pointer;
-
-  transition:
-    background 120ms ease,
-    transform 120ms ease,
-    box-shadow 120ms ease;
-}
-
-.cubeScreenNavigation button:hover {
-  background: #0f172a;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.35);
-}
-
-.cubeScreenNavigation button:active {
-  transform: scale(0.94);
 }

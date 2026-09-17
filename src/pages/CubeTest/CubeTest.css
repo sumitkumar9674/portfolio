@@ -6,7 +6,7 @@
    The cube always uses 70% of whichever viewport dimension
    is smaller: width or height. */
 :root {
-  --cube-size: min(77vh, 85vw);
+  --cube-size: min(70vh, 85vw);
 
   /* Automatically calculates half of the cube size.
      Used for the distance of each face from the cube center. */
@@ -72,7 +72,7 @@
   position: relative;
 
   /* Controls how strongly the 3D depth changes apparent size. */
-  perspective: 21000px;
+  perspective: 2100px;
 
   touch-action: none;
 }
@@ -99,7 +99,6 @@
    ------------------------------------------------------------ */
 
 .cubeFace {
-  /* Every physical face must exactly match the cube size. */
   width: var(--cube-size);
   height: var(--cube-size);
 
@@ -111,11 +110,35 @@
 
   box-sizing: border-box;
 
-  border: 2px solid rgba(255, 255, 255, 0.25);
-  background: rgba(15, 23, 42, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.585);
+  background: rgb(0, 0, 0);
 
-  backface-visibility: hidden;
+  /*
+    The face itself remains part of the main cube's
+    3D structure.
+  */
   transform-style: preserve-3d;
+
+  /*
+    Create a dedicated perspective for objects that
+    live ON this physical face.
+
+    This is intentionally much stronger than the
+    70000px perspective used by the main cube.
+  */
+  perspective: 1200px;
+  -webkit-perspective: 1200px;
+
+  /*
+    Allow objects to extend slightly away from the face.
+  */
+  overflow: visible;
+
+  /*
+    When the physical face turns away from the camera,
+    its back disappears naturally.
+  */
+  backface-visibility: hidden;
 }
 
 /* ------------------------------------------------------------

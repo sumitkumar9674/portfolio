@@ -307,14 +307,6 @@ type CubeTestProps = {
   rotationDuration?: number;
 };
 
-const NAVIGATION_TRANSITION_DURATION = 500;
-
-const waitForNavigationToSettle = (): Promise<void> => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, NAVIGATION_TRANSITION_DURATION);
-  });
-};
-
 // ------------------------------------------------------------
 // CubeTest component
 // ------------------------------------------------------------
@@ -876,24 +868,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     // This determines whether we are leaving HOME or returning
     // to HOME.
     // --------------------------------------------------------
-    const leavingHome = activeScreen === "home" && targetScreen !== "home";
-
-    const returningHome = activeScreen !== "home" && targetScreen === "home";
-
-    // --------------------------------------------------------
-    // LEAVING HOME
-    //
-    // Change activeScreen first so the navigation buttons move
-    // to the left side.
-    //
-    // Then wait for that visual transition to finish before
-    // starting the cube rotation.
-    // --------------------------------------------------------
-    if (leavingHome) {
-      setActiveScreen(targetScreen);
-
-      await waitForNavigationToSettle();
-    }
 
     // --------------------------------------------------------
     // If the requested screen is already in front,
@@ -912,9 +886,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
         // Only move the navigation back after the cube has
         // completely finished reaching HOME.
         // ----------------------------------------------------
-        if (returningHome) {
-          setActiveScreen("home");
-        }
 
         isMoving.current = false;
       });
@@ -1027,9 +998,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
         correctCubeOrientation(rotationAfterFirstAxis, () => {
           // HOME is updated only after the cube has completely
           // reached and corrected its final orientation.
-          if (returningHome) {
-            setActiveScreen("home");
-          }
 
           isMoving.current = false;
         });
@@ -1056,12 +1024,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
             // --------------------------------------------
 
             correctCubeOrientation(finalRotation, () => {
-              // HOME is updated only after the cube has completely
-              // reached and corrected its final orientation.
-              if (returningHome) {
-                setActiveScreen("home");
-              }
-
               isMoving.current = false;
             });
 
@@ -1165,10 +1127,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     system before we build the final navigation dock.
 --------------------------------------------------------- */}
 
-      <CubeScreenNavigation
-        onNavigate={navigateToScreen}
-        isHome={activeScreen === "home"}
-      />
+      <CubeScreenNavigation onNavigate={navigateToScreen} />
 
       <div className="cubeJoystick">
         <button
@@ -1290,7 +1249,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           >
             <WireframeCubeObject
               size={cubeSize * 1.09}
-              color="#ffffff"
+              color="#fbfafa69"
               lineWidth={2}
               x={0}
               y={0}

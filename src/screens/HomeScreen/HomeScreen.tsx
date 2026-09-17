@@ -1,24 +1,92 @@
 import "./HomeScreen.css";
+import flatLogo from "../../assets/logo/flat-logo.png";
+import ProfilePhoto from "../../components/ProfilePhoto";
 
 type HomeScreenProps = {
-  /*
-    Actual rendered size of the main portfolio cube.
-
-    This is kept available for future Home-screen
-    objects and responsive positioning.
-  */
   cubeSize: number;
 };
 
-export default function HomeScreen({ cubeSize }: HomeScreenProps) {
+export default function HomeScreen({ cubeSize: _cubeSize }: HomeScreenProps) {
   return (
     <div className="homeScreen">
       {/* ------------------------------------------------
-          NORMAL HOME CONTENT
+          3D OBJECT LAYER
+
+          This remains empty for now.
+
+          Future 3D objects such as:
+          - PC
+          - Monitor
+          - Phone
+          - decorative structures
+
+          will be placed here.
+      ------------------------------------------------- */}
+
+      <div className="homeScreen3DLayer">
+        {/* Future 3D objects go here. */}
+      </div>
+
+      {/* ------------------------------------------------
+          NORMAL CONTENT LAYER
       ------------------------------------------------- */}
 
       <div className="homeScreenContent">
-        {/* HOME content will be added here later. */}
+        {/* ------------------------------------------------
+            STICKFORYOU LOGO
+
+            This is the fixed, thin header at the top
+            of the Home face.
+        ------------------------------------------------- */}
+
+        <header className="homeScreenHeader">
+          <img className="homeScreenLogo" src={flatLogo} alt="StickForYou" />
+        </header>
+        <main className="homeScreenMain">
+          <div className="homeProfileSection">
+            <div className="homeProfileFrame">
+              <ProfilePhoto size={_cubeSize * 0.22} />
+            </div>
+            <div className="homeProfileInfo">
+              <div>Sumit Kumar</div>
+              <div>Software Developer</div>
+              <div>
+                I build interactive, user-focused applications with React,
+                TypeScript, React Native, and Firebase, while continuously
+                strengthening my skills in DSA and AI/ML.
+              </div>
+            </div>
+          </div>
+          <div className="homeGreetingSection">
+            <div>Good Morning</div>
+          </div>
+          <div className="homeSkillsSection">
+            <div className="homeSkillsHeader">
+              <div>Skills</div>
+              <div>Languages</div>
+            </div>
+
+            <div className="homeSkillsList">
+              <div>TypeScript</div>
+              <div>JavaScript</div>
+              <div>Python</div>
+              <div>Java</div>
+              <div>SQL</div>
+            </div>
+          </div>
+        </main>
+
+        {/* ------------------------------------------------
+            MAIN HOME CONTENT
+
+            We will add the profile, name, role,
+            introduction, skills, links, etc.
+            one piece at a time.
+        ------------------------------------------------- */}
+
+        <main className="homeScreenMain">
+          {/* Main Home content will be added here. */}
+        </main>
       </div>
     </div>
   );
