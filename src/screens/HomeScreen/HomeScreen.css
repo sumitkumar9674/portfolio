@@ -354,3 +354,33 @@
 .homeContactSocials > div:last-child {
   border-right: none;
 }
+.homeGitHubCalendar svg text {
+  /* We'll target the calendar labels separately next */
+}
+
+.homeGitHubSection {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.homeGitHubTitle > div {
+  width: 100%;
+
+  border: 1px solid #555;
+  box-sizing: border-box;
+
+  padding: 6px 10px;
+
+  font-size: calc(var(--cube-size) * 0.018);
+  color: #ffffff;
+}
+
+.homeGitHubCalendar {
+  width: 100%;
+
+  border: 1px solid #555;
+  box-sizing: border-box;
+
+  padding: 10px;
+  overflow: hidden;
+}

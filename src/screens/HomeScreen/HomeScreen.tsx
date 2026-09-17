@@ -1,6 +1,7 @@
 import "./HomeScreen.css";
 import flatLogo from "../../assets/logo/flat-logo.png";
 import ProfilePhoto from "../../components/ProfilePhoto";
+import { GitHubCalendar } from "react-github-calendar";
 
 type HomeScreenProps = {
   cubeSize: number;
@@ -104,6 +105,23 @@ export default function HomeScreen({ cubeSize: _cubeSize }: HomeScreenProps) {
               <div>Reddit</div>
               <div>GitHub</div>
               <div>LinkedIn</div>
+            </div>
+          </div>
+          <div className="homeGitHubSection">
+            <div className="homeGitHubCalendar">
+              <GitHubCalendar
+                username="sumitkumar9674"
+                colorScheme="dark"
+                showTotalCount={false}
+                showColorLegend={false}
+                showMonthLabels={false}
+                blockSize={Math.max(5, Math.floor(_cubeSize / 75))}
+                blockMargin={3}
+                fontSize={Math.max(8, Math.floor(_cubeSize / 110))}
+                theme={{
+                  dark: ["#161616", "#263238", "#35515c", "#4b7885", "#6fa8b8"],
+                }}
+              />{" "}
             </div>
           </div>
         </main>
