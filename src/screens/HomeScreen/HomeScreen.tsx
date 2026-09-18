@@ -2,6 +2,8 @@ import "./HomeScreen.css";
 import flatLogo from "../../assets/logo/flat-logo.png";
 import ProfilePhoto from "../../components/ProfilePhoto";
 import { GitHubCalendar } from "react-github-calendar";
+import logoBackground from "../../assets/logo/background.png";
+import LogoBanner from "../../components/LogoBanner/LogoBanner";
 
 type HomeScreenProps = {
   cubeSize: number;
@@ -41,7 +43,11 @@ export default function HomeScreen({ cubeSize: _cubeSize }: HomeScreenProps) {
         ------------------------------------------------- */}
 
         <header className="homeScreenHeader">
-          <img className="homeScreenLogo" src={flatLogo} alt="StickForYou" />
+          <LogoBanner
+            image={flatLogo}
+            backgroundImage={logoBackground}
+            height="100%"
+          />
         </header>
         <main className="homeScreenMain">
           <div className="homeProfileSection">
@@ -124,18 +130,6 @@ export default function HomeScreen({ cubeSize: _cubeSize }: HomeScreenProps) {
               />{" "}
             </div>
           </div>
-        </main>
-
-        {/* ------------------------------------------------
-            MAIN HOME CONTENT
-
-            We will add the profile, name, role,
-            introduction, skills, links, etc.
-            one piece at a time.
-        ------------------------------------------------- */}
-
-        <main className="homeScreenMain">
-          {/* Main Home content will be added here. */}
         </main>
       </div>
     </div>

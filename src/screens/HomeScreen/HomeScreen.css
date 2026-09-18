@@ -77,32 +77,18 @@
 
 .homeScreenHeader {
   width: 100%;
-  height: 11%;
+  height: 19%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   box-sizing: border-box;
-  padding: 2% 2%;
-}
+  padding: 0;
 
-/* ------------------------------------------------------------
-   STICKFORYOU LOGO
-   ------------------------------------------------------------ */
-
-.homeScreenLogo {
-  /*
-    Wide logo with a deliberately modest width.
-
-    This can be adjusted after we see the actual
-    asset inside the cube.
-  */
-  width: 32%;
-
-  height: auto;
-
-  display: block;
-
-  object-fit: contain;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* ------------------------------------------------------------
@@ -353,9 +339,6 @@
 
 .homeContactSocials > div:last-child {
   border-right: none;
-}
-.homeGitHubCalendar svg text {
-  /* We'll target the calendar labels separately next */
 }
 
 .homeGitHubSection {

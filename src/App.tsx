@@ -11,7 +11,7 @@ import logoBackground from "./assets/logo/background.png";
 
 function App() {
   // Controls whether the SpaceDefender rooftop sign is expanded.
-  const [isSpaceDefenderExpanded, setIsSpaceDefenderExpanded] = useState(false);
+
   return (
     <div className="page">
       <NeonFrame

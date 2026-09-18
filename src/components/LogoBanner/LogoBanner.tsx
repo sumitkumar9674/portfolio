@@ -2,25 +2,35 @@
 type LogoBannerProps = {
   image: string;
   backgroundImage: string;
+  height?: string;
 };
 
 export default function LogoBanner({
   image,
   backgroundImage,
+  height = "240px",
 }: LogoBannerProps) {
   return (
     <div
       className="logoBanner"
       style={{
         width: "100%",
-        height: "240px",
-        padding: "30px 20px",
+        height,
+        minWidth: 0,
+        minHeight: 0,
+
+        padding: 0,
+        boxSizing: "border-box",
+
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+
         overflow: "hidden",
       }}
     >
@@ -30,6 +40,8 @@ export default function LogoBanner({
         alt="Company logo"
         style={{
           display: "block",
+          width: "32%",
+          height: "auto",
           maxWidth: "100%",
           maxHeight: "100%",
           objectFit: "contain",
