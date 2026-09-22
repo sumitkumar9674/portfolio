@@ -10,9 +10,6 @@ type DecodeTextProps = {
   // Font size used by both the invisible layout text and visible text.
   fontSize?: string | number;
 
-  // Color of the outer box border.
-  borderColor?: string;
-
   // How long to wait before each character starts rotating.
   rotationStartDelay?: number;
 
@@ -24,6 +21,8 @@ type DecodeTextProps = {
 
   // Delay between each character's resolution turn.
   resolveDelay?: number;
+
+  padding?: string | number;
 };
 
 // Characters that are allowed to rotate.
@@ -36,13 +35,14 @@ export default function DecodeText({
 
   fontFamily = "Arial",
   fontSize = "16px",
-  borderColor = "#ffffff",
 
-  rotationStartDelay = 200,
-  rotationSpeed = 50,
+  rotationStartDelay = 100,
+  rotationSpeed = 20,
 
-  resolveStartDelay = 500,
-  resolveDelay = 200,
+  resolveStartDelay = 200,
+  resolveDelay = 100,
+
+  padding = "1%",
 }: DecodeTextProps) {
   // Current character displayed at every position.
   const [characters, setCharacters] = useState<string[]>(
@@ -284,6 +284,7 @@ export default function DecodeText({
     <div
       style={{
         width: "100%",
+        height: "100%",
         position: "relative",
         fontFamily,
         boxSizing: "border-box",
@@ -302,7 +303,7 @@ export default function DecodeText({
           whiteSpace: "pre-wrap",
           overflowWrap: "normal",
           boxSizing: "border-box",
-          padding: "16px",
+          padding,
           fontFamily,
           fontSize,
           lineHeight: "1",
@@ -324,11 +325,9 @@ export default function DecodeText({
 
           width: "100%",
           height: "100%",
-
-          border: `1px solid ${borderColor}`,
           boxSizing: "border-box",
 
-          padding: "16px",
+          padding,
           overflow: "hidden",
 
           whiteSpace: "pre-wrap",
@@ -363,7 +362,7 @@ export default function DecodeText({
                   position: "absolute",
                   left: 0,
                   top: 0,
-                  color: resolvedCharacters[index] ? "#004362" : "#ab2260",
+                  color: resolvedCharacters[index] ? "#ffffff" : "#c32f71",
                 }}
               >
                 {character || "\u00A0"}

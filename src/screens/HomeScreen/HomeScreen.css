@@ -100,28 +100,29 @@
 
   width: 100%;
 
-  /*
-    Remaining space after the thin logo header.
-  */
-  height: 89%;
+  height: 81%;
 
   box-sizing: border-box;
 }
 
 .homeProfileSection {
   width: 100%;
+  height: var(--profile-photo-size);
+
   display: flex;
   justify-content: flex-start;
+  align-items: stretch;
 }
 .homeProfileFrame {
   display: flex;
+  flex-shrink: 0;
+  align-self: stretch;
+
   padding: 2px;
 
-  /* Outer square */
-  border: 1px solid #e8dcdc;
+  border: 1px solid #ffffff;
   box-sizing: border-box;
 }
-
 /* ProfilePhoto is the direct child of the frame */
 .homeProfileFrame > * {
   /* Inner circle */
@@ -134,6 +135,8 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 0;
+  height: 100%;
 }
 
 .homeProfileInfo > div {

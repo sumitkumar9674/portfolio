@@ -2,6 +2,7 @@ import "./HomeScreen.css";
 import flatLogo from "../../assets/logo/flat-logo.png";
 import ProfilePhoto from "../../components/ProfilePhoto";
 import { GitHubCalendar } from "react-github-calendar";
+import DecodeText from "../../components/DecodeText/DecodeText";
 import logoBackground from "../../assets/logo/background.png";
 import LogoBanner from "../../components/LogoBanner/LogoBanner";
 import GitHubActivity from "../../components/GitHubActivity/GitHubActivity";
@@ -51,12 +52,26 @@ export default function HomeScreen({ cubeSize: _cubeSize }: HomeScreenProps) {
           />
         </header>
         <main className="homeScreenMain">
-          <div className="homeProfileSection">
+          <div
+            className="homeProfileSection"
+            style={
+              {
+                "--profile-photo-size": `${_cubeSize * 0.22}px`,
+              } as React.CSSProperties
+            }
+          >
             <div className="homeProfileFrame">
               <ProfilePhoto size={_cubeSize * 0.22} />
             </div>
+
             <div className="homeProfileInfo">
-              <div>Sumit Kumar</div>
+              <div className="homeProfileName">
+                <DecodeText
+                  text="Sumit Kumar"
+                  fontSize={`${_cubeSize * 0.041}px`}
+                  padding={`${_cubeSize * 0.008}px`}
+                />
+              </div>{" "}
               <div>Software Developer</div>
               <div>
                 I build interactive, user-focused applications with React,
