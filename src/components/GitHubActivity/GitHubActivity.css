@@ -1,0 +1,26 @@
+.gitHubActivity {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.gitHubActivityTitle {
+  width: 100%;
+
+  border: 1px solid #555;
+  box-sizing: border-box;
+
+  padding: 6px 10px;
+
+  font-size: calc(var(--cube-size) * 0.018);
+  color: #ffffff;
+}
+
+.gitHubActivityCalendar {
+  width: 100%;
+
+  border: 1px solid #555;
+  box-sizing: border-box;
+
+  padding: 10px;
+  overflow: hidden;
+}

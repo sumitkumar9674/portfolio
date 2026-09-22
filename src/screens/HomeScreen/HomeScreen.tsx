@@ -4,6 +4,7 @@ import ProfilePhoto from "../../components/ProfilePhoto";
 import { GitHubCalendar } from "react-github-calendar";
 import logoBackground from "../../assets/logo/background.png";
 import LogoBanner from "../../components/LogoBanner/LogoBanner";
+import GitHubActivity from "../../components/GitHubActivity/GitHubActivity";
 
 type HomeScreenProps = {
   cubeSize: number;
@@ -113,23 +114,7 @@ export default function HomeScreen({ cubeSize: _cubeSize }: HomeScreenProps) {
               <div>LinkedIn</div>
             </div>
           </div>
-          <div className="homeGitHubSection">
-            <div className="homeGitHubCalendar">
-              <GitHubCalendar
-                username="sumitkumar9674"
-                colorScheme="dark"
-                showTotalCount={false}
-                showColorLegend={false}
-                showMonthLabels={false}
-                blockSize={Math.max(5, Math.floor(_cubeSize / 75))}
-                blockMargin={3}
-                fontSize={Math.max(8, Math.floor(_cubeSize / 110))}
-                theme={{
-                  dark: ["#161616", "#263238", "#35515c", "#4b7885", "#6fa8b8"],
-                }}
-              />{" "}
-            </div>
-          </div>
+          <GitHubActivity _cubeSize={_cubeSize} />
         </main>
       </div>
     </div>
