@@ -169,8 +169,10 @@
 .homeProfileInfo > div:nth-child(3) {
   flex: 1;
   min-height: 0;
+  min-width: 0;
   font-size: calc(var(--cube-size) * 0.024);
-  color: #888;
+  color: #888888;
+  overflow: hidden;
 }
 
 .homeGreetingSection {

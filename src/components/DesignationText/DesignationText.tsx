@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import DecodeText from "../DecodeText/DecodeText";
 import "./DesignationText.css";
+import NeonText from "../NeonText";
 
 type DesignationTextProps = {
   designations: string[];
@@ -42,10 +43,10 @@ export default function DesignationText({
 
   return (
     <div className="designationText">
-      <DecodeText
+      <NeonText
         text={designations[currentIndex]}
         fontSize={fontSize}
-        padding={padding}
+        textColor="#ffffff5b"
       />
     </div>
   );

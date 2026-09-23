@@ -194,9 +194,8 @@ export default function NeonText({
 
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
-
-        padding: "20px",
+        justifyContent: "flex-start",
+        padding: "0px",
       }}
     >
       <span

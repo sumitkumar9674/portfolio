@@ -7,6 +7,8 @@ import logoBackground from "../../assets/logo/background.png";
 import LogoBanner from "../../components/LogoBanner/LogoBanner";
 import GitHubActivity from "../../components/GitHubActivity/GitHubActivity";
 import DesignationText from "../../components/DesignationText/DesignationText";
+import GreetingTime from "../../components/GreetingTime/GreetingTime";
+import NeonText from "../../components/NeonText";
 
 type HomeScreenProps = {
   cubeSize: number;
@@ -71,10 +73,10 @@ export default function HomeScreen({
 
             <div className="homeProfileInfo">
               <div className="homeProfileName">
-                <DecodeText
+                <NeonText
                   text="Sumit Kumar"
                   fontSize={`${_cubeSize * 0.041}px`}
-                  padding={`${_cubeSize * 0.008}px`}
+                  textColor="#ffffff92"
                 />
               </div>{" "}
               <div>
@@ -90,14 +92,17 @@ export default function HomeScreen({
                 />
               </div>{" "}
               <div>
-                I build interactive, user-focused applications with React,
-                TypeScript, React Native, and Firebase, while continuously
-                strengthening my skills in DSA and AI/ML.
+                <DecodeText
+                  text="I build interactive, user-focused applications with React, TypeScript, React Native, and Firebase, while continuously strengthening my skills in DSA and AI/ML."
+                  fontSize={`${_cubeSize * 0.024}px`}
+                  padding="0"
+                  wrap
+                />
               </div>
             </div>
           </div>
           <div className="homeGreetingSection">
-            <div>Good Morning</div>
+            <GreetingTime cubeSize={_cubeSize} />
           </div>
           <div className="homeSkillsSection">
             <div className="homeSkillsHeader">

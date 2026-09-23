@@ -23,6 +23,8 @@ type DecodeTextProps = {
   resolveDelay?: number;
 
   padding?: string | number;
+
+  wrap?: boolean;
 };
 
 // Characters that are allowed to rotate.
@@ -36,13 +38,15 @@ export default function DecodeText({
   fontFamily = "Arial",
   fontSize = "16px",
 
-  rotationStartDelay = 100,
-  rotationSpeed = 20,
+  rotationStartDelay = 7,
+  rotationSpeed = 67,
 
-  resolveStartDelay = 367,
-  resolveDelay = 167,
+  resolveStartDelay = 700,
+  resolveDelay = 10,
 
   padding = "1%",
+
+  wrap = false,
 }: DecodeTextProps) {
   // Current character displayed at every position.
   const [characters, setCharacters] = useState<string[]>(
@@ -106,6 +110,7 @@ export default function DecodeText({
      * Character 2 starts after another rotationStartDelay.
      * And so on.
      */
+
     states.forEach((state, index) => {
       // Symbols and spaces don't need a rotation timer.
       if (!state.shouldRotate) {
@@ -326,8 +331,7 @@ export default function DecodeText({
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          display: "flex",
-          alignItems: "center",
+          display: "block",
           padding,
           overflow: "hidden",
 
@@ -340,37 +344,66 @@ export default function DecodeText({
           lineHeight: "1",
         }}
       >
-        {characters.map((character, index) => {
-          const targetCharacter = text[index];
+        {(() => {
+          const tokens = text.split(/(\s+)/);
+          let characterIndex = 0;
 
-          return (
-            <span
-              key={index}
-              style={{
-                display: "inline-block",
-                position: "relative",
-                whiteSpace: "pre",
-              }}
-            >
-              {/* Invisible target controls the real slot width */}
-              <span style={{ visibility: "hidden" }}>
-                {targetCharacter === " " ? "\u00A0" : targetCharacter}
-              </span>
+          return tokens.map((token, tokenIndex) => {
+            if (/^\s+$/.test(token)) {
+              characterIndex += token.length;
 
-              {/* Rotating character sits inside the fixed slot */}
+              return <span key={tokenIndex}> </span>;
+            }
+            const startIndex = characterIndex;
+            characterIndex += token.length;
+
+            return (
               <span
+                key={tokenIndex}
                 style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  color: resolvedCharacters[index] ? "#eaeaea" : "#737373",
+                  display: "inline-block",
+                  whiteSpace: "nowrap",
                 }}
               >
-                {character || "\u00A0"}
+                {Array.from(token).map((_, wordIndex) => {
+                  const index = startIndex + wordIndex;
+                  const character = characters[index];
+                  const targetCharacter = text[index];
+
+                  return (
+                    <span
+                      key={index}
+                      style={{
+                        display: "inline-block",
+                        position: "relative",
+                        whiteSpace: "pre",
+                      }}
+                    >
+                      {/* Invisible target controls the real slot width */}
+                      <span style={{ visibility: "hidden" }}>
+                        {targetCharacter}
+                      </span>
+
+                      {/* Rotating character sits inside the fixed slot */}
+                      <span
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          top: 0,
+                          color: resolvedCharacters[index]
+                            ? "#eaeaeacc"
+                            : "#fefefe64",
+                        }}
+                      >
+                        {character || "\u00A0"}
+                      </span>
+                    </span>
+                  );
+                })}
               </span>
-            </span>
-          );
-        })}
+            );
+          });
+        })()}
       </div>
     </div>
   );
