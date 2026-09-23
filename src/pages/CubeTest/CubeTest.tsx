@@ -717,6 +717,10 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     return cubeState[frontFace];
   }
 
+  function updateActiveScreen(rotation: Quaternion) {
+    setActiveScreen(getFrontScreen(rotation));
+  }
+
   // ----------------------------------------------------------
   // Calculate the target quaternion for one 90° roll.
   // ----------------------------------------------------------
@@ -880,16 +884,9 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
       isMoving.current = true;
 
       correctCubeOrientation(cubeRotation, () => {
-        // ----------------------------------------------------
-        // RETURNING HOME
-        //
-        // Only move the navigation back after the cube has
-        // completely finished reaching HOME.
-        // ----------------------------------------------------
-
+        updateActiveScreen(cubeRotation);
         isMoving.current = false;
       });
-
       return;
     }
 
@@ -996,12 +993,9 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
         // ----------------------------------------------
 
         correctCubeOrientation(rotationAfterFirstAxis, () => {
-          // HOME is updated only after the cube has completely
-          // reached and corrected its final orientation.
-
+          updateActiveScreen(rotationAfterFirstAxis);
           isMoving.current = false;
         });
-
         return;
       }
 
@@ -1024,6 +1018,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
             // --------------------------------------------
 
             correctCubeOrientation(finalRotation, () => {
+              updateActiveScreen(finalRotation);
               isMoving.current = false;
             });
 
@@ -1097,6 +1092,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
       // ----------------------------------------------------
 
       correctCubeOrientation(targetRotation, () => {
+        updateActiveScreen(targetRotation);
         isMoving.current = false;
       });
     });
@@ -1188,7 +1184,10 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           ------------------------------------------------- */}
 
           <div className="cubeFace cubeFront">
-            <HomeScreen cubeSize={cubeSize} />
+            <HomeScreen
+              cubeSize={cubeSize}
+              isActive={activeScreen === "home"}
+            />{" "}
           </div>
 
           {/* ------------------------------------------------

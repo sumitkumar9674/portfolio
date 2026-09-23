@@ -39,8 +39,8 @@ export default function DecodeText({
   rotationStartDelay = 100,
   rotationSpeed = 20,
 
-  resolveStartDelay = 200,
-  resolveDelay = 100,
+  resolveStartDelay = 367,
+  resolveDelay = 167,
 
   padding = "1%",
 }: DecodeTextProps) {
@@ -326,7 +326,8 @@ export default function DecodeText({
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-
+          display: "flex",
+          alignItems: "center",
           padding,
           overflow: "hidden",
 
@@ -362,7 +363,7 @@ export default function DecodeText({
                   position: "absolute",
                   left: 0,
                   top: 0,
-                  color: resolvedCharacters[index] ? "#ffffff" : "#c32f71",
+                  color: resolvedCharacters[index] ? "#eaeaea" : "#737373",
                 }}
               >
                 {character || "\u00A0"}

@@ -6,12 +6,17 @@ import DecodeText from "../../components/DecodeText/DecodeText";
 import logoBackground from "../../assets/logo/background.png";
 import LogoBanner from "../../components/LogoBanner/LogoBanner";
 import GitHubActivity from "../../components/GitHubActivity/GitHubActivity";
+import DesignationText from "../../components/DesignationText/DesignationText";
 
 type HomeScreenProps = {
   cubeSize: number;
+  isActive: boolean;
 };
 
-export default function HomeScreen({ cubeSize: _cubeSize }: HomeScreenProps) {
+export default function HomeScreen({
+  cubeSize: _cubeSize,
+  isActive,
+}: HomeScreenProps) {
   return (
     <div className="homeScreen">
       {/* ------------------------------------------------
@@ -72,7 +77,18 @@ export default function HomeScreen({ cubeSize: _cubeSize }: HomeScreenProps) {
                   padding={`${_cubeSize * 0.008}px`}
                 />
               </div>{" "}
-              <div>Software Developer</div>
+              <div>
+                <DesignationText
+                  designations={[
+                    "Software Developer",
+                    "UI/UX Developer",
+                    "Full Stack Engineer",
+                  ]}
+                  isActive={isActive}
+                  fontSize={`${_cubeSize * 0.023}px`}
+                  padding="0 4px"
+                />
+              </div>{" "}
               <div>
                 I build interactive, user-focused applications with React,
                 TypeScript, React Native, and Firebase, while continuously

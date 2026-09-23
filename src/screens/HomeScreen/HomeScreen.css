@@ -141,28 +141,36 @@
 
 .homeProfileInfo > div {
   flex: 1;
-
+  min-height: 0;
   display: flex;
   align-items: center;
-
   border: 1px solid #fefefe;
   box-sizing: border-box;
   padding: 4px 8px;
+  overflow: hidden;
 }
 
 .homeProfileInfo > div:nth-child(1) {
+  flex: 0 0 30%;
   font-size: calc(var(--cube-size) * 0.041);
-  color: #ffffff;
+  color: #fff;
+  padding: 0 4px;
 }
 
 .homeProfileInfo > div:nth-child(2) {
-  font-size: calc(var(--cube-size) * 0.033);
-  color: #aaaaaa;
+  flex: 0 0 25%;
+  font-size: calc(var(--cube-size) * 0.023);
+  color: #aaa;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
 }
 
 .homeProfileInfo > div:nth-child(3) {
+  flex: 1;
+  min-height: 0;
   font-size: calc(var(--cube-size) * 0.024);
-  color: #888888;
+  color: #888;
 }
 
 .homeGreetingSection {
