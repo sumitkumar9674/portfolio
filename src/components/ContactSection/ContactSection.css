@@ -1,0 +1,141 @@
+/* Styles the reusable contact section. */
+
+.contactSection {
+  width: 100%;
+  box-sizing: border-box;
+
+  border: 1px solid #555;
+
+  overflow: hidden;
+}
+
+.contactDetails {
+  width: 100%;
+
+  display: flex;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #555;
+}
+
+.contactItem {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  box-sizing: border-box;
+
+  padding: calc(var(--cube-size) * 0.008) calc(var(--cube-size) * 0.012);
+
+  border-right: 1px solid #555;
+}
+
+.contactItem:last-child {
+  border-right: none;
+}
+
+.contactIcon {
+  flex-shrink: 0;
+
+  margin-right: calc(var(--cube-size) * 0.008);
+
+  font-size: calc(var(--cube-size) * 0.016);
+  color: #aaaaaa;
+}
+
+.contactIcon svg {
+  width: calc(var(--cube-size) * 0.017);
+  height: calc(var(--cube-size) * 0.017);
+  display: block;
+}
+
+.contactSocial svg {
+  width: calc(var(--cube-size) * 0.022);
+  height: calc(var(--cube-size) * 0.022);
+  display: block;
+}
+
+.contactValue {
+  min-width: 0;
+  flex: 1;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-size: calc(var(--cube-size) * 0.014);
+  color: #aaaaaa;
+}
+
+.contactCopyButton {
+  flex-shrink: 0;
+
+  width: calc(var(--cube-size) * 0.024);
+  height: calc(var(--cube-size) * 0.024);
+
+  margin-left: calc(var(--cube-size) * 0.008);
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  background: transparent;
+
+  color: #aaaaaa;
+
+  font-size: calc(var(--cube-size) * 0.016);
+
+  cursor: pointer;
+}
+
+.contactCopyButton:hover {
+  color: #ffffff;
+}
+
+.contactSocials {
+  width: 100%;
+
+  display: flex;
+
+  box-sizing: border-box;
+}
+
+.contactSocial {
+  flex: 1;
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  padding: calc(var(--cube-size) * 0.008);
+
+  border-right: 1px solid #555;
+
+  color: #aaaaaa;
+
+  font-size: calc(var(--cube-size) * 0.013);
+
+  text-decoration: none;
+
+  text-align: center;
+}
+
+.contactSocial:last-child {
+  border-right: none;
+}
+
+.contactSocial:hover {
+  color: #ffffff;
+  transform: scale(1.08);
+}

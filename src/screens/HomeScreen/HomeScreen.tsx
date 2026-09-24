@@ -10,6 +10,7 @@ import DesignationText from "../../components/DesignationText/DesignationText";
 import GreetingTime from "../../components/GreetingTime/GreetingTime";
 import NeonText from "../../components/NeonText";
 import CurrentlyBuilding from "../../components/CurrentlyBuilding/CurrentlyBuilding";
+import ContactSection from "../../components/ContactSection/ContactSection";
 
 const projects = [
   {
@@ -119,24 +120,7 @@ export default function HomeScreen({
             isActive={isActive}
             cubeSize={_cubeSize}
           />
-          <div className="homeContactSection">
-            <div className="homeContactTitle">
-              <div>Contact</div>
-            </div>
-
-            <div className="homeContactDetails">
-              <div>sumitkumar9674@gmail.com</div>
-              <div>9764536604</div>
-            </div>
-
-            <div className="homeContactSocials">
-              <div>Instagram</div>
-              <div>Twitter</div>
-              <div>Reddit</div>
-              <div>GitHub</div>
-              <div>LinkedIn</div>
-            </div>
-          </div>
+          <ContactSection cubeSize={_cubeSize} />
           <GitHubActivity _cubeSize={_cubeSize} />
         </main>
       </div>
