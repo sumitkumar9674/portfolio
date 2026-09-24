@@ -15,26 +15,27 @@ export default function LogoBanner({
   return (
     <div
       className="logoBanner"
-      style={{
-        width: "100%",
-        height,
-        minWidth: 0,
-        minHeight: 0,
+      style={
+        {
+          width: "100%",
+          height,
+          minWidth: 0,
+          minHeight: 0,
 
-        padding: 0,
-        boxSizing: "border-box",
+          padding: 0,
+          boxSizing: "border-box",
 
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
+          "--logo-background": `url(${backgroundImage})`,
 
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
 
-        overflow: "hidden",
-      }}
+          overflow: "hidden",
+        } as React.CSSProperties & {
+          "--logo-background": string;
+        }
+      }
     >
       <img
         src={image}

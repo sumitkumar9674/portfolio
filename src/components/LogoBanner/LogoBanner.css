@@ -1,3 +1,25 @@
+.logoBanner {
+  position: relative;
+}
+
+.logoBanner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: var(--logo-background);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  opacity: 0.7;
+}
+
+.logoBannerImage {
+  position: relative;
+  z-index: 1;
+}
+
 .logoBannerImage {
   filter: grayscale(30%);
 }

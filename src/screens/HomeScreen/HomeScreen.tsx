@@ -104,20 +104,7 @@ export default function HomeScreen({
           <div className="homeGreetingSection">
             <GreetingTime cubeSize={_cubeSize} />
           </div>
-          <div className="homeSkillsSection">
-            <div className="homeSkillsHeader">
-              <div>Skills</div>
-              <div>Languages</div>
-            </div>
 
-            <div className="homeSkillsList">
-              <div>TypeScript</div>
-              <div>JavaScript</div>
-              <div>Python</div>
-              <div>Java</div>
-              <div>SQL</div>
-            </div>
-          </div>
           <div className="homeCurrentFocusSection">
             <div className="homeCurrentFocusHeader">
               <div>Currently Building</div>
