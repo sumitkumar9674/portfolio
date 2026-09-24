@@ -10,11 +10,11 @@
 }
 
 .greetingTimeText {
-  font-size: calc(var(--cube-size) * 0.025);
+  font-size: calc(var(--cube-size) * 0.021);
   color: #ffffff;
 }
 
 .greetingTimeClock {
-  font-size: calc(var(--cube-size) * 0.02);
+  font-size: calc(var(--cube-size) * 0.017);
   color: #888888;
 }

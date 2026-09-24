@@ -1,0 +1,50 @@
+/* Styles the reusable Currently Building project section. */
+
+.currentlyBuilding {
+  width: 100%;
+  box-sizing: border-box;
+
+  border: 1px solid #555;
+
+  overflow: hidden;
+}
+
+.currentlyBuildingHeader {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  box-sizing: border-box;
+
+  padding: calc(var(--cube-size) * 0.008) calc(var(--cube-size) * 0.012);
+}
+
+.currentlyBuildingLabel {
+  font-size: calc(var(--cube-size) * 0.021);
+  color: #ffffff;
+
+  white-space: nowrap;
+}
+
+.currentlyBuildingProject {
+  min-width: 0;
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  text-align: right;
+}
+
+.currentlyBuildingDescription {
+  width: 100%;
+  min-width: 0;
+
+  box-sizing: border-box;
+
+  padding: calc(var(--cube-size) * 0.006) calc(var(--cube-size) * 0.012);
+
+  overflow: hidden;
+}

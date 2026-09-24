@@ -21,10 +21,10 @@
 }
 
 .logoBannerImage {
-  filter: grayscale(30%);
+  filter: grayscale(96%);
 }
 
 .logoBanner:hover .logoBannerImage {
   transform: translateY(-1px) scale(1.0367);
-  filter: grayscale(0%) drop-shadow(0px 0px 9px #ffffffb8);
+  filter: grayscale(0%) drop-shadow(0px 0px 9px #ffffff);
 }

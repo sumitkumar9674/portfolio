@@ -9,6 +9,15 @@ import GitHubActivity from "../../components/GitHubActivity/GitHubActivity";
 import DesignationText from "../../components/DesignationText/DesignationText";
 import GreetingTime from "../../components/GreetingTime/GreetingTime";
 import NeonText from "../../components/NeonText";
+import CurrentlyBuilding from "../../components/CurrentlyBuilding/CurrentlyBuilding";
+
+const projects = [
+  {
+    name: "Horizon - Productivity App",
+    description:
+      "A productivity and social accountability application focused on disciplined task execution.",
+  },
+];
 
 type HomeScreenProps = {
   cubeSize: number;
@@ -105,20 +114,11 @@ export default function HomeScreen({
             <GreetingTime cubeSize={_cubeSize} />
           </div>
 
-          <div className="homeCurrentFocusSection">
-            <div className="homeCurrentFocusHeader">
-              <div>Currently Building</div>
-              <div>Horizon</div>
-            </div>
-
-            <div className="homeCurrentFocusDescription">
-              <div>
-                Building Horizon, a productivity and social accountability
-                application with daily task management, streak tracking, friend
-                relationships, and a timezone-aware backend system.
-              </div>
-            </div>
-          </div>
+          <CurrentlyBuilding
+            projects={projects}
+            isActive={isActive}
+            cubeSize={_cubeSize}
+          />
           <div className="homeContactSection">
             <div className="homeContactTitle">
               <div>Contact</div>
