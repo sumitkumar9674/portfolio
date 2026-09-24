@@ -25,13 +25,13 @@ const transformContributions = (
     // Seeded pseudo-random number between 0 and 1.
     const random = Math.abs(Math.sin(seed)) % 1;
 
-    // 20% remain empty.
-    if (random < 0.2) {
+    // 33% remain empty.
+    if (random < 0.33) {
       return day;
     }
 
-    // 70.5% become 1 contribution.
-    if (random < 0.905) {
+    // 61% become 1 contribution.
+    if (random < 0.94) {
       return {
         ...day,
         count: 1,
@@ -39,7 +39,7 @@ const transformContributions = (
       };
     }
 
-    // 9% become 2 contributions.
+    // 5.5% become 2 contributions.
     if (random < 0.995) {
       return {
         ...day,
@@ -62,23 +62,35 @@ type GitHubActivityProps = {
 };
 
 export default function GitHubActivity({ _cubeSize }: GitHubActivityProps) {
-  return (
-    <div className="gitHubActivity">
-      <div className="gitHubActivityTitle">GitHub Activity</div>
+  const blockMargin = 1.2;
+  const calendarHorizontalPadding = _cubeSize * 0.012;
+  const availableCalendarWidth = _cubeSize - calendarHorizontalPadding;
 
+  const blockSize = Math.floor(
+    (availableCalendarWidth - 52 * blockMargin) / 53,
+  );
+  return (
+    <div
+      className="gitHubActivity"
+      style={
+        {
+          "--cube-size": `${_cubeSize}px`,
+        } as React.CSSProperties
+      }
+    >
       <div className="gitHubActivityCalendar">
         <GitHubCalendar
           username="sumitkumar9674"
           colorScheme="dark"
-          showTotalCount={false}
-          showColorLegend={false}
-          showMonthLabels={false}
-          blockSize={Math.max(5, Math.floor(_cubeSize / 75))}
-          blockMargin={3}
+          showTotalCount={true}
+          showColorLegend={true}
+          showMonthLabels={true}
+          blockSize={Math.max(5, Math.floor(_cubeSize / 57))}
+          blockMargin={blockMargin}
           fontSize={Math.max(8, Math.floor(_cubeSize / 110))}
           transformData={transformContributions}
           theme={{
-            dark: ["#161616", "#263238", "#35515c", "#4b7885", "#6fa8b8"],
+            dark: ["#151515", "#303030", "#4a4a4a", "#686868", "#8a8a8a"],
           }}
         />
       </div>

@@ -1,26 +1,65 @@
 .gitHubActivity {
   width: 100%;
+  min-height: 0;
   box-sizing: border-box;
-}
-
-.gitHubActivityTitle {
-  width: 100%;
-
-  border: 1px solid #555;
-  box-sizing: border-box;
-
-  padding: 6px 10px;
-
-  font-size: calc(var(--cube-size) * 0.018);
-  color: #ffffff;
+  overflow: hidden;
 }
 
 .gitHubActivityCalendar {
   width: 100%;
-
-  border: 1px solid #555;
   box-sizing: border-box;
-
-  padding: 10px;
+  border: 1px solid #555;
+  padding: calc(var(--cube-size) * 0.006) calc(var(--cube-size) * 0.012);
   overflow: hidden;
+}
+
+/* Keep the calendar at its natural height. */
+.gitHubActivityCalendar .react-activity-calendar {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.gitHubActivityCalendar .react-activity-calendar__scroll-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.gitHubActivityCalendar .react-activity-calendar__calendar {
+  margin: 0;
+  padding: 0;
+}
+
+/* Footer sits directly below the calendar. */
+.gitHubActivityCalendar .react-activity-calendar__footer {
+  margin-top: calc(var(--cube-size) * 0.004) !important;
+  margin-bottom: 0 !important;
+  padding: 0;
+}
+
+/* Month labels */
+.gitHubActivityCalendar .react-activity-calendar__legend-month {
+  color: #aaaaaa;
+  font-size: calc(var(--cube-size) * 0.017);
+}
+
+/* Contribution count */
+.gitHubActivityCalendar .react-activity-calendar__count {
+  color: #aaaaaa;
+  font-size: calc(var(--cube-size) * 0.016);
+  margin-top: 0;
+}
+
+/* Less → More legend */
+.gitHubActivityCalendar .react-activity-calendar__legend-colors {
+  color: #aaaaaa;
+  font-size: calc(var(--cube-size) * 0.016);
+  gap: calc(var(--cube-size) * 0.004);
+}
+
+/* Keep contribution blocks square. */
+.gitHubActivityCalendar svg rect {
+  rx: 0%;
+  ry: 0%;
 }
