@@ -1,4 +1,6 @@
 // Displays a centered logo inside a simple rectangular banner.
+
+import "./LogoBanner.css";
 type LogoBannerProps = {
   image: string;
   backgroundImage: string;
