@@ -12,6 +12,7 @@
 .greetingTimeText {
   font-size: calc(var(--cube-size) * 0.021);
   color: #ffffff;
+  font-family: "Quicksand", sans-serif;
 }
 
 .greetingTimeClock {

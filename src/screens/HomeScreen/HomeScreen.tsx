@@ -109,6 +109,7 @@ export default function HomeScreen({
                       text="Sumit Kumar"
                       fontSize={`${_cubeSize * 0.041}px`}
                       textColor="#ffffff92"
+                      fontFamily="array"
                     />
                   </div>
 
@@ -132,7 +133,7 @@ export default function HomeScreen({
 
                 <div className="homeProfileDescription">
                   <DecodeText
-                    text="I build interactive, user-focused applications with React, TypeScript, React Native, and Firebase. I enjoy turning ideas into clean, practical experiences while continuously strengthening my skills in software engineering, DSA, and AI/ML."
+                    text="Chillax I build interactive, user-focused applications with React, TypeScript, React Native, and Firebase. I enjoy turning ideas into clean, practical experiences while continuously strengthening my skills in software engineering, DSA, and AI/ML."
                     fontSize={`${_cubeSize * 0.023}px`}
                     padding="0"
                     wrap

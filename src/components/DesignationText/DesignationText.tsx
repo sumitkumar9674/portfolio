@@ -47,6 +47,7 @@ export default function DesignationText({
         text={designations[currentIndex]}
         fontSize={fontSize}
         textColor="#ffffff5b"
+        fontFamily="Bespoke Stencil"
       />
     </div>
   );

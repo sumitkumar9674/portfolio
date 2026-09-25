@@ -35,7 +35,7 @@ const NUMBERS = "0123456789";
 export default function DecodeText({
   text,
 
-  fontFamily = "Arial",
+  fontFamily = "Chillax",
   fontSize = "16px",
 
   rotationStartDelay = 7,
@@ -390,9 +390,10 @@ export default function DecodeText({
                           position: "absolute",
                           left: 0,
                           top: 0,
+                          fontFamily,
                           color: resolvedCharacters[index]
-                            ? "#eaeaeacc"
-                            : "#fefefe64",
+                            ? "#eaeaea89"
+                            : "#fefefe4e",
                         }}
                       >
                         {character || "\u00A0"}
