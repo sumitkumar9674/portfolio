@@ -12,6 +12,7 @@ import GreetingTime from "../../components/GreetingTime/GreetingTime";
 import NeonText from "../../components/NeonText";
 import CurrentlyBuilding from "../../components/CurrentlyBuilding/CurrentlyBuilding";
 import ContactSection from "../../components/ContactSection/ContactSection";
+import NeonFrame from "../../components/NeonFrame";
 
 const projects = [
   {
@@ -99,7 +100,15 @@ export default function HomeScreen({
               }
             >
               <div className="homeProfileFrame">
-                <ProfilePhoto size={_cubeSize * 0.22} />
+                <NeonFrame
+                  width="100%"
+                  height="100%"
+                  borderColor="#ddddddab"
+                  cornerColor="#dddddd79"
+                  padding={0}
+                >
+                  <ProfilePhoto size={_cubeSize * 0.22} />
+                </NeonFrame>
               </div>
 
               <div className="homeProfileInfo">

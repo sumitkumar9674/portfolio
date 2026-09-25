@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // Profile photo assets
-import background from "../assets/logo/background.png";
+import background from "../assets/Profile_Photo/background.png";
 import idle from "../assets/Profile_Photo/idle.png";
 import eyebrow from "../assets/Profile_Photo/eyebrow.png";
 import left from "../assets/Profile_Photo/left.png";
@@ -273,6 +273,7 @@ export default function ProfilePhoto({
         style={{
           position: "absolute",
           inset: 0,
+          borderRadius: "18px",
 
           width: "100%",
           height: "100%",

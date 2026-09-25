@@ -34,6 +34,8 @@ type NeonFrameProps = {
 
   // Strength of the colored shadow.
   shadowStrength?: number;
+
+  padding?: string | number;
 };
 
 export default function NeonFrame({
@@ -58,6 +60,7 @@ export default function NeonFrame({
 
   glowStrength = 0.8,
   shadowStrength = 0.8,
+  padding = "28px",
 }: NeonFrameProps) {
   /*
    * Which sides have permanently turned on.
@@ -404,7 +407,7 @@ export default function NeonFrame({
 
         display: "inline-block",
 
-        padding: "28px",
+        padding,
 
         backgroundColor,
         margin: "0px",
@@ -424,6 +427,9 @@ export default function NeonFrame({
         style={{
           position: "relative",
           zIndex: 1,
+          width: "100%",
+          height: "100%",
+          overflow: "hidden",
         }}
       >
         {children}
