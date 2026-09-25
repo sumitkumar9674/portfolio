@@ -1,6 +1,6 @@
 // Displays the projects currently being worked on and their descriptions.
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import DesignationText from "../DesignationText/DesignationText";
 import DecodeText from "../DecodeText/DecodeText";
 import "./CurrentlyBuilding.css";
@@ -22,7 +22,11 @@ export default function CurrentlyBuilding({
   cubeSize,
 }: CurrentlyBuildingProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [descriptionFontSize, setDescriptionFontSize] = useState(
+    cubeSize * 0.019,
+  );
 
+  const descriptionRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     // Stop the rotation completely when the screen is inactive.
     if (!isActive || projects.length <= 1) {
@@ -32,12 +36,73 @@ export default function CurrentlyBuilding({
     // Keep the current project visible long enough to read.
     const timer = window.setInterval(() => {
       setCurrentIndex((current) => (current + 1) % projects.length);
-    }, 9000);
+    }, 21000);
 
     return () => {
       window.clearInterval(timer);
     };
   }, [isActive, projects.length]);
+
+  useLayoutEffect(() => {
+    if (!isActive || projects.length === 0) {
+      return;
+    }
+
+    const baseFontSize = cubeSize * 0.019;
+
+    setDescriptionFontSize(baseFontSize);
+
+    const descriptionElement = descriptionRef.current;
+
+    if (!descriptionElement) {
+      return;
+    }
+
+    let frame = 0;
+
+    const fitText = () => {
+      const availableHeight = descriptionElement.clientHeight;
+
+      if (availableHeight <= 0) {
+        return;
+      }
+
+      let fontSize = baseFontSize;
+
+      descriptionElement.style.fontSize = `${fontSize}px`;
+
+      while (
+        descriptionElement.scrollHeight > availableHeight &&
+        fontSize > cubeSize * 0.01
+      ) {
+        fontSize -= 0.5;
+        descriptionElement.style.fontSize = `${fontSize}px`;
+      }
+
+      while (
+        descriptionElement.scrollHeight <= availableHeight &&
+        fontSize < baseFontSize
+      ) {
+        const nextFontSize = fontSize + 0.5;
+
+        descriptionElement.style.fontSize = `${nextFontSize}px`;
+
+        if (descriptionElement.scrollHeight > availableHeight) {
+          break;
+        }
+
+        fontSize = nextFontSize;
+      }
+
+      setDescriptionFontSize(fontSize);
+    };
+
+    frame = window.requestAnimationFrame(fitText);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, [currentIndex, cubeSize, isActive, projects.length]);
 
   if (!isActive || projects.length === 0) {
     return null;
@@ -66,10 +131,10 @@ export default function CurrentlyBuilding({
         </div>
       </div>
 
-      <div className="currentlyBuildingDescription">
+      <div ref={descriptionRef} className="currentlyBuildingDescription">
         <DecodeText
           text={currentProject.description}
-          fontSize={`${cubeSize * 0.019}px`}
+          fontSize={`${descriptionFontSize}px`}
           padding="0"
           wrap
         />

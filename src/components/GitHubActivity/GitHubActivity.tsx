@@ -62,12 +62,14 @@ type GitHubActivityProps = {
 };
 
 export default function GitHubActivity({ _cubeSize }: GitHubActivityProps) {
-  const blockMargin = 1.2;
-  const calendarHorizontalPadding = _cubeSize * 0.012;
+  const calendarHorizontalPadding = _cubeSize * 0.024;
   const availableCalendarWidth = _cubeSize - calendarHorizontalPadding;
 
-  const blockSize = Math.floor(
-    (availableCalendarWidth - 52 * blockMargin) / 53,
+  const blockSize = Math.floor(_cubeSize / 59);
+
+  const blockMargin = Math.max(
+    0,
+    (availableCalendarWidth - 53 * blockSize) / 56,
   );
   return (
     <div
@@ -85,12 +87,12 @@ export default function GitHubActivity({ _cubeSize }: GitHubActivityProps) {
           showTotalCount={true}
           showColorLegend={true}
           showMonthLabels={true}
-          blockSize={Math.max(5, Math.floor(_cubeSize / 57))}
+          blockSize={blockSize}
           blockMargin={blockMargin}
           fontSize={Math.max(8, Math.floor(_cubeSize / 110))}
           transformData={transformContributions}
           theme={{
-            dark: ["#151515", "#303030", "#4a4a4a", "#686868", "#8a8a8a"],
+            dark: ["#0b0b0b", "#1b1b1b", "#2f2f2f", "#3f3f3f", "#585858"],
           }}
         />
       </div>
