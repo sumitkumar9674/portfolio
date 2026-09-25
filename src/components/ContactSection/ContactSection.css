@@ -13,7 +13,7 @@
 
   box-sizing: border-box;
 
-  border: 1px solid #555;
+  border: 1px solid #ffffff17;
 
   overflow: hidden;
 }
@@ -29,7 +29,7 @@
 
   box-sizing: border-box;
 
-  border-bottom: 1px solid #555;
+  border-bottom: 1px solid #ffffff17;
 }
 
 .contactItem {
@@ -43,7 +43,7 @@
 
   padding: calc(var(--cube-size) * 0.008) calc(var(--cube-size) * 0.012);
 
-  border-right: 1px solid #555;
+  border-right: 1px solid #ffffff17;
 }
 
 .contactItem:last-child {
@@ -137,7 +137,7 @@
 
   padding: calc(var(--cube-size) * 0.008);
 
-  border-right: 1px solid #555;
+  border-right: 1px solid #ffffff17;
 
   color: #aaaaaa;
 
