@@ -54,7 +54,7 @@ type Bullet = {
   sprite: HTMLImageElement;
 };
 
-export default function SpaceDefender({ isOpen }: { isOpen: boolean }) {
+export default function SpaceDefender({ isOpen = true }: { isOpen: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // Keeps the latest open/closed state available to the game loop and input handlers.
   const isOpenRef = useRef(isOpen);

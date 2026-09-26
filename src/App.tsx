@@ -30,6 +30,7 @@ function App() {
       >
         <LogoBanner image={companyLogo} backgroundImage={logoBackground} />
       </NeonFrame>
+      <SpaceDefender isOpen={true} />
 
       {/* ---------- SpaceDefender Rooftop ---------- */}
       {/* <section
