@@ -53,6 +53,40 @@ type Bullet = {
   y: number;
   sprite: HTMLImageElement;
 };
+// ------------------------------------------------------------
+// Preload SpaceDefender assets
+// ------------------------------------------------------------
+// Loads all game images into the browser cache before the game
+// component is mounted.
+// ------------------------------------------------------------
+
+function preloadImage(src: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+
+    image.onload = () => {
+      resolve();
+    };
+
+    image.onerror = () => {
+      reject(new Error(`Failed to preload image: ${src}`));
+    };
+
+    image.src = src;
+  });
+}
+
+export function preloadSpaceDefender(): Promise<void> {
+  const sources = [
+    ...entitySources,
+    ...bulletSources,
+    ...heroSources,
+    ...backgroundSources,
+    ...explosionSources,
+  ];
+
+  return Promise.all(sources.map(preloadImage)).then(() => undefined);
+}
 
 export default function SpaceDefender({ isOpen = true }: { isOpen: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -101,6 +135,8 @@ export default function SpaceDefender({ isOpen = true }: { isOpen: boolean }) {
   // Start the continuous game loop when SpaceDefender is opened.
 
   useEffect(() => {
+    console.log("SPACEDEFENDER MOUNTED");
+
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
 
@@ -244,8 +280,7 @@ export default function SpaceDefender({ isOpen = true }: { isOpen: boolean }) {
 
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
-      ship.y = 567;
-
+      ship.y = height - 70;
       const LOGO_MARGIN = 20;
       const availableLogoWidth = width - LOGO_MARGIN * 2;
 
@@ -519,7 +554,7 @@ export default function SpaceDefender({ isOpen = true }: { isOpen: boolean }) {
         }
 
         if (a.sprite.complete && a.sprite.naturalWidth > 0) {
-          ctx.fillStyle = "rgba(183, 125, 153, 0.71)";
+          ctx.fillStyle = "rgba(237, 68, 125, 0.82)";
           ctx.fillRect(
             a.x - drawWidth / 2 + 2,
             a.y - drawHeight / 2 + 2,
@@ -616,7 +651,7 @@ export default function SpaceDefender({ isOpen = true }: { isOpen: boolean }) {
       ref={canvasRef}
       style={{
         width: "100%",
-        height: "637px",
+        height: "100%",
         display: "block",
         borderRadius: "0px",
         touchAction: "none",

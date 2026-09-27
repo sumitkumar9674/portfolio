@@ -375,6 +375,12 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
   const animationFrame = useRef<number | null>(null);
   const searchAxisDirection = useRef<Direction>("left");
   const [activeScreen, setActiveScreen] = useState<ScreenId>("home");
+  const [hasOpenedProjects, setHasOpenedProjects] = useState(false);
+  useEffect(() => {
+    if (activeScreen === "projects") {
+      setHasOpenedProjects(true);
+    }
+  }, [activeScreen]);
 
   // ----------------------------------------------------------
   // Starting pointer position for drag detection.
@@ -1194,7 +1200,12 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
               BACK
           ------------------------------------------------- */}
           <div className="cubeFace cubeBack">
-            <ProjectsScreen />
+            <ProjectsScreen
+              isActive={activeScreen === "projects"}
+              hasBeenActivated={
+                hasOpenedProjects || activeScreen === "projects"
+              }
+            />{" "}
           </div>
 
           {/* ------------------------------------------------

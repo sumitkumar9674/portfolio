@@ -1,0 +1,17 @@
+.splashScreen {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #000000;
+
+  z-index: 9999;
+}
+
+.splashScreenText {
+  font-size: 24px;
+  letter-spacing: 0.2em;
+}

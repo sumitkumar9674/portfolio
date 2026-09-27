@@ -1,18 +1,26 @@
-// ------------------------------------------------------------
-// ProjectsScreen
-// ------------------------------------------------------------
-// Content displayed on the PROJECTS face of the 3D cube.
-//
-// This component is independent from the cube controller.
-// ------------------------------------------------------------
-
+import SpaceDefender from "../../components/SpaceDefender";
 import "./ProjectsScreen.css";
 
-export default function ProjectsScreen() {
+type ProjectsScreenProps = {
+  isActive: boolean;
+  hasBeenActivated: boolean;
+};
+
+export default function ProjectsScreen({
+  isActive,
+  hasBeenActivated,
+}: ProjectsScreenProps) {
   return (
-    <div className="projectsScreen">
-      {/* Temporary PROJECTS content while the screen architecture is built. */}
-      PROJECTS
+    <div
+      className="projectsScreen"
+      data-active={isActive}
+      data-has-been-activated={hasBeenActivated}
+      style={{
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      <SpaceDefender isOpen={isActive} />
     </div>
   );
 }
