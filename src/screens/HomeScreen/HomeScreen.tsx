@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import "./HomeScreen.css";
 
 import flatLogo from "../../assets/logo/flat-logo.png";
@@ -45,31 +44,21 @@ const projects = [
 type HomeScreenProps = {
   cubeSize: number;
   isActive: boolean;
+  isFirstOpen: boolean;
 };
 
 export default function HomeScreen({
   cubeSize: _cubeSize,
   isActive,
+  isFirstOpen,
 }: HomeScreenProps) {
-  const [homeRenderKey, setHomeRenderKey] = useState(0);
-
-  /*
-   * Give the initial Home render one browser frame to settle,
-   * then remount the Home content once.
-   */
-  useEffect(() => {
-    if (!isActive) return;
-
-    const frame = requestAnimationFrame(() => {
-      setHomeRenderKey((key) => key + 1);
-    });
-
-    return () => cancelAnimationFrame(frame);
-  }, [isActive]);
-
   return (
     <div
       className="homeScreen"
+      data-active={isActive}
+      data-first-open={isFirstOpen}
+      aria-hidden={!isActive}
+      inert={!isActive}
       style={
         {
           "--cube-size": `${_cubeSize}px`,
@@ -80,7 +69,7 @@ export default function HomeScreen({
         {/* Future 3D objects go here. */}
       </div>
 
-      <div className="homeScreenContent" key={homeRenderKey}>
+      <div className="homeScreenContent">
         <header className="homeScreenHeader">
           <LogoBanner
             image={flatLogo}
@@ -95,7 +84,7 @@ export default function HomeScreen({
               className="homeProfileSection"
               style={
                 {
-                  "--profile-photo-size": `${_cubeSize * 0.22}px`,
+                  "--profile-photo-size": `${_cubeSize * 0.18}px`,
                 } as React.CSSProperties
               }
             >
@@ -107,19 +96,20 @@ export default function HomeScreen({
                   cornerColor="#dddddd79"
                   padding={0}
                 >
-                  <ProfilePhoto size={_cubeSize * 0.22} />
+                  <ProfilePhoto size={_cubeSize * 0.18} />
                 </NeonFrame>
               </div>
 
               <div className="homeProfileInfo">
                 <div className="homeProfileTopRow">
                   <div className="homeProfileName">
-                    <NeonText
+                    {isFirstOpen ? <NeonText
                       text="Sumit Kumar"
+                      isActive={isActive}
                       fontSize={`${_cubeSize * 0.041}px`}
                       textColor="#d7d7d7d5"
                       fontFamily="array"
-                    />
+                    /> : <span className="homeProfileNameStatic">Sumit Kumar</span>}
                   </div>
 
                   <div className="homeProfileDesignation">
@@ -141,12 +131,18 @@ export default function HomeScreen({
                 </div>
 
                 <div className="homeProfileDescription">
-                  <DecodeText
-                    text="Chillax I build interactive, user-focused applications with React, TypeScript, React Native, and Firebase. I enjoy turning ideas into clean, practical experiences while continuously strengthening my skills in software engineering, DSA, and AI/ML."
-                    fontSize={`${_cubeSize * 0.023}px`}
-                    padding="0"
-                    wrap
-                  />
+                  {isFirstOpen ? (
+                    <DecodeText
+                      text="I build interactive, user-focused applications with React, TypeScript, React Native, and Firebase. I enjoy turning ideas into clean, practical experiences while continuously strengthening my skills in software engineering, DSA, and AI/ML."
+                      fontSize={`${_cubeSize * 0.023}px`}
+                      padding="0"
+                      wrap
+                    />
+                  ) : (
+                    <p className="homeProfileDescriptionText">
+                      I build interactive, user-focused applications with React, TypeScript, React Native, and Firebase. I enjoy turning ideas into clean, practical experiences while continuously strengthening my skills in software engineering, DSA, and AI/ML.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

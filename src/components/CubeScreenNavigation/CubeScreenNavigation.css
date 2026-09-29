@@ -1,48 +1,82 @@
-/* ------------------------------------------------------------
-   Base navigation
------------------------------------------------------------- */
-
 .cubeScreenNavigation {
   position: fixed;
   z-index: 100;
   display: flex;
-  gap: 10px;
+  gap: 5px;
+  padding: 6px;
+  border: 1px solid rgba(220, 239, 219, 0.16);
+  border-radius: 4px;
+  background: rgba(10, 16, 15, 0.78);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
 }
-
-/* ------------------------------------------------------------
-   LANDSCAPE
-   width > height
-
-   Navigation sits on the left side.
------------------------------------------------------------- */
 
 .cubeScreenNavigationLandscape {
-  left: 20px;
   top: 50%;
-  transform: translateY(-50%);
-
+  left: clamp(16px, 2.5vw, 36px);
   flex-direction: column;
+  transform: translateY(-50%);
 }
-
-/* ------------------------------------------------------------
-   PORTRAIT
-   height >= width
-
-   Navigation sits at the top.
------------------------------------------------------------- */
 
 .cubeScreenNavigationPortrait {
+  top: max(14px, env(safe-area-inset-top));
   left: 50%;
-  top: 20px;
+  max-width: calc(100vw - 20px);
+  overflow-x: auto;
   transform: translateX(-50%);
-
-  flex-direction: row;
+  touch-action: pan-x;
+  scrollbar-width: none;
 }
 
-/* ------------------------------------------------------------
-   Temporary button styling
------------------------------------------------------------- */
+.cubeScreenNavigationPortrait::-webkit-scrollbar { display: none; }
 
 .cubeScreenNavigation button {
+  min-width: 70px;
+  min-height: 42px;
+  padding: 0 11px;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  background: transparent;
+  color: #adb8b0;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px;
+  letter-spacing: 0.05em;
   cursor: pointer;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+  touch-action: manipulation;
+}
+
+.cubeScreenNavigation button:hover {
+  border-color: rgba(220, 239, 219, 0.15);
+  color: var(--paper, #f1f0e8);
+}
+
+.cubeScreenNavigation button[aria-current="page"] {
+  border-color: rgba(199, 242, 124, 0.3);
+  background: rgba(199, 242, 124, 0.08);
+  color: var(--accent, #c7f27c);
+}
+
+.cubeScreenNavigation button:focus-visible {
+  outline: 2px solid var(--accent, #c7f27c);
+  outline-offset: 1px;
+}
+
+@media (max-width: 600px) {
+  .cubeScreenNavigation { gap: 2px; padding: 4px; }
+  .cubeScreenNavigationPortrait { top: max(8px, env(safe-area-inset-top)); }
+  .cubeScreenNavigation button { min-width: 56px; min-height: 40px; padding: 0 7px; font-size: 9px; }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .cubeScreenNavigation button { min-height: 44px; }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .cubeScreenNavigationLandscape { gap: 2px; padding: 3px; }
+  .cubeScreenNavigation button { min-width: 62px; min-height: 34px; font-size: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cubeScreenNavigation button { transition: none; }
 }

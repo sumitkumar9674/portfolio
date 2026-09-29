@@ -156,7 +156,7 @@ export default function ContactSection({ cubeSize }: ContactSectionProps) {
         type="button"
         className="contactCopyButton"
         onClick={() => copyToClipboard(value)}
-        aria-label={isCopied ? "Copied" : "Copy"}
+        aria-label={isCopied ? `Copied ${value}` : `Copy ${value}`}
       >
         {isCopied ? "✓" : "⧉"}
       </button>

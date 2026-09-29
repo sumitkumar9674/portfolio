@@ -48,16 +48,24 @@ export default function DecodeText({
 
   wrap = false,
 }: DecodeTextProps) {
+  const [prefersReducedMotion] = useState(() =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+
   // Current character displayed at every position.
   const [characters, setCharacters] = useState<string[]>(
-    Array.from(text, () => ""),
+    Array.from(text, (character) =>
+      prefersReducedMotion ? character : "",
+    ),
   );
 
   const [resolvedCharacters, setResolvedCharacters] = useState<boolean[]>(
-    Array.from(text, () => false),
+    Array.from(text, () => prefersReducedMotion),
   );
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
+
     // Reset the visible text whenever the animation starts again.
     setCharacters(Array.from(text, () => ""));
     setResolvedCharacters(Array.from(text, () => false));
@@ -82,15 +90,15 @@ export default function DecodeText({
           : NUMBERS;
 
       // Pick a random starting position.
-      let currentIndex = shouldRotate
+      const currentIndex = shouldRotate
         ? Math.floor(Math.random() * characterSet.length)
         : 0;
 
       // Whether this character has been permanently resolved.
-      let resolved = false;
+      const resolved = false;
 
       // Whether this character is now allowed to resolve.
-      let canResolve = false;
+      const canResolve = false;
 
       return {
         target,
@@ -283,10 +291,13 @@ export default function DecodeText({
     rotationSpeed,
     resolveStartDelay,
     resolveDelay,
+    prefersReducedMotion,
   ]);
 
   return (
     <div
+      role="group"
+      aria-label={text}
       style={{
         width: "100%",
         height: "100%",
@@ -302,10 +313,11 @@ export default function DecodeText({
         before the animation starts.
       */}
       <div
+        aria-hidden="true"
         style={{
           width: "100%",
           visibility: "hidden",
-          whiteSpace: "pre-wrap",
+          whiteSpace: wrap ? "pre-wrap" : "nowrap",
           overflowWrap: "normal",
           boxSizing: "border-box",
           padding,
@@ -324,6 +336,7 @@ export default function DecodeText({
         component's physical size never changes.
       */}
       <div
+        aria-hidden="true"
         style={{
           position: "absolute",
           inset: 0,
@@ -335,7 +348,7 @@ export default function DecodeText({
           padding,
           overflow: "hidden",
 
-          whiteSpace: "pre-wrap",
+          whiteSpace: wrap ? "pre-wrap" : "nowrap",
           wordBreak: "normal",
           overflowWrap: "normal",
 

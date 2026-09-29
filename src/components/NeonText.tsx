@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type NeonTextProps = {
   // Text to display.
   text: string;
 
   textAlign?: "left" | "center" | "right";
+  isActive?: boolean;
 
   // Font used by the text.
   fontFamily?: string;
@@ -31,6 +32,7 @@ type NeonTextProps = {
 export default function NeonText({
   text,
   textAlign,
+  isActive = true,
 
   fontFamily = "Arial",
   fontSize = "32px",
@@ -43,12 +45,16 @@ export default function NeonText({
   flickerSpeed = 80,
 }: NeonTextProps) {
   // Current brightness of the neon text.
-  const [brightness, setBrightness] = useState(0);
+  const [prefersReducedMotion] = useState(() =>
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const [brightness, setBrightness] = useState(prefersReducedMotion ? 1 : 0);
+  const hasStartedRef = useRef(false);
 
   useEffect(() => {
-    // Start completely dark whenever the animation restarts.
-    setBrightness(0);
-
+    if (!isActive || hasStartedRef.current) return;
+    hasStartedRef.current = true;
+    if (prefersReducedMotion) return;
     let flickerInterval: ReturnType<typeof setInterval> | null = null;
 
     // --------------------------------
@@ -99,8 +105,6 @@ export default function NeonText({
          * Later:
          * increasingly aggressive flickering.
          */
-        const intensity = progress < 0.35 ? 0.25 : progress < 0.7 ? 0.55 : 1;
-
         const random = Math.random();
 
         let nextBrightness = 0;
@@ -174,7 +178,7 @@ export default function NeonText({
         clearInterval(flickerInterval);
       }
     };
-  }, [text, initialDelay, flickerDuration, flickerSpeed]);
+  }, [text, initialDelay, flickerDuration, flickerSpeed, isActive, prefersReducedMotion]);
 
   // --------------------------------
   // SUBTLE NEON GLOW

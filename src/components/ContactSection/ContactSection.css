@@ -55,19 +55,19 @@
 
   margin-right: calc(var(--cube-size) * 0.008);
 
-  font-size: calc(var(--cube-size) * 0.016);
+  font-size: clamp(12px, calc(var(--cube-size) * 0.016), 18px);
   color: #aaaaaa;
 }
 
 .contactIcon svg {
-  width: calc(var(--cube-size) * 0.017);
-  height: calc(var(--cube-size) * 0.017);
+  width: clamp(14px, calc(var(--cube-size) * 0.017), 20px);
+  height: clamp(14px, calc(var(--cube-size) * 0.017), 20px);
   display: block;
 }
 
 .contactSocial svg {
-  width: calc(var(--cube-size) * 0.022);
-  height: calc(var(--cube-size) * 0.022);
+  width: clamp(16px, calc(var(--cube-size) * 0.022), 22px);
+  height: clamp(16px, calc(var(--cube-size) * 0.022), 22px);
   display: block;
 }
 
@@ -80,15 +80,15 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  font-size: calc(var(--cube-size) * 0.014);
+  font-size: clamp(10px, calc(var(--cube-size) * 0.014), 16px);
   color: #aaaaaa;
 }
 
 .contactCopyButton {
   flex-shrink: 0;
 
-  width: calc(var(--cube-size) * 0.024);
-  height: calc(var(--cube-size) * 0.024);
+  width: max(36px, calc(var(--cube-size) * 0.05));
+  height: max(36px, calc(var(--cube-size) * 0.05));
 
   margin-left: calc(var(--cube-size) * 0.008);
 
@@ -104,13 +104,19 @@
 
   color: #aaaaaa;
 
-  font-size: calc(var(--cube-size) * 0.016);
+  font-size: clamp(14px, calc(var(--cube-size) * 0.02), 20px);
 
   cursor: pointer;
 }
 
 .contactCopyButton:hover {
   color: #ffffff;
+}
+
+.contactCopyButton:focus-visible,
+.contactSocial:focus-visible {
+  outline: 2px solid var(--accent, #c7f27c);
+  outline-offset: -3px;
 }
 
 .contactSocials {
@@ -141,7 +147,7 @@
 
   color: #aaaaaa;
 
-  font-size: calc(var(--cube-size) * 0.013);
+  font-size: clamp(10px, calc(var(--cube-size) * 0.013), 14px);
 
   text-decoration: none;
 
@@ -154,5 +160,5 @@
 
 .contactSocial:hover {
   color: #ffffff;
-  transform: scale(1.08);
+  transform: translateY(-2px);
 }

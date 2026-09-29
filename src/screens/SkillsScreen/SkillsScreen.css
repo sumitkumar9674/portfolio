@@ -1,27 +1,60 @@
-/* ------------------------------------------------------------
-   SkillsScreen
-   ------------------------------------------------------------
-   Styles belonging only to the SKILLS screen.
------------------------------------------------------------- */
-
 .skillsScreen {
-  width: 80%;
-  height: 80%;
+  justify-content: flex-start;
+  gap: 6cqw;
+}
 
+.skillsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2cqw;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.skillGroup {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  min-height: 24cqw;
+  gap: 2cqw;
+  padding: 3cqw 2.6cqw;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.025);
+}
 
-  border: 2px solid #00ffff;
-  background: #020617;
-  color: white;
+.skillIndex {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: clamp(8px, 2.3cqw, 12px);
+}
 
-  font-family: Inter, system-ui, sans-serif;
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: 2px;
+.skillGroup h2 {
+  margin: 0 0 3cqw;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: clamp(7px, 2cqw, 10px);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+}
 
-  box-shadow:
-    0 0 10px rgba(0, 255, 255, 0.5),
-    inset 0 0 15px rgba(0, 255, 255, 0.15);
+.skillGroup ul {
+  display: grid;
+  gap: 2.2cqw;
+  padding: 0;
+  list-style: none;
+}
+
+.skillGroup li {
+  color: var(--paper);
+  font-size: clamp(9px, 2.7cqw, 14px);
+  line-height: 1.2;
+}
+
+.skillsScreen .screenFooter {
+  justify-content: flex-start;
+  gap: 2cqw;
+}
+
+@media (max-width: 600px) {
+  .skillsGrid { gap: 1.4cqw; }
+  .skillGroup { min-height: 29cqw; gap: 1.4cqw; padding: 2.3cqw 1.7cqw; }
+  .skillGroup li { font-size: clamp(8px, 2.6cqw, 13px); }
 }

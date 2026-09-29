@@ -13,6 +13,7 @@ type ScreenId = "home" | "projects" | "skills" | "about" | "blog" | "contact";
 
 type CubeScreenNavigationProps = {
   onNavigate: (screen: ScreenId) => void;
+  activeScreen: ScreenId;
 };
 
 // ------------------------------------------------------------
@@ -21,6 +22,7 @@ type CubeScreenNavigationProps = {
 
 export default function CubeScreenNavigation({
   onNavigate,
+  activeScreen,
 }: CubeScreenNavigationProps) {
   // ----------------------------------------------------------
   // Determine whether the current browser is portrait.
@@ -62,23 +64,55 @@ export default function CubeScreenNavigation({
 
   return (
     <div
+      aria-label="Portfolio screens"
+      role="navigation"
       className={`cubeScreenNavigation ${
         isPortrait
           ? "cubeScreenNavigationPortrait"
           : "cubeScreenNavigationLandscape"
       }`}
     >
-      <button onClick={() => onNavigate("home")}>HOME</button>
+      <button
+        aria-current={activeScreen === "home" ? "page" : undefined}
+        onClick={() => onNavigate("home")}
+      >
+        HOME
+      </button>
 
-      <button onClick={() => onNavigate("projects")}>PROJECTS</button>
+      <button
+        aria-current={activeScreen === "projects" ? "page" : undefined}
+        onClick={() => onNavigate("projects")}
+      >
+        PROJECTS
+      </button>
 
-      <button onClick={() => onNavigate("skills")}>SKILLS</button>
+      <button
+        aria-current={activeScreen === "skills" ? "page" : undefined}
+        onClick={() => onNavigate("skills")}
+      >
+        SKILLS
+      </button>
 
-      <button onClick={() => onNavigate("about")}>ABOUT</button>
+      <button
+        aria-current={activeScreen === "about" ? "page" : undefined}
+        onClick={() => onNavigate("about")}
+      >
+        ABOUT
+      </button>
 
-      <button onClick={() => onNavigate("blog")}>BLOG</button>
+      <button
+        aria-current={activeScreen === "blog" ? "page" : undefined}
+        onClick={() => onNavigate("blog")}
+      >
+        BLOG
+      </button>
 
-      <button onClick={() => onNavigate("contact")}>CONTACT</button>
+      <button
+        aria-current={activeScreen === "contact" ? "page" : undefined}
+        onClick={() => onNavigate("contact")}
+      >
+        CONTACT
+      </button>
     </div>
   );
 }

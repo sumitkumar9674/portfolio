@@ -4,21 +4,22 @@ import "./ProjectsScreen.css";
 type ProjectsScreenProps = {
   isActive: boolean;
   hasBeenActivated: boolean;
+  isFirstOpen: boolean;
 };
 
 export default function ProjectsScreen({
   isActive,
   hasBeenActivated,
+  isFirstOpen,
 }: ProjectsScreenProps) {
   return (
     <div
       className="projectsScreen"
       data-active={isActive}
       data-has-been-activated={hasBeenActivated}
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
+      data-first-open={isFirstOpen}
+      aria-hidden={!isActive}
+      inert={!isActive}
     >
       <SpaceDefender isOpen={isActive} />
     </div>

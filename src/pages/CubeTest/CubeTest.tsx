@@ -375,18 +375,10 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
   const animationFrame = useRef<number | null>(null);
   const searchAxisDirection = useRef<Direction>("left");
   const [activeScreen, setActiveScreen] = useState<ScreenId>("home");
-  const [hasOpenedProjects, setHasOpenedProjects] = useState(false);
-  const [hasOpenedAbout, setHasOpenedAbout] = useState(false);
-
-  useEffect(() => {
-    if (activeScreen === "projects") {
-      setHasOpenedProjects(true);
-    }
-
-    if (activeScreen === "about") {
-      setHasOpenedAbout(true);
-    }
-  }, [activeScreen]);
+  const [openedScreens, setOpenedScreens] = useState<Set<ScreenId>>(
+    () => new Set(["home"]),
+  );
+  const [firstOpenScreen, setFirstOpenScreen] = useState<ScreenId | null>("home");
   // ----------------------------------------------------------
   // Starting pointer position for drag detection.
   // ----------------------------------------------------------
@@ -640,11 +632,15 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     onComplete?: () => void,
   ) {
     const startTime = performance.now();
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const movementDuration = prefersReducedMotion ? 1 : rotationDuration;
 
     function animate(currentTime: number) {
       const elapsed = currentTime - startTime;
 
-      const rawProgress = Math.min(elapsed / rotationDuration, 1);
+      const rawProgress = Math.min(elapsed / movementDuration, 1);
 
       // ------------------------------------------------------
       // Smooth ease-in / ease-out.
@@ -729,7 +725,17 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
   }
 
   function updateActiveScreen(rotation: Quaternion) {
-    setActiveScreen(getFrontScreen(rotation));
+    const screen = getFrontScreen(rotation);
+    if (screen === activeScreen) return;
+
+    setActiveScreen(screen);
+    setFirstOpenScreen(openedScreens.has(screen) ? null : screen);
+    setOpenedScreens((opened) => {
+      if (opened.has(screen)) return opened;
+      const next = new Set(opened);
+      next.add(screen);
+      return next;
+    });
   }
 
   // ----------------------------------------------------------
@@ -1134,9 +1140,12 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     system before we build the final navigation dock.
 --------------------------------------------------------- */}
 
-      <CubeScreenNavigation onNavigate={navigateToScreen} />
+      <CubeScreenNavigation
+        onNavigate={navigateToScreen}
+        activeScreen={activeScreen}
+      />
 
-      <div className="cubeJoystick">
+      <div className="cubeJoystick" role="group" aria-label="Rotate cube">
         <button
           className="joystickButton joystickUp"
           onPointerDown={(event) => event.stopPropagation()}
@@ -1198,6 +1207,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
             <HomeScreen
               cubeSize={cubeSize}
               isActive={activeScreen === "home"}
+              isFirstOpen={firstOpenScreen === "home"}
             />{" "}
           </div>
 
@@ -1207,9 +1217,8 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           <div className="cubeFace cubeBack">
             <ProjectsScreen
               isActive={activeScreen === "projects"}
-              hasBeenActivated={
-                hasOpenedProjects || activeScreen === "projects"
-              }
+              hasBeenActivated={openedScreens.has("projects")}
+              isFirstOpen={firstOpenScreen === "projects"}
             />{" "}
           </div>
 
@@ -1220,7 +1229,8 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           <div className="cubeFace cubeRight">
             <AboutScreen
               isActive={activeScreen === "about"}
-              hasBeenActivated={hasOpenedAbout || activeScreen === "about"}
+              hasBeenActivated={openedScreens.has("about")}
+              isFirstOpen={firstOpenScreen === "about"}
             />
           </div>
 
@@ -1228,7 +1238,10 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
               LEFT
           ------------------------------------------------- */}
           <div className="cubeFace cubeLeft">
-            <SkillsScreen />
+            <SkillsScreen
+              isActive={activeScreen === "skills"}
+              isFirstOpen={firstOpenScreen === "skills"}
+            />
           </div>
 
           {/* ------------------------------------------------
@@ -1236,7 +1249,10 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           ------------------------------------------------- */}
 
           <div className="cubeFace cubeTop">
-            <BlogScreen />
+            <BlogScreen
+              isActive={activeScreen === "blog"}
+              isFirstOpen={firstOpenScreen === "blog"}
+            />
           </div>
 
           {/* ------------------------------------------------
@@ -1244,7 +1260,10 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           ------------------------------------------------- */}
 
           <div className="cubeFace cubeBottom">
-            <ContactScreen />
+            <ContactScreen
+              isActive={activeScreen === "contact"}
+              isFirstOpen={firstOpenScreen === "contact"}
+            />
           </div>
           {/* ------------------------------------------------
     OUTER WIREFRAME CUBE
@@ -1267,8 +1286,8 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           >
             <WireframeCubeObject
               size={cubeSize * 1.09}
-              color="#fbfafa69"
-              lineWidth={2}
+              color="#c7f27c45"
+              lineWidth={1.25}
               x={0}
               y={0}
               z={0}

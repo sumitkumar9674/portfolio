@@ -9,6 +9,8 @@
   background: transparent;
   transform-style: preserve-3d;
   overflow: visible;
+  container-type: inline-size;
+  color: var(--paper, #f1f0e8);
 
   --cube-size: var(--cube-size);
 
@@ -72,6 +74,7 @@
   z-index: 10;
 
   pointer-events: auto;
+  background: linear-gradient(180deg, rgba(7, 12, 11, 0.12), rgba(7, 12, 11, 0.28));
 }
 
 /* ------------------------------------------------------------
@@ -220,7 +223,7 @@
   min-height: 0;
   display: flex;
   align-items: center;
-  border: 1px solid #ffffff17;
+  border: 1px solid var(--line, rgba(230, 239, 224, 0.15));
   box-sizing: border-box;
   padding: 4px 8px;
   overflow: hidden;
@@ -234,7 +237,7 @@
 
   flex: 0 0 22%;
 
-  border: 1px solid #ffffff17;
+  border: 1px solid var(--line, rgba(230, 239, 224, 0.15));
   box-sizing: border-box;
 }
 
@@ -263,13 +266,91 @@
   display: flex;
   align-items: center;
 
-  border: 1px solid #ffffff17;
+  border: 1px solid var(--line, rgba(230, 239, 224, 0.15));
   box-sizing: border-box;
 
   font-size: calc(var(--cube-size) * 0.024);
-  color: #888888;
+  color: var(--muted, #9ca9a2);
 
   overflow: hidden;
+}
+
+.homeProfileDescriptionText {
+  width: 100%;
+  margin: 0;
+  color: var(--muted, #9ca9a2);
+  font-size: clamp(10px, calc(var(--cube-size) * 0.023), 18px);
+  line-height: 1.45;
+}
+
+.homeProfileNameStatic {
+  color: var(--paper, #f1f0e8);
+  font-family: var(--font-display, "Array", sans-serif);
+  font-size: clamp(16px, calc(var(--cube-size) * 0.041), 34px);
+}
+
+.homeScreen[data-first-open="true"] .homeScreenContent {
+  animation: panel-arrive 680ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.homeScreen .homeContactContainer .contactSection {
+  border-color: var(--line, rgba(230, 239, 224, 0.15));
+}
+
+.homeScreen .homeContactContainer .contactItem,
+.homeScreen .homeContactContainer .contactSocial {
+  border-color: var(--line, rgba(230, 239, 224, 0.15));
+  color: var(--muted, #9ca9a2);
+}
+
+.homeScreen .homeContactContainer .contactValue { color: var(--muted, #9ca9a2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .homeScreen[data-first-open="true"] .homeScreenContent { animation: none; }
+}
+
+@media (max-width: 700px), (orientation: landscape) and (max-height: 520px) {
+  .homeScreen {
+    width: 90%;
+    height: 90%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(199, 242, 124, 0.4) transparent;
+  }
+
+  .homeScreenContent {
+    position: relative;
+    inset: auto;
+    height: auto;
+    min-height: 100%;
+  }
+
+  .homeScreenHeader {
+    height: 24cqw;
+    min-height: 54px;
+    flex: 0 0 auto;
+    border-bottom: 1px solid var(--line, rgba(230, 239, 224, 0.15));
+  }
+
+  .homeScreenMain {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .homeProfileContainer { flex: 0 0 48cqw; }
+  .homeCurrentlyBuildingContainer { flex: 0 0 28cqw; }
+  .homeGitHubContainer { flex: 0 0 38cqw; }
+  .homeContactContainer { flex: 0 0 24cqw; }
+
+  .homeProfileInfo > div { padding: 1cqw 2cqw; }
+  .homeProfileInfo > .homeProfileTopRow { flex-basis: 28%; }
+  .homeProfileDescriptionText { font-size: clamp(10px, 3.1cqw, 14px); }
+  .homeGreetingSection > div { padding: 1cqw 2cqw; }
+  .homeScreen .currentlyBuildingLabel { font-size: clamp(10px, 3cqw, 14px); }
 }
 
 .homeProfileInfo > .homeGreetingSection {

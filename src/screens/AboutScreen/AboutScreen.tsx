@@ -13,21 +13,29 @@ import NeonText from "../../components/NeonText";
 type AboutScreenProps = {
   isActive: boolean;
   hasBeenActivated: boolean;
+  isFirstOpen: boolean;
 };
 
 export default function AboutScreen({
   isActive,
   hasBeenActivated,
+  isFirstOpen,
 }: AboutScreenProps) {
   return (
-    <div className="aboutScreen">
-      {isActive && hasBeenActivated && (
-        <div className="aboutFirstOpenBanner">FIRST OPEN BANNER</div>
-      )}
+    <div
+      className="aboutScreen"
+      data-active={isActive}
+      data-first-open={isFirstOpen}
+      data-has-been-activated={hasBeenActivated}
+      aria-hidden={!isActive}
+      inert={!isActive}
+    >
+      <div className="aboutEyebrow">A small studio for thoughtful software</div>
 
       <div className="aboutBox aboutIdentity">
-        <NeonText
+        {isFirstOpen ? <NeonText
           text="STICKFORYOU"
+          isActive={isActive}
           fontFamily="array"
           fontSize="8cqw"
           textAlign="right"
@@ -36,12 +44,13 @@ export default function AboutScreen({
           initialDelay={300}
           flickerDuration={1200}
           flickerSpeed={60}
-        />
+        /> : <span className="aboutStaticText">STICKFORYOU</span>}
       </div>
 
       <div className="aboutBox aboutTagline">
-        <NeonText
+        {isFirstOpen ? <NeonText
           text="SIMPLE IS A FEATURE."
+          isActive={isActive}
           fontFamily="kola"
           fontSize="5cqw"
           textAlign="left"
@@ -50,11 +59,11 @@ export default function AboutScreen({
           initialDelay={600}
           flickerDuration={1200}
           flickerSpeed={60}
-        />
+        /> : <span className="aboutStaticText aboutStaticTagline">SIMPLE IS A FEATURE.</span>}
       </div>
 
       <div className="aboutBox aboutDescription">
-        <DecodeText
+        {isFirstOpen ? <DecodeText
           text={`StickForYou is a UI/UX and system design company focused on making
 digital experiences simple to use, thoughtfully designed, and built to grow.
 
@@ -64,7 +73,7 @@ systems that are ready for what comes next. As they grow, we grow with them.`}
           fontSize="2.5cqw"
           padding="0"
           wrap={true}
-        />
+        /> : <p className="aboutDescriptionCopy">StickForYou is a UI/UX and system design company focused on making digital experiences simple to use, thoughtfully designed, and built to grow. We work alongside our customers to solve what matters today while creating systems that are ready for what comes next. As they grow, we grow with them.</p>}
       </div>
     </div>
   );
