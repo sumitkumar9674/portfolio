@@ -46,7 +46,7 @@ export default function DesignationText({
       <NeonText
         text={designations[currentIndex]}
         fontSize={fontSize}
-        textColor="#ffffff5b"
+        textColor="#8b8b8bcd"
         fontFamily="Bespoke Stencil"
       />
     </div>

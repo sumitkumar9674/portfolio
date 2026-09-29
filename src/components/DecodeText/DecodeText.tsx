@@ -392,8 +392,8 @@ export default function DecodeText({
                           top: 0,
                           fontFamily,
                           color: resolvedCharacters[index]
-                            ? "#eaeaea89"
-                            : "#fefefe4e",
+                            ? "#848484"
+                            : "#3d3d3d",
                         }}
                       >
                         {character || "\u00A0"}

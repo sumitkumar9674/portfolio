@@ -117,7 +117,7 @@ export default function HomeScreen({
                     <NeonText
                       text="Sumit Kumar"
                       fontSize={`${_cubeSize * 0.041}px`}
-                      textColor="#ffffff92"
+                      textColor="#d7d7d7d5"
                       fontFamily="array"
                     />
                   </div>

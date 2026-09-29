@@ -4,6 +4,8 @@ type NeonTextProps = {
   // Text to display.
   text: string;
 
+  textAlign?: "left" | "center" | "right";
+
   // Font used by the text.
   fontFamily?: string;
 
@@ -28,6 +30,7 @@ type NeonTextProps = {
 
 export default function NeonText({
   text,
+  textAlign,
 
   fontFamily = "Arial",
   fontSize = "32px",
@@ -194,7 +197,12 @@ export default function NeonText({
 
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-start",
+        justifyContent:
+          textAlign === "right"
+            ? "flex-end"
+            : textAlign === "center"
+              ? "center"
+              : "flex-start",
         padding: "0px",
       }}
     >
