@@ -1,53 +1,42 @@
 import { useEffect, useState } from "react";
-import DecodeText from "../DecodeText/DecodeText";
 import "./DesignationText.css";
 import NeonText from "../NeonText";
 
 type DesignationTextProps = {
   designations: string[];
-  isActive: boolean;
   fontSize?: string | number;
   padding?: string | number;
 };
 
 export default function DesignationText({
   designations,
-  isActive,
   fontSize = "16px",
   padding = "0",
 }: DesignationTextProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    // Stop completely when the screen is not active.
-    if (!isActive) {
-      return;
-    }
-
-    // Change designation after the configured interval.
+    // Change designation continuously while this component is mounted.
     const timer = window.setInterval(() => {
       setCurrentIndex((current) => {
         return (current + 1) % designations.length;
       });
     }, 5000);
 
-    // Stop the cycle when the screen becomes inactive.
     return () => {
       window.clearInterval(timer);
     };
-  }, [isActive, designations.length]);
-
-  if (!isActive) {
-    return null;
-  }
+  }, [designations.length]);
 
   return (
-    <div className="designationText">
+    <div className="designationText" style={{ padding }}>
       <NeonText
         text={designations[currentIndex]}
+        isActive={true}
         fontSize={fontSize}
-        textColor="#8b8b8bcd"
+        textColor="#d3ddd4"
         fontFamily="Bespoke Stencil"
+        backgroundColor="transparent"
       />
     </div>
   );

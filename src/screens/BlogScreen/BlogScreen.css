@@ -83,9 +83,3 @@
   font-size: clamp(9px, 2.7cqw, 13px);
   line-height: 1.5;
 }
-
-@media (max-width: 600px) {
-  .blogFeature { gap: 5cqw; padding: 4cqw; }
-  .blogOrbit { width: 24cqw; flex-basis: 24cqw; }
-  .blogFeatureCopy { max-width: 66%; }
-}

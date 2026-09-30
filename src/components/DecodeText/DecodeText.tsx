@@ -1,423 +1,293 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type DecodeTextProps = {
-  // Text that will be decoded.
   text: string;
-
-  // Font used by both the invisible layout text and visible text.
   fontFamily?: string;
-
-  // Font size used by both the invisible layout text and visible text.
   fontSize?: string | number;
-
-  // How long to wait before each character starts rotating.
   rotationStartDelay?: number;
-
-  // How quickly each rotating character changes.
   rotationSpeed?: number;
-
-  // Delay before the first character is allowed to resolve.
   resolveStartDelay?: number;
-
-  // Delay between each character's resolution turn.
   resolveDelay?: number;
-
   padding?: string | number;
-
   wrap?: boolean;
 };
 
-// Characters that are allowed to rotate.
+type TextToken = {
+  value: string;
+  start: number;
+  isWhitespace: boolean;
+};
+
+type DecodeFrame = {
+  key: string;
+  characters: string[];
+  resolved: boolean[];
+};
+
+type CharacterState = {
+  target: string;
+  characterSet: string;
+  initialIndex: number;
+  started: boolean;
+  resolved: boolean;
+  canResolve: boolean;
+};
+
 const UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
 const NUMBERS = "0123456789";
 
 export default function DecodeText({
   text,
-
   fontFamily = "Chillax",
   fontSize = "16px",
-
   rotationStartDelay = 7,
   rotationSpeed = 67,
-
   resolveStartDelay = 700,
   resolveDelay = 10,
-
   padding = "1%",
-
   wrap = false,
 }: DecodeTextProps) {
   const [prefersReducedMotion] = useState(() =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
+  const animationKey = [
+    text,
+    rotationStartDelay,
+    rotationSpeed,
+    resolveStartDelay,
+    resolveDelay,
+  ].join("\u0000");
 
-  // Current character displayed at every position.
-  const [characters, setCharacters] = useState<string[]>(
-    Array.from(text, (character) =>
-      prefersReducedMotion ? character : "",
-    ),
-  );
+  const [frame, setFrame] = useState<DecodeFrame>(() => ({
+    key: animationKey,
+    characters: prefersReducedMotion ? text.split("") : [],
+    resolved: text.split("").map(() => prefersReducedMotion),
+  }));
 
-  const [resolvedCharacters, setResolvedCharacters] = useState<boolean[]>(
-    Array.from(text, () => prefersReducedMotion),
+  const tokens = useMemo<TextToken[]>(
+    () =>
+      Array.from(text.matchAll(/\s+|\S+/g), (match) => ({
+        value: match[0],
+        start: match.index ?? 0,
+        isWhitespace: /^\s+$/.test(match[0]),
+      })),
+    [text],
   );
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || text.length === 0) return;
 
-    // Reset the visible text whenever the animation starts again.
-    setCharacters(Array.from(text, () => ""));
-    setResolvedCharacters(Array.from(text, () => false));
-
-    // Store every timeout and interval so we can clean them up.
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    const intervals: ReturnType<typeof setInterval>[] = [];
-
-    // Create independent state for every character.
-    const states = text.split("").map((target) => {
+    const targets = text.split("");
+    const states: CharacterState[] = targets.map((target) => {
       const isUppercase = /[A-Z]/.test(target);
       const isLowercase = /[a-z]/.test(target);
       const isNumber = /[0-9]/.test(target);
-
-      // Symbols and spaces do not rotate.
       const shouldRotate = isUppercase || isLowercase || isNumber;
-
       const characterSet = isUppercase
         ? UPPERCASE
         : isLowercase
           ? LOWERCASE
           : NUMBERS;
 
-      // Pick a random starting position.
-      const currentIndex = shouldRotate
-        ? Math.floor(Math.random() * characterSet.length)
-        : 0;
-
-      // Whether this character has been permanently resolved.
-      const resolved = false;
-
-      // Whether this character is now allowed to resolve.
-      const canResolve = false;
-
       return {
         target,
-        shouldRotate,
         characterSet,
-        currentIndex,
-        resolved,
-        canResolve,
+        initialIndex: shouldRotate
+          ? Math.floor(Math.random() * characterSet.length)
+          : 0,
+        started: false,
+        resolved: false,
+        canResolve: false,
       };
     });
 
-    /*
-     * Start each character's rotation.
-     *
-     * Character 0 starts immediately.
-     * Character 1 starts after rotationStartDelay.
-     * Character 2 starts after another rotationStartDelay.
-     * And so on.
-     */
+    let visibleCharacters = targets.map(() => "");
+    let resolvedCharacters = targets.map(() => false);
+    let unresolvedCount = targets.length;
+    const startTime = performance.now();
+    let animationFrame = 0;
 
-    states.forEach((state, index) => {
-      // Symbols and spaces don't need a rotation timer.
-      if (!state.shouldRotate) {
-        const symbolResolveTimer = setTimeout(
-          () => {
-            setResolvedCharacters((current) => {
-              const next = [...current];
+    const updateFrame = (time: number) => {
+      const elapsed = time - startTime;
+      let nextCharacters: string[] | null = null;
+      let nextResolved: boolean[] | null = null;
 
-              next[index] = true;
+      states.forEach((state, index) => {
+        if (state.resolved) return;
 
-              return next;
-            });
+        const target = state.target;
+        const isRotatingCharacter = /[A-Za-z0-9]/.test(target);
+        const startAt = index * rotationStartDelay;
+        const resolveAt = resolveStartDelay + index * resolveDelay;
 
-            setCharacters((current) => {
-              const next = [...current];
+        if (!isRotatingCharacter) {
+          if (elapsed < resolveAt) return;
 
-              next[index] = state.target;
+          state.resolved = true;
+          unresolvedCount -= 1;
+          nextCharacters ??= visibleCharacters.slice();
+          nextResolved ??= resolvedCharacters.slice();
+          nextCharacters[index] = target;
+          nextResolved[index] = true;
+          return;
+        }
 
-              return next;
-            });
-          },
-          resolveStartDelay + index * resolveDelay,
-        );
+        if (elapsed < startAt) return;
+        state.started = true;
 
-        timers.push(symbolResolveTimer);
+        const step = Math.floor((elapsed - startAt) / rotationSpeed);
+        const currentIndex = (state.initialIndex + step) % state.characterSet.length;
+        const currentCharacter = state.characterSet[currentIndex];
 
-        return;
+        if (!state.canResolve && elapsed >= resolveAt) {
+          state.canResolve = true;
+        }
+
+        if (
+          state.canResolve &&
+          currentCharacter.toLowerCase() === target.toLowerCase()
+        ) {
+          state.resolved = true;
+          unresolvedCount -= 1;
+          nextCharacters ??= visibleCharacters.slice();
+          nextResolved ??= resolvedCharacters.slice();
+          nextCharacters[index] = target;
+          nextResolved[index] = true;
+          return;
+        }
+
+        if (visibleCharacters[index] !== currentCharacter) {
+          nextCharacters ??= visibleCharacters.slice();
+          nextCharacters[index] = currentCharacter;
+        }
+      });
+
+      if (nextCharacters) visibleCharacters = nextCharacters;
+      if (nextResolved) resolvedCharacters = nextResolved;
+
+      if (nextCharacters || nextResolved) {
+        setFrame({
+          key: animationKey,
+          characters: visibleCharacters,
+          resolved: resolvedCharacters,
+        });
       }
 
-      // -----------------------------
-      // ROTATION WAVE
-      // -----------------------------
-
-      const rotationStartTimer = setTimeout(() => {
-        // Show the random starting character immediately.
-        setCharacters((current) => {
-          const next = [...current];
-
-          next[index] = state.characterSet[state.currentIndex];
-
-          return next;
-        });
-
-        // Keep rotating until this character resolves.
-        const rotationInterval = setInterval(() => {
-          // Once resolved, stop changing this character.
-          if (state.resolved) {
-            return;
-          }
-
-          // Move to the next character in the set.
-          state.currentIndex =
-            (state.currentIndex + 1) % state.characterSet.length;
-
-          const currentCharacter = state.characterSet[state.currentIndex];
-
-          // Update the visible character.
-          setCharacters((current) => {
-            const next = [...current];
-
-            next[index] = currentCharacter;
-
-            return next;
-          });
-
-          /*
-           * Resolution can only happen after this character's
-           * scheduled resolution time has arrived.
-           *
-           * If the current rotating character is already the
-           * target, lock it immediately.
-           */
-          if (
-            state.canResolve &&
-            currentCharacter.toLowerCase() === state.target.toLowerCase()
-          ) {
-            state.resolved = true;
-
-            clearInterval(rotationInterval);
-
-            setResolvedCharacters((current) => {
-              const next = [...current];
-
-              next[index] = true;
-
-              return next;
-            });
-
-            setCharacters((current) => {
-              const next = [...current];
-
-              next[index] = state.target;
-
-              return next;
-            });
-          }
-        }, rotationSpeed);
-
-        intervals.push(rotationInterval);
-      }, index * rotationStartDelay);
-
-      timers.push(rotationStartTimer);
-
-      // -----------------------------
-      // RESOLUTION WAVE
-      // -----------------------------
-
-      const resolveTimer = setTimeout(
-        () => {
-          /*
-           * This does NOT resolve the character immediately.
-           *
-           * It only gives this character permission to resolve.
-           *
-           * The character must still wait until its rotating
-           * sequence reaches the correct character.
-           */
-          state.canResolve = true;
-
-          /*
-           * Check whether the character is already sitting on
-           * the correct letter.
-           *
-           * This handles the case where it happens to land on
-           * the target exactly when its resolution turn begins.
-           */
-          if (
-            state.characterSet[state.currentIndex].toLowerCase() ===
-            state.target.toLowerCase()
-          ) {
-            state.resolved = true;
-
-            setResolvedCharacters((current) => {
-              const next = [...current];
-
-              next[index] = true;
-
-              return next;
-            });
-
-            setCharacters((current) => {
-              const next = [...current];
-
-              next[index] = state.target;
-
-              return next;
-            });
-          }
-        },
-        resolveStartDelay + index * resolveDelay,
-      );
-
-      timers.push(resolveTimer);
-    });
-
-    // Clean everything when the component unmounts
-    // or the text/settings change.
-    return () => {
-      timers.forEach((timer) => {
-        clearTimeout(timer);
-      });
-
-      intervals.forEach((interval) => {
-        clearInterval(interval);
-      });
+      if (unresolvedCount > 0) {
+        animationFrame = window.requestAnimationFrame(updateFrame);
+      }
     };
+
+    animationFrame = window.requestAnimationFrame(updateFrame);
+
+    return () => window.cancelAnimationFrame(animationFrame);
   }, [
-    text,
+    animationKey,
     rotationStartDelay,
     rotationSpeed,
     resolveStartDelay,
     resolveDelay,
+    text,
     prefersReducedMotion,
   ]);
+
+  const hasCurrentFrame = frame.key === animationKey;
+  const characters = hasCurrentFrame ? frame.characters : [];
+  const resolvedCharacters = hasCurrentFrame ? frame.resolved : [];
 
   return (
     <div
       role="group"
       aria-label={text}
       style={{
+        position: "relative",
         width: "100%",
         height: "100%",
-        position: "relative",
-        fontFamily,
         boxSizing: "border-box",
+        fontFamily,
       }}
     >
-      {/* 
-        Invisible layout text.
-
-        This determines the final size of the component
-        before the animation starts.
-      */}
       <div
         aria-hidden="true"
         style={{
           width: "100%",
           visibility: "hidden",
-          whiteSpace: wrap ? "pre-wrap" : "nowrap",
+          whiteSpace: wrap ? "pre-wrap" : "pre",
           overflowWrap: "normal",
           boxSizing: "border-box",
           padding,
           fontFamily,
           fontSize,
-          lineHeight: "1",
+          lineHeight: 1,
         }}
       >
         {text}
       </div>
 
-      {/*
-        Visual box.
-
-        It is positioned over the invisible text so the
-        component's physical size never changes.
-      */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
           inset: 0,
-
+          display: "block",
           width: "100%",
           height: "100%",
           boxSizing: "border-box",
-          display: "block",
           padding,
           overflow: "hidden",
-
-          whiteSpace: wrap ? "pre-wrap" : "nowrap",
+          whiteSpace: wrap ? "pre-wrap" : "pre",
           wordBreak: "normal",
           overflowWrap: "normal",
-
           fontFamily,
           fontSize,
-          lineHeight: "1",
+          lineHeight: 1,
         }}
       >
-        {(() => {
-          const tokens = text.split(/(\s+)/);
-          let characterIndex = 0;
+        {tokens.map((token, tokenIndex) => {
+          if (token.isWhitespace) {
+            return <span key={tokenIndex}> </span>;
+          }
 
-          return tokens.map((token, tokenIndex) => {
-            if (/^\s+$/.test(token)) {
-              characterIndex += token.length;
+          return (
+            <span
+              key={tokenIndex}
+              style={{ display: "inline-block", whiteSpace: "nowrap" }}
+            >
+              {token.value.split("").map((_, characterOffset) => {
+                const index = token.start + characterOffset;
+                const targetCharacter = text[index];
+                const character =
+                  characters[index] ?? (prefersReducedMotion ? targetCharacter : "\u00a0");
+                const isResolved = resolvedCharacters[index] ?? prefersReducedMotion;
 
-              return <span key={tokenIndex}> </span>;
-            }
-            const startIndex = characterIndex;
-            characterIndex += token.length;
-
-            return (
-              <span
-                key={tokenIndex}
-                style={{
-                  display: "inline-block",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {Array.from(token).map((_, wordIndex) => {
-                  const index = startIndex + wordIndex;
-                  const character = characters[index];
-                  const targetCharacter = text[index];
-
-                  return (
+                return (
+                  <span
+                    key={index}
+                    style={{
+                      position: "relative",
+                      display: "inline-block",
+                      whiteSpace: "pre",
+                    }}
+                  >
+                    <span style={{ visibility: "hidden" }}>{targetCharacter}</span>
                     <span
-                      key={index}
                       style={{
-                        display: "inline-block",
-                        position: "relative",
-                        whiteSpace: "pre",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        fontFamily,
+                        color: isResolved ? "#848484" : "#3d3d3d",
                       }}
                     >
-                      {/* Invisible target controls the real slot width */}
-                      <span style={{ visibility: "hidden" }}>
-                        {targetCharacter}
-                      </span>
-
-                      {/* Rotating character sits inside the fixed slot */}
-                      <span
-                        style={{
-                          position: "absolute",
-                          left: 0,
-                          top: 0,
-                          fontFamily,
-                          color: resolvedCharacters[index]
-                            ? "#848484"
-                            : "#3d3d3d",
-                        }}
-                      >
-                        {character || "\u00A0"}
-                      </span>
+                      {character}
                     </span>
-                  );
-                })}
-              </span>
-            );
-          });
-        })()}
+                  </span>
+                );
+              })}
+            </span>
+          );
+        })}
       </div>
     </div>
   );

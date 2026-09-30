@@ -1,589 +1,223 @@
-/* ------------------------------------------------------------
-   HOME SCREEN
-   ------------------------------------------------------------ */
-
 .homeScreen {
   position: relative;
   width: 100%;
   height: 100%;
-  background: transparent;
-  transform-style: preserve-3d;
+  min-width: 0;
+  min-height: 0;
   overflow: visible;
-  container-type: inline-size;
   color: var(--paper, #f1f0e8);
-
-  --cube-size: var(--cube-size);
-
-  /*
-    MAIN SECTION HEIGHTS
-
-    These four values must always add up to 100%.
-
-    Current distribution:
-    Profile             40%
-    Currently Building  18%
-    GitHub              30%
-    Contact             12%
-  */
-  --profile-section-height: 33%;
-  --currently-building-height: 21%;
-  --github-section-height: 33%;
-  --contact-section-height: 13%;
+  container: home / size;
+  font-family: var(--font-body, "Inter", sans-serif);
+  box-sizing: border-box;
 }
-
-/* ------------------------------------------------------------
-   3D OBJECT LAYER
-   ------------------------------------------------------------ */
 
 .homeScreen3DLayer {
   position: absolute;
-
   inset: 0;
-
-  /*
-    Everything placed here participates in the
-    Home face's 3D coordinate system.
-  */
-  transform-style: preserve-3d;
-
-  overflow: visible;
-
-  /*
-    3D decorations should not block UI interaction.
-  */
+  z-index: 0;
   pointer-events: none;
-
-  z-index: 1;
+  background: radial-gradient(ellipse at 48% 38%, rgba(199, 242, 124, 0.055), transparent 58%);
 }
-
-/* ------------------------------------------------------------
-   NORMAL CONTENT LAYER
-   ------------------------------------------------------------ */
 
 .homeScreenContent {
-  position: absolute;
-
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  /*
-    Content sits above the future 3D objects.
-  */
-  z-index: 10;
-
-  pointer-events: auto;
-  background: linear-gradient(180deg, rgba(7, 12, 11, 0.12), rgba(7, 12, 11, 0.28));
-}
-
-/* ------------------------------------------------------------
-   STICKFORYOU HEADER
-   ------------------------------------------------------------ */
-
-.homeScreenHeader {
-  width: 100%;
-  height: 29%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  box-sizing: border-box;
-  padding: 0;
-
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-/* ------------------------------------------------------------
-   MAIN CONTENT AREA
-   ------------------------------------------------------------ */
-
-.homeScreenMain {
   position: relative;
-
-  width: 100%;
-  height: 71%;
-
+  z-index: 10;
   display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
   flex-direction: column;
-
   box-sizing: border-box;
-  overflow: hidden;
-}
-
-/* ------------------------------------------------------------
-   MAIN SECTION CONTAINERS
-
-   These four containers own 100% of the available
-   Home main-section height.
-
-   Their sizes are controlled by the variables
-   at the top of .homeScreen.
------------------------------------------------------------- */
-
-.homeProfileContainer {
-  width: 100%;
-  min-height: 0;
-  flex: 0 0 var(--profile-section-height);
-
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.homeProfileSection {
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  justify-content: flex-start;
-  align-items: stretch;
-}
-
-.homeCurrentlyBuildingContainer {
-  width: 100%;
-  min-height: 0;
-  flex: 0 0 var(--currently-building-height);
-
-  display: flex;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.homeCurrentlyBuildingContainer > * {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-}
-
-.homeGitHubContainer {
-  width: 100%;
-  min-height: 0;
-  flex: 0 0 var(--github-section-height);
-
-  display: flex;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.homeGitHubContainer > * {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-}
-
-.homeContactContainer {
-  width: 100%;
-  min-height: 0;
-  flex: 0 0 var(--contact-section-height);
-
-  display: flex;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.homeContactContainer > * {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-}
-
-/* ------------------------------------------------------------
-   PROFILE SECTION
-   ------------------------------------------------------------ */
-
-.homeProfileFrame {
-  width: var(--profile-photo-size);
-  height: var(--profile-photo-size);
-  flex: 0 0 var(--profile-photo-size);
-  display: flex;
-  flex-shrink: 0;
-  align-self: center;
-}
-/* ProfilePhoto is the direct child of the frame */
-.homeProfileFrame > * {
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 0;
-}
-
-.homeProfileInfo {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-  height: 100%;
-}
-
-.homeProfileInfo > div {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  align-items: center;
-  border: 1px solid var(--line, rgba(230, 239, 224, 0.15));
-  box-sizing: border-box;
-  padding: 4px 8px;
-  overflow: hidden;
-}
-
-.homeProfileInfo > .homeProfileTopRow {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  flex: 0 0 22%;
-
-  border: 1px solid var(--line, rgba(230, 239, 224, 0.15));
-  box-sizing: border-box;
-}
-
-.homeProfileName {
-  display: flex;
-  align-items: center;
-
-  padding: 0 4px;
-  font-family: Array, sans-serif;
-}
-
-.homeProfileDesignation {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-
-  padding: 0 6px;
-  font-family: Array, sans-serif;
-}
-
-.homeProfileDescription {
-  flex: 1;
-  min-height: 0;
-  min-width: 0;
-
-  display: flex;
-  align-items: center;
-
-  border: 1px solid var(--line, rgba(230, 239, 224, 0.15));
-  box-sizing: border-box;
-
-  font-size: calc(var(--cube-size) * 0.024);
-  color: var(--muted, #9ca9a2);
-
-  overflow: hidden;
-}
-
-.homeProfileDescriptionText {
-  width: 100%;
-  margin: 0;
-  color: var(--muted, #9ca9a2);
-  font-size: clamp(10px, calc(var(--cube-size) * 0.023), 18px);
-  line-height: 1.45;
-}
-
-.homeProfileNameStatic {
-  color: var(--paper, #f1f0e8);
-  font-family: var(--font-display, "Array", sans-serif);
-  font-size: clamp(16px, calc(var(--cube-size) * 0.041), 34px);
+  pointer-events: auto;
+  padding: 4.1cqw;
+  gap: 3.3cqw;
 }
 
 .homeScreen[data-first-open="true"] .homeScreenContent {
-  animation: panel-arrive 680ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  /* The final keyframe matches the base styles; don't retain its 3D transform layer. */
+  animation: panel-arrive 680ms cubic-bezier(0.2, 0.75, 0.25, 1);
 }
 
-.homeScreen .homeContactContainer .contactSection {
-  border-color: var(--line, rgba(230, 239, 224, 0.15));
-}
-
-.homeScreen .homeContactContainer .contactItem,
-.homeScreen .homeContactContainer .contactSocial {
-  border-color: var(--line, rgba(230, 239, 224, 0.15));
-  color: var(--muted, #9ca9a2);
-}
-
-.homeScreen .homeContactContainer .contactValue { color: var(--muted, #9ca9a2); }
-
-@media (prefers-reduced-motion: reduce) {
-  .homeScreen[data-first-open="true"] .homeScreenContent { animation: none; }
-}
-
-@media (max-width: 700px), (orientation: landscape) and (max-height: 520px) {
-  .homeScreen {
-    width: 90%;
-    height: 90%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    touch-action: pan-y;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(199, 242, 124, 0.4) transparent;
-  }
-
-  .homeScreenContent {
-    position: relative;
-    inset: auto;
-    height: auto;
-    min-height: 100%;
-  }
-
-  .homeScreenHeader {
-    height: 24cqw;
-    min-height: 54px;
-    flex: 0 0 auto;
-    border-bottom: 1px solid var(--line, rgba(230, 239, 224, 0.15));
-  }
-
-  .homeScreenMain {
-    height: auto;
-    min-height: 0;
-    overflow: visible;
-  }
-
-  .homeProfileContainer { flex: 0 0 48cqw; }
-  .homeCurrentlyBuildingContainer { flex: 0 0 28cqw; }
-  .homeGitHubContainer { flex: 0 0 38cqw; }
-  .homeContactContainer { flex: 0 0 24cqw; }
-
-  .homeProfileInfo > div { padding: 1cqw 2cqw; }
-  .homeProfileInfo > .homeProfileTopRow { flex-basis: 28%; }
-  .homeProfileDescriptionText { font-size: clamp(10px, 3.1cqw, 14px); }
-  .homeGreetingSection > div { padding: 1cqw 2cqw; }
-  .homeScreen .currentlyBuildingLabel { font-size: clamp(10px, 3cqw, 14px); }
-}
-
-.homeProfileInfo > .homeGreetingSection {
-  width: 100%;
+.homeScreenHeader {
   display: flex;
-  justify-content: flex-start;
+  min-height: 5.5cqw;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4cqw;
+}
 
-  flex: 0 0 auto;
+.homeLogo {
+  display: block;
+  width: 14cqw;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.homeScreenHeader .homeLogo {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin-left: 1.5cqw;
+}
+
+.homeHeaderLabel,
+.homeIdentityEyebrow,
+.homeCapabilitiesHeader,
+.homeContactHeading {
+  color: var(--accent, #c7f27c);
+  font-family: var(--font-mono, monospace);
+  font-size: 1.45cqw;
+  letter-spacing: 0.12em;
+}
+
+.homeHeaderLabel { text-align: right; color: var(--muted, #9ca9a2); }
+
+.homeScreenMain {
+  display: grid;
   min-height: 0;
+  flex: 1;
+  grid-template-rows: minmax(0, 1.25fr) minmax(0, 0.9fr) minmax(0, 0.7fr) minmax(0, 0.3fr);
+  gap: 4.2cqw;
+}
 
+.homeProfileContainer {
+  display: grid;
+  min-height: 0;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1fr);
+  grid-template-areas:
+    "photo identity"
+    "photo pitch";
+  grid-template-rows: minmax(0, 2fr) minmax(0, 3fr);
+  align-items: center;
+  column-gap: 5cqw;
+  row-gap: 1.5cqw;
+}
+
+.homeProfileFrame {
+  grid-area: photo;
+  position: relative;
+  width: 29cqw;
+  max-width: 100%;
+  aspect-ratio: 1;
+  justify-self: center;
+  overflow: hidden;
+  border-radius: 4px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
+}
+
+.homeProfileFrame > div {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+.homeProfileFrame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.homeProfileInfo {
+  grid-area: identity;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1cqw;
+}
+
+.homeIdentityEyebrow { display: block; }
+
+.homeProfileName {
+  min-height: 1.12em;
+  min-width: 0;
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 6.5cqw;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.homeProfileNameStatic { display: block; color: var(--paper, #f1f0e8); line-height: 1.05; }
+.homeProfileInfo > .designationText {
+  flex: 0 0 auto;
+  height: auto;
+  min-height: 1.2em;
+  overflow: visible;
   margin-top: 0;
-  padding: 0;
-  border: none;
-  box-sizing: border-box;
 }
 
-.homeGreetingSection > div {
-  width: 100%;
-
-  border: 1px solid #ffffff17;
-  box-sizing: border-box;
-
-  padding: 3px 10px;
-
-  font-size: calc(var(--cube-size) * 0.025);
-  color: #ffffff;
-
-  text-align: left;
-}
-
-/* ------------------------------------------------------------
-   OLD / UNUSED HOME SKILLS STYLES
-   ------------------------------------------------------------ */
-
-.homeSkillsSection {
-  width: 100%;
-  margin-top: 0;
-
-  box-sizing: border-box;
-}
-
-.homeSkillsHeader {
-  width: 100%;
+.homePitch {
+  grid-area: pitch;
+  min-width: 0;
+  align-self: center;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.homeSkillsHeader > div {
-  border: 1px solid #555;
-  box-sizing: border-box;
-  padding: 6px 10px;
-
-  font-size: calc(var(--cube-size) * 0.018);
-  color: #ffffff;
+.homePitch h1 {
+  max-width: 17ch;
+  margin: 0 0 1.5cqw;
+  color: var(--paper, #f1f0e8);
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 4.8cqw;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
 }
 
-.homeSkillsHeader > div:first-child {
-  width: 25%;
+.homeIntroductionCopy,
+.homeIntroductionCopy p {
+  max-width: 50ch;
+  margin: 0;
+  color: var(--muted, #9ca9a2);
+  font-size: 1.8cqw;
+  line-height: 1.4;
 }
 
-.homeSkillsHeader > div:last-child {
+.homeCapabilities { min-height: 0; display: flex; flex-direction: column; }
+.homeCapabilitiesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1cqw;
+  padding-bottom: 1.5cqw;
+  border-bottom: max(1px, 0.12cqw) solid var(--line, rgba(230, 239, 224, 0.15));
+}
+
+.homeCapabilitiesHeader h2 { margin: 0; font: inherit; }
+.homeCapabilitiesHeader > span { color: var(--muted, #9ca9a2); text-align: right; }
+
+.homeCapabilityGrid {
+  display: grid;
+  min-height: 0;
   flex: 1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 
-.homeSkillsList {
-  width: 100%;
+.homeCapability {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.8cqw;
+  padding: 1.2cqw 0.8cqw 1cqw 0;
+  border-bottom: max(1px, 0.12cqw) solid var(--line, rgba(230, 239, 224, 0.15));
+}
+
+.homeCapability:nth-child(odd) { padding-right: 1.2cqw; border-right: max(1px, 0.12cqw) solid var(--line, rgba(230, 239, 224, 0.15)); }
+.homeCapability:nth-child(even) { padding-left: 1.2cqw; }
+.homeCapability:nth-child(n+3) { border-bottom: 0; }
+.homeCapabilityNumber,.homeCapabilityArrow { color: var(--accent-cool, #9ec9c0); font: 1.3cqw var(--font-mono, monospace); }
+.homeCapability h3 { margin: 0 0 0.45cqw; color: var(--paper, #f1f0e8); font-size: 2.15cqw; font-weight: 500; }
+.homeCapability p { margin: 0; color: var(--muted, #9ca9a2); font-size: 1.65cqw; line-height: 1.4; }
+
+.homeContactContainer {
   display: flex;
-
-  border: 1px solid #555;
-  box-sizing: border-box;
+  min-height: 0;
+  flex-direction: column;
+  border-top: max(1px, 0.12cqw) solid var(--line, rgba(230, 239, 224, 0.15));
+  padding-top: 1.8cqw;
 }
 
-.homeSkillsList > div {
-  flex: 1;
-
-  border-right: 1px solid #555;
-  box-sizing: border-box;
-  padding: 6px 10px;
-
-  font-size: calc(var(--cube-size) * 0.012);
-  color: #aaaaaa;
-}
-
-.homeSkillsList > div:last-child {
-  border-right: none;
-}
-
-/* ------------------------------------------------------------
-   OLD / UNUSED CURRENT FOCUS STYLES
-   ------------------------------------------------------------ */
-
-.homeCurrentFocusHeader {
-  width: 100%;
-  display: flex;
-}
-
-.homeCurrentFocusHeader > div {
-  border: 1px solid #555;
-  box-sizing: border-box;
-  padding: 6px 10px;
-
-  font-size: calc(var(--cube-size) * 0.018);
-  color: #ffffff;
-}
-
-.homeCurrentFocusHeader > div:first-child {
-  width: 25%;
-}
-
-.homeCurrentFocusHeader > div:last-child {
-  flex: 1;
-}
-
-.homeCurrentFocusDescription {
-  width: 100%;
-  overflow: hidden;
-  box-sizing: border-box;
-  border: 1px solid #555;
-}
-
-.homeCurrentFocusDescription > div {
-  width: 100%;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-
-  padding: 6px 10px;
-  box-sizing: border-box;
-
-  font-size: calc(var(--cube-size) * 0.012);
-  color: #aaaaaa;
-}
-
-/* ------------------------------------------------------------
-   OLD / UNUSED CONTACT STYLES
-   ------------------------------------------------------------ */
-
-.homeContactSection {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.homeContactTitle {
-  width: 100%;
-  display: flex;
-}
-
-.homeContactTitle > div {
-  width: 100%;
-
-  border: 1px solid #555;
-  box-sizing: border-box;
-
-  padding: 6px 10px;
-
-  font-size: calc(var(--cube-size) * 0.018);
-  color: #ffffff;
-}
-
-.homeContactDetails {
-  width: 100%;
-  display: flex;
-}
-
-.homeContactDetails > div {
-  flex: 1;
-
-  border: 1px solid #555;
-  box-sizing: border-box;
-
-  padding: 6px 10px;
-
-  font-size: calc(var(--cube-size) * 0.012);
-  color: #aaaaaa;
-}
-
-.homeContactSocials {
-  width: 100%;
-  display: flex;
-
-  border: 1px solid #555;
-  box-sizing: border-box;
-}
-
-.homeContactSocials > div {
-  flex: 1;
-
-  border-right: 1px solid #555;
-  box-sizing: border-box;
-
-  padding: 6px 10px;
-
-  font-size: calc(var(--cube-size) * 0.012);
-  color: #aaaaaa;
-
-  text-align: center;
-}
-
-.homeContactSocials > div:last-child {
-  border-right: none;
-}
-
-.homeContactSocials > div:last-child {
-  border-right: none;
-}
-
-/* ------------------------------------------------------------
-   OLD / UNUSED GITHUB STYLES
-   ------------------------------------------------------------ */
-
-.homeGitHubSection {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.homeGitHubTitle > div {
-  width: 100%;
-
-  border: 1px solid #555;
-  box-sizing: border-box;
-
-  padding: 6px 10px;
-
-  font-size: calc(var(--cube-size) * 0.018);
-  color: #ffffff;
-}
-
-.homeGitHubCalendar {
-  width: 100%;
-
-  border: 1px solid #555;
-  box-sizing: border-box;
-
-  padding: 10px;
-  overflow: hidden;
-}
+.homeContactHeading { display: flex; justify-content: space-between; align-items: center; gap: 1cqw; margin-bottom: 0.5cqw; }
+.homeContactHeading > span:first-child { color: var(--muted, #9ca9a2); }
+.homeContactPrompt { color: var(--accent, #c7f27c); }
+.homeContactPrompt b { padding-left: 0.4em; }

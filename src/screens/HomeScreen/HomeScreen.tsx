@@ -1,45 +1,13 @@
 import "./HomeScreen.css";
 
 import flatLogo from "../../assets/logo/flat-logo.png";
-import ProfilePhoto from "../../components/ProfilePhoto";
-import DecodeText from "../../components/DecodeText/DecodeText";
-import logoBackground from "../../assets/logo/background.png";
-import LogoBanner from "../../components/LogoBanner/LogoBanner";
-import GitHubActivity from "../../components/GitHubActivity/GitHubActivity";
-import DesignationText from "../../components/DesignationText/DesignationText";
-import GreetingTime from "../../components/GreetingTime/GreetingTime";
-import NeonText from "../../components/NeonText";
-import CurrentlyBuilding from "../../components/CurrentlyBuilding/CurrentlyBuilding";
 import ContactSection from "../../components/ContactSection/ContactSection";
+import DecodeText from "../../components/DecodeText/DecodeText";
+import DesignationText from "../../components/DesignationText/DesignationText";
 import NeonFrame from "../../components/NeonFrame";
-
-const projects = [
-  {
-    name: "Horizon - Productivity App",
-    description:
-      "A productivity and social accountability application focused on disciplined task execution. Horizon uses tomorrow-only planning and Parkinson's Law to help users commit to a manageable amount of work and complete it consistently. Streaks, progression, and social accountability turn daily execution into a structured and sustainable habit.",
-  },
-  {
-    name: "DesignLab - UI Library",
-    description:
-      "A reusable UI component library created with React Native and Expo, focused on building clean and practical interface components. Each component is designed as a reusable building block with live previews, documentation, and source examples. The goal is to make experimentation and refinement simple while keeping the final components production ready.",
-  },
-  {
-    name: "Couple Cycle - Social App",
-    description:
-      "A relationship-focused mobile application built with React Native, Expo, Firebase Authentication, and Firestore. The application combines private communication and shared information into a simple experience designed for couples. Real-time interaction, authentication, and structured data handling form the foundation of the application.",
-  },
-  {
-    name: "Portfolio - 3D Interface",
-    description:
-      "An interactive portfolio built around a physical 3D cube where each face represents a permanent screen. Navigation rotates the entire cube instead of replacing traditional page content. React, TypeScript, CSS 3D transforms, responsive sizing, reusable components, animations, and live project information come together to make the portfolio itself demonstrate frontend engineering skills.",
-  },
-  {
-    name: "AI Learning Projects",
-    description:
-      "A collection of projects focused on strengthening practical knowledge in Python, data structures, machine learning, and artificial intelligence. The work combines smaller experiments with larger applications to turn theoretical concepts into working software. The focus is on understanding the underlying ideas while gradually building more capable and useful systems.",
-  },
-];
+import NeonText from "../../components/NeonText";
+import ProfilePhoto from "../../components/ProfilePhoto";
+import SocialLinks from "../../components/SocialLinks/SocialLinks";
 
 type HomeScreenProps = {
   cubeSize: number;
@@ -47,122 +15,145 @@ type HomeScreenProps = {
   isFirstOpen: boolean;
 };
 
+const capabilities = [
+  {
+    number: "01",
+    title: "Product interfaces",
+    description: "Clear flows with thoughtful visual detail.",
+  },
+  {
+    number: "02",
+    title: "Web + mobile",
+    description: "Useful experiences on every screen.",
+  },
+  {
+    number: "03",
+    title: "Custom software",
+    description: "Tools and systems shaped to fit.",
+  },
+  {
+    number: "04",
+    title: "Interactive experiences",
+    description: "Distinctive moments with depth and purpose.",
+  },
+];
+
+const introduction =
+  "We turn ambitious ideas into polished digital products—from clear interfaces and mobile experiences to custom tools and interactive systems.";
+
 export default function HomeScreen({
-  cubeSize: _cubeSize,
+  cubeSize,
   isActive,
   isFirstOpen,
 }: HomeScreenProps) {
+  const profilePhotoSize = cubeSize * 0.29;
+  const profileCornerRadius = Math.min(profilePhotoSize * 0.06, 18);
+
   return (
-    <div
+    <section
       className="homeScreen"
       data-active={isActive}
       data-first-open={isFirstOpen}
+      aria-labelledby="home-title"
       aria-hidden={!isActive}
       inert={!isActive}
-      style={
-        {
-          "--cube-size": `${_cubeSize}px`,
-        } as React.CSSProperties
-      }
+      style={{ "--cube-size": `${cubeSize}px` } as React.CSSProperties}
     >
-      <div className="homeScreen3DLayer">
-        {/* Future 3D objects go here. */}
-      </div>
+      <div className="homeScreen3DLayer" aria-hidden="true" />
 
       <div className="homeScreenContent">
-        <header className="homeScreenHeader">
-          <LogoBanner
-            image={flatLogo}
-            backgroundImage={logoBackground}
-            height="100%"
-          />
+        <header className="homeScreenHeader" aria-label="StickForYou">
+          <span className="homeHeaderLabel">DIGITAL PRODUCTS · MADE WITH CARE</span>
+          <img className="homeLogo" src={flatLogo} alt="StickForYou" />
         </header>
 
         <main className="homeScreenMain">
-          <div className="homeProfileContainer">
-            <div
-              className="homeProfileSection"
-              style={
-                {
-                  "--profile-photo-size": `${_cubeSize * 0.18}px`,
-                } as React.CSSProperties
-              }
-            >
-              <div className="homeProfileFrame">
-                <NeonFrame
-                  width="100%"
-                  height="100%"
-                  borderColor="#ddddddab"
-                  cornerColor="#dddddd79"
-                  padding={0}
-                >
-                  <ProfilePhoto size={_cubeSize * 0.18} />
-                </NeonFrame>
+          <section className="homeProfileContainer" aria-label="Introduction">
+            <div className="homeProfileFrame">
+              <NeonFrame
+                width="100%"
+                height="100%"
+                borderColor="#ddddddab"
+                cornerColor="#dddddd79"
+                cornerRadius={profileCornerRadius}
+                padding={0}
+              >
+                <ProfilePhoto size="100%" isActive={isActive} />
+              </NeonFrame>
+            </div>
+
+            <div className="homeProfileInfo">
+              <span className="homeIdentityEyebrow">FOUNDER · STICKFORYOU</span>
+              <div className="homeProfileName">
+                {isFirstOpen ? (
+                  <NeonText
+                    text="Sumit Kumar"
+                    isActive={isActive}
+                    fontSize="6.5cqw"
+                    textColor="#f1f0e8"
+                    fontFamily="array"
+                  />
+                ) : (
+                  <span className="homeProfileNameStatic">
+                    Sumit Kumar
+                  </span>
+                )}
               </div>
-
-              <div className="homeProfileInfo">
-                <div className="homeProfileTopRow">
-                  <div className="homeProfileName">
-                    {isFirstOpen ? <NeonText
-                      text="Sumit Kumar"
-                      isActive={isActive}
-                      fontSize={`${_cubeSize * 0.041}px`}
-                      textColor="#d7d7d7d5"
-                      fontFamily="array"
-                    /> : <span className="homeProfileNameStatic">Sumit Kumar</span>}
-                  </div>
-
-                  <div className="homeProfileDesignation">
-                    <DesignationText
-                      designations={[
-                        "Software Developer",
-                        "UI/UX Developer",
-                        "Full Stack Engineer",
-                      ]}
-                      isActive={isActive}
-                      fontSize={`${_cubeSize * 0.023}px`}
-                      padding="0 4px"
-                    />
-                  </div>
-                </div>
-
-                <div className="homeGreetingSection">
-                  <GreetingTime cubeSize={_cubeSize} />
-                </div>
-
-                <div className="homeProfileDescription">
-                  {isFirstOpen ? (
-                    <DecodeText
-                      text="I build interactive, user-focused applications with React, TypeScript, React Native, and Firebase. I enjoy turning ideas into clean, practical experiences while continuously strengthening my skills in software engineering, DSA, and AI/ML."
-                      fontSize={`${_cubeSize * 0.023}px`}
-                      padding="0"
-                      wrap
-                    />
-                  ) : (
-                    <p className="homeProfileDescriptionText">
-                      I build interactive, user-focused applications with React, TypeScript, React Native, and Firebase. I enjoy turning ideas into clean, practical experiences while continuously strengthening my skills in software engineering, DSA, and AI/ML.
-                    </p>
-                  )}
-                </div>
+              <DesignationText
+                designations={[
+                  "Product designer & developer",
+                  "Interactive experience builder",
+                  "Software product creator",
+                ]}
+                fontSize="2.2cqw"
+              />
+            </div>
+            <div className="homePitch">
+              <h1 id="home-title">Thoughtful software, made for people.</h1>
+              <div className="homeIntroductionCopy">
+                {isFirstOpen ? (
+                  <DecodeText
+                    text={introduction}
+                    fontSize="1.8cqw"
+                    padding="0"
+                    wrap
+                  />
+                ) : (
+                  <p>{introduction}</p>
+                )}
               </div>
             </div>
-          </div>
+          </section>
 
-          <CurrentlyBuilding
-            projects={projects}
-            isActive={isActive}
-            cubeSize={_cubeSize}
-          />
+          <section className="homeCapabilities" aria-labelledby="home-capabilities-title">
+            <header className="homeCapabilitiesHeader">
+              <h2 id="home-capabilities-title">WHAT WE CAN BUILD</h2>
+              <span>DESIGN → PRODUCT → SYSTEM</span>
+            </header>
+            <div className="homeCapabilityGrid">
+              {capabilities.map((capability) => (
+                <article className="homeCapability" key={capability.number}>
+                  <span className="homeCapabilityNumber">{capability.number}</span>
+                  <div>
+                    <h3>{capability.title}</h3>
+                    <p>{capability.description}</p>
+                  </div>
+                  <span className="homeCapabilityArrow" aria-hidden="true">↗</span>
+                </article>
+              ))}
+            </div>
+          </section>
 
-          <div className="homeGitHubContainer">
-            <GitHubActivity _cubeSize={_cubeSize} />
-          </div>
-
-          <div className="homeContactContainer">
-            <ContactSection cubeSize={_cubeSize} />
-          </div>
+          <footer className="homeContactContainer" aria-label="Contact information">
+            <div className="homeContactHeading">
+              <span>HAVE SOMETHING IN MIND?</span>
+              <span className="homeContactPrompt">LET’S TALK <b aria-hidden="true">↓</b></span>
+            </div>
+            <ContactSection cubeSize={cubeSize} variant="compact" />
+          </footer>
+          <SocialLinks cubeSize={cubeSize} />
         </main>
       </div>
-    </div>
+    </section>
   );
 }

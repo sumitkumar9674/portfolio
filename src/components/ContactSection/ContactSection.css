@@ -162,3 +162,40 @@
   color: #ffffff;
   transform: translateY(-2px);
 }
+
+.contactSectionCompact {
+  flex: 1 1 auto;
+  border: 0;
+}
+
+.contactSectionCompact .contactDetails {
+  flex: 1 1 auto;
+  flex-direction: column;
+  border: 0;
+}
+
+.contactSectionCompact .contactItem {
+  min-height: 0;
+  padding: 0 1.5%;
+  border: 0;
+  border-bottom: 1px solid var(--line, rgba(230, 239, 224, 0.15));
+}
+
+.contactSectionCompact .contactItem:last-child { border-bottom: 0; }
+
+.contactSectionCompact .contactIcon {
+  margin-right: clamp(6px, calc(var(--cube-size) * 0.01), 12px);
+  color: var(--accent-cool, #9ec9c0);
+}
+
+.contactSectionCompact .contactValue {
+  color: var(--paper, #f1f0e8);
+  font-size: min(calc(var(--cube-size) * 0.014), 16px);
+}
+
+.contactSectionCompact .contactCopyButton {
+  width: max(36px, calc(var(--cube-size) * 0.05));
+  height: max(36px, calc(var(--cube-size) * 0.05));
+  color: var(--accent, #c7f27c);
+  font-size: min(calc(var(--cube-size) * 0.02), 20px);
+}

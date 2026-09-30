@@ -1,0 +1,76 @@
+.socialLinks {
+  display: flex;
+  min-width: 0;
+  min-height: max(34px, calc(var(--cube-size) * 0.052));
+  align-items: center;
+  justify-content: space-between;
+  gap: 2cqw;
+  box-sizing: border-box;
+  padding-top: 1cqw;
+  border-top: max(1px, 0.12cqw) solid var(--line, rgba(230, 239, 224, 0.15));
+}
+
+.socialLinksLabel {
+  color: var(--muted, #9ca9a2);
+  font-family: var(--font-mono, monospace);
+  font-size: calc(var(--cube-size) * 0.011);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
+.socialLinksList {
+  display: flex;
+  align-items: center;
+  gap: max(4px, calc(var(--cube-size) * 0.008));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.socialLinkControl {
+  display: grid;
+  width: calc(var(--cube-size) * 0.048);
+  height: calc(var(--cube-size) * 0.048);
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(158, 201, 192, 0.25);
+  border-radius: 50%;
+  background: rgba(9, 16, 14, 0.32);
+  color: var(--accent-cool, #9ec9c0);
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.socialLinkControl svg {
+  display: block;
+  width: 52%;
+  height: 52%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
+}
+
+.socialLinkControl .socialIconFill {
+  fill: currentColor;
+  stroke: none;
+}
+
+.socialLinkControl .socialIconDot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.socialLinkControl:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent, #c7f27c);
+  background: rgba(199, 242, 124, 0.08);
+  color: var(--accent, #c7f27c);
+}
+
+.socialLinkControl:focus-visible {
+  outline: 2px solid var(--accent, #c7f27c);
+  outline-offset: 2px;
+}

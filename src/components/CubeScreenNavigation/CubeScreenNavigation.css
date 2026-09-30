@@ -61,22 +61,3 @@
   outline: 2px solid var(--accent, #c7f27c);
   outline-offset: 1px;
 }
-
-@media (max-width: 600px) {
-  .cubeScreenNavigation { gap: 2px; padding: 4px; }
-  .cubeScreenNavigationPortrait { top: max(8px, env(safe-area-inset-top)); }
-  .cubeScreenNavigation button { min-width: 56px; min-height: 40px; padding: 0 7px; font-size: 9px; }
-}
-
-@media (hover: none) and (pointer: coarse) {
-  .cubeScreenNavigation button { min-height: 44px; }
-}
-
-@media (orientation: landscape) and (max-height: 520px) {
-  .cubeScreenNavigationLandscape { gap: 2px; padding: 3px; }
-  .cubeScreenNavigation button { min-width: 62px; min-height: 34px; font-size: 9px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cubeScreenNavigation button { transition: none; }
-}

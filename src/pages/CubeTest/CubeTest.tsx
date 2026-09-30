@@ -15,7 +15,6 @@
 // 8. Orientation is checked only after navigation finishes.
 // 9. Orientation correction rotates the ENTIRE cube.
 // 10. Dragging is handled only by the cube scene.
-// 11. The joystick is temporary testing navigation.
 // ------------------------------------------------------------
 
 import { useEffect, useRef, useState, useLayoutEffect } from "react";
@@ -1063,58 +1062,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
   // three 90° rolls of one axis.
   // ----------------------------------------------------------
 
-  // ----------------------------------------------------------
-  // Manual cube movement.
-  //
-  // Manual movement still performs:
-  //
-  // ONE 90° roll
-  //      ↓
-  // Z orientation correction
-  //
-  // Multi-roll navigation uses navigateToScreen() instead.
-  // ----------------------------------------------------------
-
-  function move(direction: Direction) {
-    // --------------------------------------------------------
-    // Ignore commands while moving.
-    // --------------------------------------------------------
-
-    if (isMoving.current) {
-      return;
-    }
-
-    isMoving.current = true;
-
-    // --------------------------------------------------------
-    // Save current physical orientation.
-    // --------------------------------------------------------
-
-    const startRotation = cubeRotation;
-
-    // --------------------------------------------------------
-    // Calculate the 90° target orientation.
-    // --------------------------------------------------------
-
-    const targetRotation = getMovementRotation(direction, startRotation);
-
-    // --------------------------------------------------------
-    // Perform exactly one physical cube roll.
-    // --------------------------------------------------------
-
-    animateCubeTo(startRotation, targetRotation, () => {
-      // ----------------------------------------------------
-      // Only after the roll completely finishes do we
-      // perform the orientation correction.
-      // ----------------------------------------------------
-
-      correctCubeOrientation(targetRotation, () => {
-        updateActiveScreen(targetRotation);
-        isMoving.current = false;
-      });
-    });
-  }
-
   useEffect(() => {
     return () => {
       if (animationFrame.current !== null) {
@@ -1129,10 +1076,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
 
   return (
     <div className="cubeTestPage">
-      {/* ----------------------------------------------------
-          TEMPORARY TEST JOYSTICK
-      ----------------------------------------------------- */}
-
       {/* --------------------------------------------------------
     Temporary screen navigation.
 
@@ -1144,46 +1087,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
         onNavigate={navigateToScreen}
         activeScreen={activeScreen}
       />
-
-      <div className="cubeJoystick" role="group" aria-label="Rotate cube">
-        <button
-          className="joystickButton joystickUp"
-          onPointerDown={(event) => event.stopPropagation()}
-          onClick={() => move("up")}
-          aria-label="Move cube up"
-        >
-          ↑
-        </button>
-
-        <button
-          className="joystickButton joystickLeft"
-          onPointerDown={(event) => event.stopPropagation()}
-          onClick={() => move("left")}
-          aria-label="Move cube left"
-        >
-          ←
-        </button>
-
-        <div className="joystickCenter">●</div>
-
-        <button
-          className="joystickButton joystickRight"
-          onPointerDown={(event) => event.stopPropagation()}
-          onClick={() => move("right")}
-          aria-label="Move cube right"
-        >
-          →
-        </button>
-
-        <button
-          className="joystickButton joystickDown"
-          onPointerDown={(event) => event.stopPropagation()}
-          onClick={() => move("down")}
-          aria-label="Move cube down"
-        >
-          ↓
-        </button>
-      </div>
 
       {/* ----------------------------------------------------
           3D scene

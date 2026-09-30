@@ -5,6 +5,7 @@ import "./ContactSection.css";
 
 type ContactSectionProps = {
   cubeSize: number;
+  variant?: "default" | "compact";
 };
 
 type SocialLink = {
@@ -135,11 +136,35 @@ const socialLinks: SocialLink[] = [
   },
 ];
 
-export default function ContactSection({ cubeSize }: ContactSectionProps) {
+export default function ContactSection({
+  cubeSize,
+  variant = "default",
+}: ContactSectionProps) {
   const [copiedValue, setCopiedValue] = useState<string | null>(null);
 
   const copyToClipboard = async (value: string) => {
-    await navigator.clipboard.writeText(value);
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+    } else {
+      const textArea = document.createElement("textarea");
+      textArea.value = value;
+      textArea.setAttribute("readonly", "");
+      textArea.setAttribute("aria-hidden", "true");
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      textArea.style.left = "-9999px";
+      document.body.appendChild(textArea);
+
+      let copied = false;
+      try {
+        textArea.select();
+        copied = document.execCommand("copy");
+      } finally {
+        textArea.remove();
+      }
+
+      if (!copied) return;
+    }
 
     setCopiedValue(value);
 
@@ -165,7 +190,7 @@ export default function ContactSection({ cubeSize }: ContactSectionProps) {
 
   return (
     <div
-      className="contactSection"
+      className={`contactSection${variant === "compact" ? " contactSectionCompact" : ""}`}
       style={
         {
           "--cube-size": `${cubeSize}px`,
@@ -222,24 +247,26 @@ export default function ContactSection({ cubeSize }: ContactSectionProps) {
         </div>
       </div>
 
-      <div className="contactSocials">
-        {socialLinks.map((social) => (
-          <a
-            key={social.name}
-            href={social.url || undefined}
-            className="contactSocial"
-            aria-label={social.name}
-            title={social.name}
-            onClick={(event) => {
-              if (!social.url) {
-                event.preventDefault();
-              }
-            }}
-          >
-            {social.icon}
-          </a>
-        ))}
-      </div>
+      {variant === "default" && (
+        <div className="contactSocials">
+          {socialLinks.map((social) => (
+            <a
+              key={social.name}
+              href={social.url || undefined}
+              className="contactSocial"
+              aria-label={social.name}
+              title={social.name}
+              onClick={(event) => {
+                if (!social.url) {
+                  event.preventDefault();
+                }
+              }}
+            >
+              {social.icon}
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // Profile photo assets
 import background from "../assets/Profile_Photo/background.png";
@@ -30,7 +30,8 @@ type ProfilePhotoProps = {
   timings?: Partial<ProfilePhotoTimings>;
 
   // Optional size of the square profile area
-  size?: number;
+  size?: number | string;
+  isActive?: boolean;
 };
 
 type ProfileState = "idle" | "eyebrow" | "left" | "right";
@@ -43,6 +44,7 @@ type MousePosition = {
 export default function ProfilePhoto({
   timings = {},
   size = 300,
+  isActive = true,
 }: ProfilePhotoProps) {
   // Merge custom timings with the defaults.
   const animationTimings = {
@@ -76,6 +78,7 @@ export default function ProfilePhoto({
 
   // Reference to the profile container
   const containerRef = useRef<HTMLDivElement>(null);
+  const isActiveRef = useRef(isActive);
 
   // Used to cancel the current idle/eyebrow timer when a dodge happens.
   const idleTimerRef = useRef<number | null>(null);
@@ -103,32 +106,33 @@ export default function ProfilePhoto({
   };
 
   // Start the normal idle → eyebrow → idle animation.
-  const startIdleAnimation = () => {
+  const startIdleAnimation = useCallback(() => {
     // Clear any previous idle timer.
     if (idleTimerRef.current !== null) {
       window.clearTimeout(idleTimerRef.current);
     }
 
-    // Start from the normal idle image.
-    setProfileState("idle");
-
-    // Wait for the idle duration before showing the eyebrow image.
-    idleTimerRef.current = window.setTimeout(() => {
-      setProfileState("eyebrow");
-
-      // Keep the eyebrow image visible for its duration.
+    const runIdleCycle = () => {
+      setProfileState("idle");
       idleTimerRef.current = window.setTimeout(() => {
-        // Return to idle.
-        setProfileState("idle");
+        setProfileState("eyebrow");
+        idleTimerRef.current = window.setTimeout(() => {
+          runIdleCycle();
+        }, animationTimings.eyebrowDuration);
+      }, animationTimings.idleDuration);
+    };
 
-        // Start the cycle again.
-        startIdleAnimation();
-      }, animationTimings.eyebrowDuration);
-    }, animationTimings.idleDuration);
-  };
+    runIdleCycle();
+  }, [animationTimings.eyebrowDuration, animationTimings.idleDuration]);
 
-  // Start the idle animation when the component appears.
   useEffect(() => {
+    isActiveRef.current = isActive;
+  }, [isActive]);
+
+  // Start the idle animation while the Home face is active.
+  useEffect(() => {
+    if (!isActive) return;
+
     startIdleAnimation();
 
     // Clean up the timer when the component is removed.
@@ -137,7 +141,16 @@ export default function ProfilePhoto({
         window.clearTimeout(idleTimerRef.current);
       }
     };
-  }, [animationTimings.idleDuration, animationTimings.eyebrowDuration]);
+  }, [isActive, startIdleAnimation]);
+
+  useEffect(
+    () => () => {
+      if (bulletTimerRef.current !== null) {
+        window.clearTimeout(bulletTimerRef.current);
+      }
+    },
+    [],
+  );
 
   // Handle mouse movement over the profile.
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -234,7 +247,7 @@ export default function ProfilePhoto({
       setProfileState("idle");
 
       // Restart the normal idle → eyebrow → idle cycle.
-      startIdleAnimation();
+      if (isActiveRef.current) startIdleAnimation();
     }, animationTimings.bulletDuration);
   };
 
@@ -273,7 +286,7 @@ export default function ProfilePhoto({
         style={{
           position: "absolute",
           inset: 0,
-          borderRadius: "18px",
+          borderRadius: "6%",
 
           width: "100%",
           height: "100%",
@@ -287,11 +300,12 @@ export default function ProfilePhoto({
       {/* Current profile image */}
       <img
         src={getProfileImage()}
-        alt="Profile"
+        alt="Portrait of Sumit Kumar"
         draggable={false}
         style={{
           position: "absolute",
           inset: 0,
+          borderRadius: "6%",
 
           width: "100%",
           height: "100%",
@@ -318,8 +332,8 @@ export default function ProfilePhoto({
             transform: "translate(-50%, -50%)",
 
             // Bullet size can be adjusted here later.
-            width: "27px",
-            height: "27px",
+            width: "9%",
+            height: "9%",
 
             pointerEvents: "none",
           }}
@@ -342,8 +356,8 @@ export default function ProfilePhoto({
             transform: "translate(-50%, -50%)",
 
             // Gun size can be adjusted here later.
-            width: "64px",
-            height: "64px",
+            width: "22%",
+            height: "22%",
 
             pointerEvents: "none",
 

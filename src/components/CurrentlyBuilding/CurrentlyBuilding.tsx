@@ -125,7 +125,6 @@ export default function CurrentlyBuilding({
         <div className="currentlyBuildingProject">
           <DesignationText
             designations={[currentProject.name]}
-            isActive={isActive}
             fontSize={`${cubeSize * 0.021}px`}
           />
         </div>

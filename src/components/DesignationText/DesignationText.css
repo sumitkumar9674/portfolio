@@ -7,3 +7,16 @@
   align-items: center;
   overflow: hidden;
 }
+
+.designationText > div,
+.designationTextStatic {
+  width: 100%;
+  min-width: 0;
+}
+
+.designationTextStatic {
+  overflow: hidden;
+  color: #d3ddd4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

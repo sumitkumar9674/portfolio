@@ -64,7 +64,3 @@
 
 .aboutDescription > div { height: auto !important; }
 .aboutScreen[data-first-open="true"] { animation: panel-arrive 680ms cubic-bezier(0.2, 0.75, 0.25, 1) both; }
-
-@media (prefers-reduced-motion: reduce) {
-  .aboutScreen[data-first-open="true"] { animation: none; }
-}

@@ -72,6 +72,10 @@ Do not introduce new libraries or dependencies unless the developer explicitly a
 
 Prefer simple, readable, production-quality solutions over clever solutions.
 
+Responsive changes must not introduce viewport/device breakpoints.
+
+If a visual problem appears at a particular screen size, fix the underlying cube-relative sizing rather than adding a screen-size-specific exception.
+
 ## 5. Project Architecture
 
 This portfolio is centered around one rigid 3D cube.
@@ -124,17 +128,115 @@ Do not redesign this architecture unless explicitly requested.
 
 ## 7. Responsive Design
 
-The cube changes size dynamically depending on the viewport.
+The portfolio uses ONE responsive system.
+
+The viewport is used ONLY to determine the physical size of the 3D cube.
+
+The responsive flow is:
+
+Viewport width + height
+↓
+Mathematical cube-size calculation
+↓
+Rendered cube size
+↓
+Cube face size
+↓
+All UI inside the face scales from the face
+
+The cube is the design canvas.
+
+A face must have the same visual composition regardless of the device or viewport.
+
+A smaller cube is the same composition at a smaller physical scale.
+
+The UI must NOT have separate phone, tablet, desktop, portrait, or landscape layouts.
+
+### Absolute rule
+
+NEVER use:
+
+- media-query rules
+- container-query rules
+- viewport-width breakpoints
+- viewport-height breakpoints
+- orientation breakpoints
+- device-specific responsive rules
+- phone/tablet/desktop layout modes
+
+Do not add these rules under any circumstances.
+
+Do not replace them with another breakpoint system.
+
+### Cube sizing
+
+Viewport dimensions may be used only by the mathematical calculation that determines the cube's size.
+
+Once the cube size has been determined, viewport dimensions must not be used to determine the visual layout of cube-face content.
 
 CubeTest.tsx measures the rendered cube using ResizeObserver.
 
-The resulting cube size is used as a reference for responsive UI and 3D components.
+The rendered cube size is the reference used by the faces and their components.
 
-UI inside cube faces should generally scale relative to the cube rather than using arbitrary fixed viewport dimensions.
+### Face content
 
-Prefer container-relative sizing such as cqw where appropriate.
+All visual dimensions inside a face should depend on the face/cube size.
 
-Avoid solutions that only work at one screen size.
+Prefer:
+
+- percentages
+- `cqw`
+- `cqh` where appropriate
+- aspect ratios
+- existing `cubeSize`
+- existing `--cube-size`
+- proportional spacing
+- proportional typography
+
+Avoid arbitrary viewport-relative sizing such as:
+
+- `vw`
+- `vh`
+- `svw`
+- `svh`
+- `dvw`
+- `dvh`
+
+when they are being used to size or position visual content inside a cube face.
+
+Do not use viewport dimensions as a substitute for cube-relative sizing.
+
+### Important design principle
+
+Think of every cube face as a fixed design/canvas that is uniformly scaled.
+
+For example:
+
+A 900px cube and a 337px cube should contain the same Home composition.
+
+The 337px version should not become a different "mobile layout".
+
+It should simply be a smaller version of the same design.
+
+### When a scaling problem appears
+
+Do NOT solve it by adding a breakpoint.
+
+Instead:
+
+1. Identify the element that does not scale correctly.
+2. Determine its relationship to the cube/face.
+3. Convert that dimension to a cube/face-relative value.
+4. Change only that element.
+5. Test at multiple cube sizes.
+
+Do not redesign the composition to accommodate a particular device.
+
+### Existing responsive code
+
+If existing media-query or container-query rules are encountered, they should be removed rather than preserved or expanded.
+
+Do not reintroduce them while fixing the resulting layout.
 
 ## 8. Reusable Components
 

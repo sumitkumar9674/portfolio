@@ -21,3 +21,6 @@ pnpm-debug.log*
 # Editor
 .vscode/*
 !.vscode/extensions.json
+
+
+AGENTS.md

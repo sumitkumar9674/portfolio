@@ -52,9 +52,3 @@
   justify-content: flex-start;
   gap: 2cqw;
 }
-
-@media (max-width: 600px) {
-  .skillsGrid { gap: 1.4cqw; }
-  .skillGroup { min-height: 29cqw; gap: 1.4cqw; padding: 2.3cqw 1.7cqw; }
-  .skillGroup li { font-size: clamp(8px, 2.6cqw, 13px); }
-}

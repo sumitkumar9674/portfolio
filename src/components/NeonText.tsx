@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 type NeonTextProps = {
   // Text to display.
@@ -38,7 +38,7 @@ export default function NeonText({
   fontSize = "32px",
 
   textColor = "#00ffff",
-  backgroundColor = "#000000",
+  backgroundColor = "transparent",
 
   initialDelay = 500,
   flickerDuration = 1500,
@@ -48,13 +48,19 @@ export default function NeonText({
   const [prefersReducedMotion] = useState(() =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches,
   );
-  const [brightness, setBrightness] = useState(prefersReducedMotion ? 1 : 0);
-  const hasStartedRef = useRef(false);
+  const [brightnessState, setBrightnessState] = useState({
+    text,
+    value: prefersReducedMotion ? 1 : 0,
+  });
+  const brightness =
+    brightnessState.text === text
+      ? brightnessState.value
+      : prefersReducedMotion
+        ? 1
+        : 0;
 
   useEffect(() => {
-    if (!isActive || hasStartedRef.current) return;
-    hasStartedRef.current = true;
-    if (prefersReducedMotion) return;
+    if (!isActive || prefersReducedMotion) return;
     let flickerInterval: ReturnType<typeof setInterval> | null = null;
 
     // --------------------------------
@@ -62,6 +68,7 @@ export default function NeonText({
     // --------------------------------
 
     const startTimer = setTimeout(() => {
+      setBrightnessState({ text, value: 0 });
       const startTime = Date.now();
 
       // --------------------------------
@@ -81,7 +88,7 @@ export default function NeonText({
             flickerInterval = null;
           }
 
-          setBrightness(1);
+          setBrightnessState({ text, value: 1 });
 
           return;
         }
@@ -163,7 +170,7 @@ export default function NeonText({
          * This makes the light jump between states
          * instead of smoothly fading.
          */
-        setBrightness(nextBrightness);
+        setBrightnessState({ text, value: nextBrightness });
       }, flickerSpeed);
     }, initialDelay);
 
@@ -178,7 +185,14 @@ export default function NeonText({
         clearInterval(flickerInterval);
       }
     };
-  }, [text, initialDelay, flickerDuration, flickerSpeed, isActive, prefersReducedMotion]);
+  }, [
+    text,
+    initialDelay,
+    flickerDuration,
+    flickerSpeed,
+    isActive,
+    prefersReducedMotion,
+  ]);
 
   // --------------------------------
   // SUBTLE NEON GLOW
