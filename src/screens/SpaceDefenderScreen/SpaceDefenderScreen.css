@@ -1,0 +1,20 @@
+.spaceDefenderScreen {
+  display: flex;
+  width: 88%;
+  height: 88%;
+  align-items: stretch;
+  justify-content: stretch;
+  overflow: hidden;
+  padding: 1.2%;
+  border: 1px solid rgba(199, 242, 124, 0.4);
+  background: #0b1110;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.3), inset 0 0 0 4px rgba(0, 0, 0, 0.32);
+}
+
+.spaceDefenderScreen canvas {
+  border: 1px solid rgba(220, 239, 219, 0.13);
+}
+
+.spaceDefenderScreen[data-first-open="true"] {
+  animation: panel-arrive 680ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}

@@ -5,7 +5,13 @@ import { useEffect, useState } from "react";
 // Screen names
 // ------------------------------------------------------------
 
-type ScreenId = "home" | "projects" | "skills" | "about" | "blog" | "contact";
+type ScreenId =
+  | "home"
+  | "projects"
+  | "skills"
+  | "blog"
+  | "contact"
+  | "spaceDefender";
 
 // ------------------------------------------------------------
 // Component props
@@ -94,13 +100,6 @@ export default function CubeScreenNavigation({
       </button>
 
       <button
-        aria-current={activeScreen === "about" ? "page" : undefined}
-        onClick={() => onNavigate("about")}
-      >
-        ABOUT
-      </button>
-
-      <button
         aria-current={activeScreen === "blog" ? "page" : undefined}
         onClick={() => onNavigate("blog")}
       >
@@ -112,6 +111,13 @@ export default function CubeScreenNavigation({
         onClick={() => onNavigate("contact")}
       >
         CONTACT
+      </button>
+
+      <button
+        aria-current={activeScreen === "spaceDefender" ? "page" : undefined}
+        onClick={() => onNavigate("spaceDefender")}
+      >
+        SPACEDEFENDER
       </button>
     </div>
   );
