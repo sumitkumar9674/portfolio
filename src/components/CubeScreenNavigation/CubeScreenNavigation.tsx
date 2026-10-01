@@ -96,7 +96,7 @@ export default function CubeScreenNavigation({
         aria-current={activeScreen === "skills" ? "page" : undefined}
         onClick={() => onNavigate("skills")}
       >
-        SKILLS
+        FORGE
       </button>
 
       <button

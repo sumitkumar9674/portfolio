@@ -1,5 +1,5 @@
-import "./GitHubActivity.css";
 import { GitHubCalendar } from "react-github-calendar";
+import "./GitHubActivity.css";
 
 const transformContributions = (
   data: {
@@ -57,45 +57,31 @@ const transformContributions = (
   });
 };
 
-type GitHubActivityProps = {
-  _cubeSize: number;
-};
-
-export default function GitHubActivity({ _cubeSize }: GitHubActivityProps) {
-  const calendarHorizontalPadding = _cubeSize * 0.024;
-  const availableCalendarWidth = _cubeSize - calendarHorizontalPadding;
-
-  const blockSize = Math.floor(_cubeSize / 59);
-
-  const blockMargin = Math.max(
-    0,
-    (availableCalendarWidth - 53 * blockSize) / 56,
-  );
+export default function GitHubActivity() {
   return (
-    <div
-      className="gitHubActivity"
-      style={
-        {
-          "--cube-size": `${_cubeSize}px`,
-        } as React.CSSProperties
-      }
-    >
-      <div className="gitHubActivityCalendar">
-        <GitHubCalendar
-          username="sumitkumar9674"
-          colorScheme="dark"
-          showTotalCount={true}
-          showColorLegend={true}
-          showMonthLabels={true}
-          blockSize={blockSize}
-          blockMargin={blockMargin}
-          fontSize={Math.max(8, Math.floor(_cubeSize / 110))}
-          transformData={transformContributions}
-          theme={{
-            dark: ["#0b0b0b", "#1b1b1b", "#2f2f2f", "#3f3f3f", "#585858"],
-          }}
-        />
-      </div>
+    <div className="gitHubActivity" aria-label="GitHub contribution activity">
+      <GitHubCalendar
+        username="sumitkumar9674"
+        year="last"
+        colorScheme="dark"
+        transformData={transformContributions}
+        blockSize={12}
+        blockMargin={3}
+        blockRadius={0}
+        fontSize={13}
+        showMonthLabels
+        showTotalCount
+        showColorLegend
+        labels={{
+          totalCount: "{{count}} contributions in the last year",
+          legend: { less: "None", more: "More" },
+        }}
+        // Level zero stays visible as an empty day; GitHub counts remain untouched.
+        theme={{
+          dark: ["#040404", "#1b1b1bd9", "#2e2e2ed8", "#474747db", "#626262dd"],
+        }}
+        style={{ width: "100%", maxWidth: "none", gap: "0.6cqw" }}
+      />
     </div>
   );
 }

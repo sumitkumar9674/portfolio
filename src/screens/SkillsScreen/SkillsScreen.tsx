@@ -1,3 +1,4 @@
+import GitHubActivity from "../../components/GitHubActivity/GitHubActivity";
 import "./SkillsScreen.css";
 
 type SkillsScreenProps = {
@@ -5,42 +6,98 @@ type SkillsScreenProps = {
   isFirstOpen: boolean;
 };
 
-const skillGroups = [
-  { label: "INTERFACE", skills: ["React", "TypeScript", "UI / UX"] },
-  { label: "PRODUCT", skills: ["React Native", "Expo", "Firebase"] },
-  { label: "FOUNDATIONS", skills: ["JavaScript", "Python", "DSA · AI / ML"] },
+const capabilities = [
+  {
+    number: "01",
+    title: "WEB EXPERIENCES",
+    description: "Responsive interfaces, interactive sites and polished product flows.",
+    tools: "React · TypeScript · JavaScript · UI / UX",
+  },
+  {
+    number: "02",
+    title: "MOBILE APPLICATIONS",
+    description: "Cross-platform apps with sign-in, connected data and live interactions.",
+    tools: "React Native · Expo · Firebase",
+  },
+  {
+    number: "03",
+    title: "BACKEND SYSTEMS",
+    description: "Authentication, persistent data and API-connected product logic.",
+    tools: "Firebase Authentication · Firestore",
+  },
+  {
+    number: "04",
+    title: "REAL-TIME FEATURES",
+    description: "Live application data and synchronized experiences across screens.",
+    tools: "Firestore · Firebase",
+  },
 ];
 
 export default function SkillsScreen({ isActive, isFirstOpen }: SkillsScreenProps) {
   return (
     <section
-      className="skillsScreen cubePanel"
+      className="forgeScreen cubePanel"
       data-active={isActive}
       data-first-open={isFirstOpen}
       aria-hidden={!isActive}
       inert={!isActive}
-      aria-labelledby="skills-title"
+      aria-labelledby="forge-title"
     >
-      <header className="screenHeading">
-        <span className="screenEyebrow">TOOLS & PRACTICE · 03</span>
-        <h1 id="skills-title">Built to make ideas useful.</h1>
-        <p>A growing toolkit for shaping clear interfaces and dependable products.</p>
+      <header className="forgeHeader">
+        <div className="forgeMeta">
+          <span>FORGE <span aria-hidden="true">/</span> 03</span>
+          <span>ENGINEERING CAPABILITIES</span>
+        </div>
+        <div className="forgeIntroduction">
+          <h1 id="forge-title">What I build.</h1>
+          <p>Interfaces, mobile apps, APIs and live features that work together.</p>
+        </div>
       </header>
-      <div className="skillsGrid">
-        {skillGroups.map((group, index) => (
-          <section className="skillGroup" key={group.label}>
-            <span className="skillIndex">0{index + 1}</span>
-            <div>
-              <h2>{group.label}</h2>
-              <ul>
-                {group.skills.map((skill) => <li key={skill}>{skill}</li>)}
-              </ul>
-            </div>
-          </section>
-        ))}
-      </div>
-      <footer className="screenFooter"><span>ALWAYS LEARNING</span><span className="statusDot" />
-        Currently exploring thoughtful systems and AI.</footer>
+
+      <section className="forgeCapabilities" aria-labelledby="forge-capabilities-title">
+        <div className="forgeSectionHeading">
+          <h2 id="forge-capabilities-title">CAPABILITIES</h2>
+          <span>DESIGN → APPLICATION → SYSTEM</span>
+        </div>
+        <div className="forgeCapabilityGrid">
+          {capabilities.map((capability) => (
+            <article className="forgeCapability" key={capability.number}>
+              <div className="forgeCapabilityHeading">
+                <span>{capability.number}</span>
+                <h3>{capability.title}</h3>
+                <span aria-hidden="true">↗</span>
+              </div>
+              <p>{capability.description}</p>
+              <small>{capability.tools}</small>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="forgeActivity" aria-labelledby="forge-activity-title">
+        <div className="forgeSectionHeading">
+          <h2 id="forge-activity-title">BUILD ACTIVITY</h2>
+          <a
+            href="https://github.com/sumitkumar9674"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @SUMITKUMAR9674 <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <div className="forgeActivityPanel">
+          <div className="forgeActivityLabel">
+            <span>GITHUB / CONTRIBUTION LOG</span>
+            <span>LAST 12 MONTHS</span>
+          </div>
+          <GitHubActivity />
+        </div>
+      </section>
+
+      <footer className="forgeFooter">
+        <span>LEARN / BUILD / REPEAT</span>
+        <span><span className="forgeStatusDot" aria-hidden="true" /> ALWAYS LEARNING</span>
+      </footer>
     </section>
   );
 }
