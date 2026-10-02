@@ -17,13 +17,17 @@
   overflow: hidden;
   isolation: isolate;
   background:
-    radial-gradient(ellipse at 50% 46%, rgba(77, 104, 88, 0.25), transparent 39%),
+    radial-gradient(
+      ellipse at 50% 46%,
+      rgba(77, 104, 88, 0.25),
+      transparent 39%
+    ),
     linear-gradient(145deg, rgba(6, 11, 10, 0.45), rgba(7, 11, 11, 0.92)),
     url("../../assets/background/05.png") center / cover no-repeat,
     #090d0d;
   color: var(--paper);
   user-select: none;
-  touch-action: auto;
+  touch-action: none;
 }
 
 .cubeTestPage::before,
@@ -37,10 +41,17 @@
 .cubeTestPage::before {
   inset: 0;
   opacity: 0.14;
-  background-image: linear-gradient(rgba(216, 234, 219, 0.09) 1px, transparent 1px),
+  background-image:
+    linear-gradient(rgba(216, 234, 219, 0.09) 1px, transparent 1px),
     linear-gradient(90deg, rgba(216, 234, 219, 0.09) 1px, transparent 1px);
   background-size: 56px 56px;
-  mask-image: linear-gradient(to bottom, transparent, black 22%, black 76%, transparent);
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 22%,
+    black 76%,
+    transparent
+  );
 }
 
 .cubeTestPage::after {
@@ -77,9 +88,15 @@
   overflow: visible;
   border: 1px solid rgba(217, 239, 221, 0.29);
   background:
-    radial-gradient(ellipse at 48% 43%, rgba(67, 96, 82, 0.24), transparent 64%),
+    radial-gradient(
+      ellipse at 48% 43%,
+      rgba(67, 96, 82, 0.24),
+      transparent 64%
+    ),
     linear-gradient(145deg, #17211f 0%, #101715 56%, #0c1211 100%);
-  box-shadow: inset 0 0 0 8px rgba(4, 9, 8, 0.33), inset 0 0 46px rgba(142, 186, 150, 0.05);
+  box-shadow:
+    inset 0 0 0 8px rgba(4, 9, 8, 0.33),
+    inset 0 0 46px rgba(142, 186, 150, 0.05);
   transform-style: preserve-3d;
   perspective: 1200px;
   -webkit-perspective: 1200px;
@@ -95,12 +112,24 @@
   pointer-events: none;
 }
 
-.cubeFront { transform: translateZ(var(--cube-half)); }
-.cubeBack { transform: rotateY(180deg) translateZ(var(--cube-half)); }
-.cubeRight { transform: rotateY(90deg) translateZ(var(--cube-half)); }
-.cubeLeft { transform: rotateY(-90deg) translateZ(var(--cube-half)); }
-.cubeTop { transform: rotateX(-90deg) translateZ(var(--cube-half)); }
-.cubeBottom { transform: rotateX(90deg) translateZ(var(--cube-half)); }
+.cubeFront {
+  transform: translateZ(var(--cube-half));
+}
+.cubeBack {
+  transform: rotateY(180deg) translateZ(var(--cube-half));
+}
+.cubeRight {
+  transform: rotateY(90deg) translateZ(var(--cube-half));
+}
+.cubeLeft {
+  transform: rotateY(-90deg) translateZ(var(--cube-half));
+}
+.cubeTop {
+  transform: rotateX(-90deg) translateZ(var(--cube-half));
+}
+.cubeBottom {
+  transform: rotateX(90deg) translateZ(var(--cube-half));
+}
 
 .cubePanel {
   position: relative;
@@ -111,11 +140,16 @@
   overflow: hidden;
   padding: 5.5%;
   border: 1px solid var(--line);
-  background:
-    linear-gradient(145deg, rgba(19, 29, 26, 0.96), rgba(12, 18, 17, 0.97));
+  background: linear-gradient(
+    145deg,
+    rgba(19, 29, 26, 0.96),
+    rgba(12, 18, 17, 0.97)
+  );
   color: var(--paper);
   container-type: inline-size;
-  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  box-shadow:
+    0 16px 50px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
 }
 
 .screenHeading {
@@ -179,8 +213,14 @@
 }
 
 @keyframes panel-arrive {
-  from { opacity: 0.55; transform: translateY(12px) scale(0.985); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0.55;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .outerWireframeCubeAnchor {

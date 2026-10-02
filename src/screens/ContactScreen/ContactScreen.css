@@ -58,7 +58,9 @@
   color: var(--accent);
 }
 
-.contactField label > .optionalLabel { color: var(--muted); }
+.contactField label > .optionalLabel {
+  color: var(--muted);
+}
 
 .contactField .optionalLabel {
   color: var(--muted);
@@ -83,7 +85,9 @@
 }
 
 .contactField input::placeholder,
-.contactField textarea::placeholder { color: #829087; }
+.contactField textarea::placeholder {
+  color: #829087;
+}
 
 .contactField select {
   padding-right: 2cqw;
@@ -99,7 +103,9 @@
 
 .contactFieldWide,
 .contactFormActions,
-.contactFormStatus { grid-column: 1 / -1; }
+.contactFormStatus {
+  grid-column: 1 / -1;
+}
 
 .contactFormActions {
   display: flex;
@@ -130,7 +136,10 @@
   font-size: clamp(9px, 2.4cqw, 12px);
   font-weight: 700;
   cursor: pointer;
-  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 .contactFormActions button:hover {
@@ -138,7 +147,9 @@
   color: var(--accent);
 }
 
-.contactFormActions button:active { transform: translateY(1px); }
+.contactFormActions button:active {
+  transform: translateY(1px);
+}
 
 .contactFormStatus {
   min-height: 1.4em;

@@ -75,12 +75,11 @@ type ScreenId = keyof typeof screenNames;
 const cubeState = {
   front: "home",
   back: "spaceDefender",
-  left: "skills",
-  right: "projects",
-  top: "blog",
+  left: "projects",
+  right: "skills",
   bottom: "contact",
+  top: "blog",
 } as const;
-
 // ------------------------------------------------------------
 // Create quaternion from axis + angle.
 // ------------------------------------------------------------
@@ -377,7 +376,9 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
   const [openedScreens, setOpenedScreens] = useState<Set<ScreenId>>(
     () => new Set(["home"]),
   );
-  const [firstOpenScreen, setFirstOpenScreen] = useState<ScreenId | null>("home");
+  const [firstOpenScreen, setFirstOpenScreen] = useState<ScreenId | null>(
+    "home",
+  );
   // ----------------------------------------------------------
   // Starting pointer position for drag detection.
   // ----------------------------------------------------------
@@ -1129,18 +1130,11 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
               RIGHT
           ------------------------------------------------- */}
 
-          <div className="cubeFace cubeRight">
-            <ProjectsScreen
-              isActive={activeScreen === "projects"}
-              hasBeenActivated={openedScreens.has("projects")}
-              isFirstOpen={firstOpenScreen === "projects"}
-            />
-          </div>
-
           {/* ------------------------------------------------
               LEFT
           ------------------------------------------------- */}
-          <div className="cubeFace cubeLeft">
+          <div className="cubeFace cubeRight">
+            {" "}
             <SkillsScreen
               isActive={activeScreen === "skills"}
               isFirstOpen={firstOpenScreen === "skills"}
@@ -1163,9 +1157,19 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           ------------------------------------------------- */}
 
           <div className="cubeFace cubeBottom">
+            {" "}
             <ContactScreen
               isActive={activeScreen === "contact"}
               isFirstOpen={firstOpenScreen === "contact"}
+            />
+          </div>
+
+          <div className="cubeFace cubeLeft">
+            {" "}
+            <ProjectsScreen
+              isActive={activeScreen === "projects"}
+              isFirstOpen={firstOpenScreen === "projects"}
+              hasBeenActivated={openedScreens.has("projects")}
             />
           </div>
           {/* ------------------------------------------------
