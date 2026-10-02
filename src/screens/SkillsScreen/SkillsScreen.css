@@ -1,4 +1,5 @@
 .forgeScreen.cubePanel {
+  --forge-readable-muted: color-mix(in srgb, var(--muted) 78%, var(--paper));
   display: grid;
   width: 100%;
   height: 100%;
@@ -47,8 +48,8 @@
 }
 
 .forgeMeta {
-  color: var(--muted);
-  font-size: 1.5cqw;
+  color: var(--forge-readable-muted);
+  font-size: 1.6cqw;
   white-space: nowrap;
 }
 
@@ -80,9 +81,9 @@
 
 .forgeIntroduction p {
   margin: 0;
-  color: var(--muted);
-  font-size: 1.9cqw;
-  line-height: 1.25;
+  color: var(--forge-readable-muted);
+  font-size: 2.15cqw;
+  line-height: 1.35;
 }
 
 .forgeCapabilities,
@@ -96,8 +97,8 @@
   min-width: 0;
   padding-bottom: 0.8cqw;
   border-bottom: 1px solid var(--line);
-  color: var(--muted);
-  font-size: 1.45cqw;
+  color: var(--forge-readable-muted);
+  font-size: 1.55cqw;
   white-space: nowrap;
 }
 
@@ -164,9 +165,9 @@
 .forgeCapability p {
   align-self: start;
   margin: 0;
-  color: var(--muted);
-  font-size: 1.7cqw;
-  line-height: 1.25;
+  color: var(--forge-readable-muted);
+  font-size: 1.95cqw;
+  line-height: 1.35;
   overflow-wrap: anywhere;
 }
 
@@ -177,9 +178,9 @@
   border-top: 1px solid rgba(230, 239, 224, 0.1);
   color: var(--accent-cool);
   font-family: var(--font-mono);
-  font-size: 1.35cqw;
+  font-size: 1.55cqw;
   letter-spacing: 0.015em;
-  line-height: 1.2;
+  line-height: 1.25;
   overflow-wrap: anywhere;
 }
 
@@ -193,8 +194,8 @@
 }
 
 .forgeActivityLabel {
-  color: var(--muted);
-  font-size: 1.35cqw;
+  color: var(--forge-readable-muted);
+  font-size: 1.5cqw;
   white-space: nowrap;
 }
 

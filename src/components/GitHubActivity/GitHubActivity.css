@@ -42,8 +42,8 @@
   flex-wrap: nowrap !important;
   gap: 0.8cqw !important;
   margin: 0;
-  color: var(--muted);
-  font-size: 1.3cqw;
+  color: var(--forge-readable-muted, var(--muted));
+  font-size: 1.45cqw;
   white-space: nowrap;
 }
 
