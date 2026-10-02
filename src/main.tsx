@@ -5,6 +5,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import CubeTest from "./pages/CubeTest/CubeTest";
+import SiteShell from "./components/SiteShell";
 import "./styles.css";
 
 // Load the cube prototype only when /cube-test is opened.
@@ -13,6 +14,8 @@ const isCubeTest = window.location.pathname === "/cube-test";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {isCubeTest ? <CubeTest rotationDuration={350} /> : <App />}
+    <SiteShell>
+      {isCubeTest ? <CubeTest rotationDuration={350} /> : <App />}
+    </SiteShell>
   </StrictMode>,
 );

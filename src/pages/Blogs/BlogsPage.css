@@ -1,0 +1,113 @@
+.journalPage {
+  width: min(100%, 76rem);
+  margin-inline: auto;
+  padding: 2rem 6%;
+  color: var(--paper);
+}
+
+.journalNav, .journalArticleMeta, .journalFooter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+}
+
+.journalNav {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+.journalPage a {
+  color: var(--accent);
+  text-decoration: none;
+}
+.journalPage a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+.journalNav > span, .journalFooter > span {
+  color: var(--muted);
+}
+.journalHeader {
+  padding-block: 4rem;
+}
+.journalEyebrow, .journalCount {
+  font: 0.75rem/1.6 var(--font-mono);
+  letter-spacing: 0.12em;
+  color: var(--accent-cool);
+}
+.journalHeader h1 {
+  margin: 1.5rem 0;
+  font: 400 clamp(3rem, 8vw, 6.5rem)/0.98 var(--font-display);
+  letter-spacing: -0.045em;
+}
+.journalHeader > p:not(.journalEyebrow) {
+  max-width: 48ch;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.journalCount {
+  display: block;
+  margin-top: 2.5rem;
+}
+.journalArticle {
+  padding-block: 3.5rem;
+  border-top: 1px solid var(--line);
+}
+.journalArticleMeta {
+  color: var(--accent-cool);
+}
+.journalArticleMeta > span:last-child {
+  color: var(--accent);
+}
+.journalArticle h2 {
+  max-width: 26ch;
+  margin: 1.8rem 0 1.3rem;
+  font: 400 clamp(2rem, 4vw, 3.4rem)/1.1 var(--font-display);
+  letter-spacing: -0.035em;
+}
+.journalSummary {
+  max-width: 60ch;
+  color: var(--accent-cool);
+  font-size: 1.2rem;
+  line-height: 1.65;
+}
+.journalBody {
+  display: grid;
+  max-width: 68ch;
+  gap: 2rem;
+  margin-top: 2.75rem;
+}
+.journalBody h3 {
+  margin: 0 0 0.7rem;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+.journalBody p {
+  margin: 0;
+  color: color-mix(in srgb, var(--muted) 65%, var(--paper));
+  font-size: 1rem;
+  line-height: 1.85;
+}
+.journalTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 2.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.journalTags li {
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--line);
+  font: 0.75rem/1.4 var(--font-mono);
+  color: var(--accent-cool);
+}
+.journalFooter {
+  padding-block: 2rem;
+  border-top: 1px solid var(--line);
+}

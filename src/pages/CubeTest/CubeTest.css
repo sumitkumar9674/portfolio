@@ -16,48 +16,9 @@
   place-items: center;
   overflow: hidden;
   isolation: isolate;
-  background:
-    radial-gradient(
-      ellipse at 50% 46%,
-      rgba(77, 104, 88, 0.25),
-      transparent 39%
-    ),
-    linear-gradient(145deg, rgba(6, 11, 10, 0.45), rgba(7, 11, 11, 0.92)),
-    url("../../assets/background/05.png") center / cover no-repeat,
-    #090d0d;
   color: var(--paper);
   user-select: none;
   touch-action: none;
-}
-
-.cubeTestPage::before,
-.cubeTestPage::after {
-  position: absolute;
-  z-index: -1;
-  pointer-events: none;
-  content: "";
-}
-
-.cubeTestPage::before {
-  inset: 0;
-  opacity: 0.14;
-  background-image:
-    linear-gradient(rgba(216, 234, 219, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(216, 234, 219, 0.09) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent,
-    black 22%,
-    black 76%,
-    transparent
-  );
-}
-
-.cubeTestPage::after {
-  inset: 16px;
-  border: 1px solid rgba(214, 235, 213, 0.1);
-  border-radius: 2px;
 }
 
 .cubeScene {

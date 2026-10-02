@@ -1115,52 +1115,11 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
             />{" "}
           </div>
 
-          {/* ------------------------------------------------
-              BACK
-          ------------------------------------------------- */}
-          <div className="cubeFace cubeBack">
-            <SpaceDefenderScreen
-              isActive={activeScreen === "spaceDefender"}
-              hasBeenActivated={openedScreens.has("spaceDefender")}
-              isFirstOpen={firstOpenScreen === "spaceDefender"}
-            />{" "}
-          </div>
-
-          {/* ------------------------------------------------
-              RIGHT
-          ------------------------------------------------- */}
-
-          {/* ------------------------------------------------
-              LEFT
-          ------------------------------------------------- */}
           <div className="cubeFace cubeRight">
             {" "}
             <SkillsScreen
               isActive={activeScreen === "skills"}
               isFirstOpen={firstOpenScreen === "skills"}
-            />
-          </div>
-
-          {/* ------------------------------------------------
-              TOP
-          ------------------------------------------------- */}
-
-          <div className="cubeFace cubeTop">
-            <BlogScreen
-              isActive={activeScreen === "blog"}
-              isFirstOpen={firstOpenScreen === "blog"}
-            />
-          </div>
-
-          {/* ------------------------------------------------
-              BOTTOM
-          ------------------------------------------------- */}
-
-          <div className="cubeFace cubeBottom">
-            {" "}
-            <ContactScreen
-              isActive={activeScreen === "contact"}
-              isFirstOpen={firstOpenScreen === "contact"}
             />
           </div>
 
@@ -1172,17 +1131,29 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
               hasBeenActivated={openedScreens.has("projects")}
             />
           </div>
-          {/* ------------------------------------------------
-    OUTER WIREFRAME CUBE
 
-    This lives directly inside the main .cube.
+          <div className="cubeFace cubeTop">
+            <BlogScreen
+              isActive={activeScreen === "blog"}
+              isFirstOpen={firstOpenScreen === "blog"}
+            />
+          </div>
 
-    Therefore it rotates with the exact same
-    quaternion as the portfolio cube.
+          <div className="cubeFace cubeBottom">
+            {" "}
+            <ContactScreen
+              isActive={activeScreen === "contact"}
+              isFirstOpen={firstOpenScreen === "contact"}
+            />
+          </div>
 
-    It is slightly larger than the main cube
-    so the main cube appears to float inside it.
-------------------------------------------------- */}
+          <div className="cubeFace cubeBack">
+            <SpaceDefenderScreen
+              isActive={activeScreen === "spaceDefender"}
+              hasBeenActivated={openedScreens.has("spaceDefender")}
+              isFirstOpen={firstOpenScreen === "spaceDefender"}
+            />{" "}
+          </div>
 
           <div
             className="outerWireframeCubeAnchor"
@@ -1198,15 +1169,6 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
               x={0}
               y={0}
               z={0}
-              /*
-      IMPORTANT:
-
-      We do NOT give this cube its own angle.
-
-      The parent .cube already has the quaternion
-      rotation, so this wireframe cube naturally
-      follows the main portfolio cube.
-    */
               rotateX={0}
               rotateY={0}
               rotateZ={0}

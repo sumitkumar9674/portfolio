@@ -73,3 +73,47 @@ textarea:focus-visible {
 .spaceDefenderBox {
   --space-defender-collapsed-height: 276px;
 }
+
+/* Shared, static environment outside the cube's transformed scene. */
+.siteShell { min-height: 100%; isolation: isolate; }
+.siteBackground {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, #0d1310 0%, #090e0c 46%, #070a09 100%);
+}
+.siteBackground::before,
+.siteBackground::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+/* A quiet edge falloff gives the dark surface a little depth. */
+.siteBackground::before {
+  inset: 0;
+  background:
+    linear-gradient(90deg, #0005, transparent 22%, transparent 78%, #0006),
+    linear-gradient(180deg, rgba(132, 171, 134, 0.035), transparent 45%);
+}
+
+/* The single horizon line is intentionally barely visible. */
+.siteBackground::after {
+  top: 65%;
+  right: 8%;
+  left: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(158, 201, 192, 0.055), transparent);
+}
+.portfolioPresentation[data-hidden="true"] {
+  position: fixed;
+  inset: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Only the standalone reader unlocks normal document scrolling. */
+html[data-page="blogs"] { overflow-x: clip; overflow-y: auto; overscroll-behavior-y: auto; }
+html[data-page="blogs"] body,
+html[data-page="blogs"] #root { height: auto; min-height: 100%; overflow: visible; overscroll-behavior-y: auto; }

@@ -8,13 +8,13 @@
 import { useEffect, useState } from "react";
 import CubeTest from "./pages/CubeTest/CubeTest";
 import SplashScreen from "./components/SplashScreen/SplashScreen";
-import { preloadSpaceDefender } from "./components/SpaceDefender";
+import { preloadSpaceDefender, spaceDefenderReady } from "./components/SpaceDefenderAssets";
 
 function App() {
   const [isBooted, setIsBooted] = useState(false);
 
   useEffect(() => {
-    preloadSpaceDefender()
+    Promise.all([preloadSpaceDefender(), spaceDefenderReady])
       .then(() => {
         setIsBooted(true);
       })
@@ -24,11 +24,12 @@ function App() {
       });
   }, []);
 
-  if (!isBooted) {
-    return <SplashScreen />;
-  }
-
-  return <CubeTest />;
+  return (
+    <>
+      <CubeTest />
+      {!isBooted && <SplashScreen />}
+    </>
+  );
 }
 
 export default App;
