@@ -6,13 +6,14 @@
 // ------------------------------------------------------------
 
 import "./SplashScreen.css";
+import { siteContent } from "../../content/siteContent";
 
 export default function SplashScreen() {
   return (
     <div className="splashScreen" role="status" aria-live="polite">
       <div className="splashScreenText">
-        <span>STICKFORYOU / DIGITAL PORTFOLIO</span>
-        <strong>LOADING</strong>
+        <span>{siteContent.brand.name.toUpperCase()}{siteContent.splash.titleSuffix}</span>
+        <strong>{siteContent.splash.loading}</strong>
         <i aria-hidden="true" />
       </div>
     </div>

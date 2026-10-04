@@ -1,6 +1,6 @@
 .wireframe-phone {
   --phone-size: 150px;
-  --phone-color: #00f0ff;
+  --phone-color: var(--color-accent-secondary);
 
   position: absolute;
 

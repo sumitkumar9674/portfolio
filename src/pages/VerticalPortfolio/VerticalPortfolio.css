@@ -1,0 +1,223 @@
+/* The portrait presentation uses normal document flow; cube overflow rules stay scoped away. */
+html[data-presentation="portrait"]:not([data-page="blogs"]) {
+  height: auto;
+  min-height: 100%;
+  overflow-x: clip;
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
+}
+
+html[data-presentation="portrait"]:not([data-page="blogs"]) body,
+html[data-presentation="portrait"]:not([data-page="blogs"]) #root {
+  height: auto;
+  min-height: 100%;
+  overflow: visible;
+}
+
+html[data-presentation="portrait"]:not([data-page="blogs"]) { scroll-behavior: smooth; }
+
+.verticalPortfolio {
+  width: 100%;
+  min-height: 100%;
+  color: var(--paper);
+}
+
+.verticalNavigation {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--color-surface-navigation) 93%, transparent);
+  backdrop-filter: blur(12px);
+  scrollbar-width: thin;
+}
+
+.verticalNavigationItems {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: max(0.45rem, env(safe-area-inset-top)) 0.75rem 0.45rem;
+}
+
+.verticalNavigation a {
+  display: inline-flex;
+  min-height: 44px;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: 0 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  color: var(--muted);
+  font: 0.7rem var(--font-mono);
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+
+.verticalNavigation a:hover,
+.verticalNavigation a:focus-visible {
+  border-color: color-mix(in srgb, var(--color-accent-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--color-accent-primary) 8%, transparent);
+  color: var(--accent);
+}
+
+.verticalPortfolioMain {
+  display: grid;
+  gap: clamp(2rem, 8vw, 4rem);
+  width: min(100%, 800px);
+  min-width: 0;
+  margin: 0 auto;
+  padding: 1rem clamp(1rem, 4vw, 2rem) 4rem;
+}
+
+.verticalSection {
+  min-width: 0;
+  scroll-margin-top: 5.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.verticalSection:first-child { padding-top: 0; border-top: 0; }
+
+/* Home keeps its content, but its portrait rows grow with their text. */
+.verticalHome .homeScreen {
+  width: 100%;
+  height: auto;
+  container: home / inline-size;
+}
+
+.verticalHome .homeScreenContent {
+  height: auto;
+  padding: 4cqw 0;
+  gap: 1.5rem;
+}
+
+.verticalHome .homeScreenMain {
+  flex: none;
+  grid-template-rows: auto;
+  gap: 1.75rem;
+}
+
+.verticalHome .homeProfileContainer {
+  grid-template-columns: minmax(0, 35%) minmax(0, 1fr);
+  grid-template-areas: "photo identity" "pitch pitch";
+  grid-template-rows: auto auto;
+  gap: 1.25rem 1rem;
+}
+
+.verticalHome .homeProfileFrame { width: 100%; }
+.verticalHome .homeProfileInfo { gap: 0.5rem; }
+.verticalHome .homeProfileName { font-size: clamp(1.4rem, 6.5cqw, 2.6rem); }
+.verticalHome .homeHeaderLabel,
+.verticalHome .homeIdentityEyebrow,
+.verticalHome .homeCapabilitiesHeader,
+.verticalHome .homeContactHeading { font-size: 0.65rem; }
+.verticalHome .homePitch h1 { max-width: 21ch; font-size: clamp(1.5rem, 5cqw, 2.25rem); }
+.verticalHome .homeIntroductionCopy,
+.verticalHome .homeIntroductionCopy p { font-size: 0.85rem; }
+.verticalHome .homeCapabilityGrid { grid-template-rows: auto; }
+.verticalHome .homeCapability { padding-top: 0.7rem; padding-bottom: 0.7rem; }
+.verticalHome .homeCapability h3 { font-size: 0.85rem; }
+.verticalHome .homeCapability p { font-size: 0.72rem; }
+.verticalHome .homeCapabilityNumber,
+.verticalHome .homeCapabilityArrow { font-size: 0.65rem; }
+.verticalHome .homeContactContainer { padding-top: 0.75rem; }
+.verticalHome .contactSectionCompact .contactItem { min-height: 48px; }
+.verticalHome .contactSectionCompact .contactValue { font-size: 0.85rem; }
+.verticalHome .contactSectionCompact .contactCopyButton {
+  width: max(47px, calc(var(--cube-size) * 0.065));
+  height: max(47px, calc(var(--cube-size) * 0.065));
+  font-size: min(calc(var(--cube-size) * 0.026), 26px);
+}
+.verticalHome .socialLinks { min-height: 48px; }
+.verticalHome .socialLinksLabel { font-size: 0.6rem; }
+.verticalHome .socialLinkControl { width: 36px; height: 36px; }
+
+/* The two project channels keep a fixed presentation height as data grows. */
+.verticalProjects .projectsScreen.cubePanel {
+  width: 100%;
+  height: clamp(480px, 130vw, 640px);
+}
+
+.verticalProjects .projectsIntroduction p { font-size: max(0.68rem, 2.05cqw); }
+.verticalProjects .projectShowcaseCardCopy p { font-size: max(0.65rem, 2.05cqw); }
+.verticalProjects .projectShowcaseHeading,
+.verticalProjects .projectShowcaseControls,
+.verticalProjects .projectShowcaseCardTail { font-size: max(0.58rem, 1.5cqw); }
+.verticalProjects .projectShowcaseCardMeta { font-size: max(0.58rem, 1.55cqw); }
+.verticalProjects .projectShowcaseSide span { width: max(32px, 6cqw); }
+
+/* Forge cards and activity use content height instead of the cube's four tracks. */
+.verticalForge .forgeScreen.cubePanel {
+  width: 100%;
+  height: auto;
+  grid-template-rows: auto auto auto auto;
+  gap: 1.5rem;
+  container: forge / inline-size;
+}
+
+.verticalForge .forgeHeader { grid-template-rows: auto auto; }
+.verticalForge .forgeCapabilityGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  grid-template-rows: auto;
+}
+.verticalForge .forgeCapability { min-height: 150px; gap: 0.7rem; padding: 0.9rem; }
+.verticalForge .forgeCapabilityHeading h3 { font-size: max(0.9rem, 2.25cqw); }
+.verticalForge .forgeCapability p { font-size: max(0.8rem, 1.95cqw); }
+.verticalForge .forgeCapability small { font-size: max(0.7rem, 1.55cqw); }
+.verticalForge .forgeMeta,
+.verticalForge .forgeSectionHeading,
+.verticalForge .forgeActivityLabel,
+.verticalForge .forgeFooter { font-size: max(0.62rem, 1.5cqw); white-space: normal; }
+.verticalForge .forgeIntroduction p { font-size: max(0.75rem, 2.15cqw); }
+.verticalForge .forgeActivityPanel { min-height: 130px; }
+
+/* Blog stays a curated showcase, including its existing standalone reader link. */
+.verticalBlog .blogScreen.cubePanel {
+  width: 100%;
+  height: clamp(490px, 130vw, 660px);
+}
+.verticalBlog .blogFooter,
+.verticalBlog .blogControls,
+.verticalBlog .blogMeta { font-size: max(0.6rem, 1.7cqw); }
+.verticalBlog .blogFooter a { font-size: max(0.65rem, 1.9cqw); }
+.verticalBlog .blogSideTarget > span { width: max(32px, 6cqw); }
+.verticalBlog .blogHeader { display: grid; align-content: start; gap: 0.5rem; }
+.verticalBlog .blogHeader h1 { margin: 0; font-size: clamp(1.6rem, 7.2cqw, 2.6rem); }
+.verticalBlog .blogHeader > p { font-size: max(0.7rem, 2.5cqw); }
+
+/* Contact's form belongs to document flow; only the page has a vertical scrollbar. */
+.verticalContact .contactScreen.cubePanel {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  touch-action: auto;
+  container-type: inline-size;
+  gap: 1.5rem;
+}
+.verticalContact .contactHeading { display: grid; gap: 0.5rem; }
+.verticalContact .contactHeading h1 { margin: 0.65rem 0 0; font-size: clamp(1.6rem, 7cqw, 2.4rem); line-height: 1.05; }
+.verticalContact .contactHeadingNote { max-width: none; font-size: 0.75rem; }
+.verticalContact .contactForm {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 1rem;
+}
+.verticalContact .contactFormActions { flex-wrap: wrap; }
+.verticalContact .contactFormActions p { margin: 0; }
+.verticalContact .contactFooter { flex-wrap: wrap; }
+
+/* The mounted game paints its ready frame during boot; visibility controls play. */
+.verticalDefender .spaceDefenderScreen {
+  width: 100%;
+  height: clamp(430px, 120vw, 650px);
+}
+.verticalDefender .spaceDefenderIntroduction p { max-width: 34%; font-size: max(0.65rem, 1.85cqw); }
+.verticalDefender .spaceDefenderMeta,
+.verticalDefender .spaceDefenderArenaLabel,
+.verticalDefender .spaceDefenderFooter { font-size: max(0.56rem, 1.5cqw); }

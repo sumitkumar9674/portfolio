@@ -13,7 +13,7 @@
 
   box-sizing: border-box;
 
-  border: 1px solid #ffffff17;
+  border: 1px solid color-mix(in srgb, var(--palette-white) 9.0196%, transparent);
 
   overflow: hidden;
 }
@@ -29,7 +29,7 @@
 
   box-sizing: border-box;
 
-  border-bottom: 1px solid #ffffff17;
+  border-bottom: 1px solid color-mix(in srgb, var(--palette-white) 9.0196%, transparent);
 }
 
 .contactItem {
@@ -43,7 +43,7 @@
 
   padding: calc(var(--cube-size) * 0.008) calc(var(--cube-size) * 0.012);
 
-  border-right: 1px solid #ffffff17;
+  border-right: 1px solid color-mix(in srgb, var(--palette-white) 9.0196%, transparent);
 }
 
 .contactItem:last-child {
@@ -56,7 +56,7 @@
   margin-right: calc(var(--cube-size) * 0.008);
 
   font-size: clamp(12px, calc(var(--cube-size) * 0.016), 18px);
-  color: #aaaaaa;
+  color: var(--color-text-control);
 }
 
 .contactIcon svg {
@@ -81,7 +81,7 @@
   text-overflow: ellipsis;
 
   font-size: clamp(10px, calc(var(--cube-size) * 0.014), 16px);
-  color: #aaaaaa;
+  color: var(--color-text-control);
 }
 
 .contactCopyButton {
@@ -102,7 +102,7 @@
 
   background: transparent;
 
-  color: #aaaaaa;
+  color: var(--color-text-control);
 
   font-size: clamp(14px, calc(var(--cube-size) * 0.02), 20px);
 
@@ -110,12 +110,12 @@
 }
 
 .contactCopyButton:hover {
-  color: #ffffff;
+  color: var(--palette-white);
 }
 
 .contactCopyButton:focus-visible,
 .contactSocial:focus-visible {
-  outline: 2px solid var(--accent, #c7f27c);
+  outline: 2px solid var(--accent);
   outline-offset: -3px;
 }
 
@@ -143,9 +143,9 @@
 
   padding: calc(var(--cube-size) * 0.008);
 
-  border-right: 1px solid #ffffff17;
+  border-right: 1px solid color-mix(in srgb, var(--palette-white) 9.0196%, transparent);
 
-  color: #aaaaaa;
+  color: var(--color-text-control);
 
   font-size: clamp(10px, calc(var(--cube-size) * 0.013), 14px);
 
@@ -159,7 +159,7 @@
 }
 
 .contactSocial:hover {
-  color: #ffffff;
+  color: var(--palette-white);
   transform: translateY(-2px);
 }
 
@@ -178,24 +178,24 @@
   min-height: 0;
   padding: 0 1.5%;
   border: 0;
-  border-bottom: 1px solid var(--line, rgba(230, 239, 224, 0.15));
+  border-bottom: 1px solid var(--line);
 }
 
 .contactSectionCompact .contactItem:last-child { border-bottom: 0; }
 
 .contactSectionCompact .contactIcon {
   margin-right: clamp(6px, calc(var(--cube-size) * 0.01), 12px);
-  color: var(--accent-cool, #9ec9c0);
+  color: var(--accent-cool);
 }
 
 .contactSectionCompact .contactValue {
-  color: var(--paper, #f1f0e8);
+  color: var(--paper);
   font-size: min(calc(var(--cube-size) * 0.014), 16px);
 }
 
 .contactSectionCompact .contactCopyButton {
   width: max(36px, calc(var(--cube-size) * 0.05));
   height: max(36px, calc(var(--cube-size) * 0.05));
-  color: var(--accent, #c7f27c);
+  color: var(--accent);
   font-size: min(calc(var(--cube-size) * 0.02), 20px);
 }

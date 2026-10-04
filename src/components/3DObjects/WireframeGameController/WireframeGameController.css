@@ -139,7 +139,7 @@
   border: 2px solid var(--controller-glow);
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--palette-white) 4%, transparent);
 
   box-shadow:
     inset 0 0 8px var(--controller-glow),
@@ -185,7 +185,7 @@
 
   border: 1px solid var(--controller-glow);
 
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--palette-white) 4%, transparent);
 
   box-shadow: 0 0 5px var(--controller-glow);
 }
@@ -233,7 +233,7 @@
   font-size: calc(var(--controller-size) * 0.045);
   font-weight: 600;
 
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--palette-white) 3%, transparent);
 
   box-shadow: 0 0 5px var(--controller-glow);
 }

@@ -1,3 +1,4 @@
+@import url("./theme/colors.css");
 @import url("https://api.fontshare.com/v2/css?f[]=bespoke-stencil@800&display=swap");
 @import url("https://api.fontshare.com/v2/css?f[]=quicksand@400&display=swap");
 @import url("https://api.fontshare.com/v2/css?f[]=kola@400&display=swap");
@@ -6,21 +7,13 @@
 
 :root {
   font-family: "Quicksand", "Avenir Next", system-ui, sans-serif;
-  color: #f1f0e8;
-  background: #090d0d;
+  color: var(--color-text-primary);
+  background: var(--color-background-page);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --ink: #090d0d;
-  --panel: #101716;
-  --panel-raised: #17201e;
-  --paper: #f1f0e8;
-  --muted: #9ca9a2;
-  --line: rgba(230, 239, 224, 0.15);
-  --accent: #c7f27c;
-  --accent-cool: #9ec9c0;
   --font-display: "Array", "Arial Narrow", sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
 }
@@ -81,7 +74,12 @@ textarea:focus-visible {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: linear-gradient(180deg, #0d1310 0%, #090e0c 46%, #070a09 100%);
+  background: linear-gradient(
+    180deg,
+    var(--color-background-page-top) 0%,
+    var(--color-background-page-middle) 46%,
+    var(--color-background-page-bottom) 100%
+  );
 }
 .siteBackground::before,
 .siteBackground::after {
@@ -94,8 +92,18 @@ textarea:focus-visible {
 .siteBackground::before {
   inset: 0;
   background:
-    linear-gradient(90deg, #0005, transparent 22%, transparent 78%, #0006),
-    linear-gradient(180deg, rgba(132, 171, 134, 0.035), transparent 45%);
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--palette-black) 33.3333%, transparent),
+      transparent 22%,
+      transparent 78%,
+      color-mix(in srgb, var(--palette-black) 40%, transparent)
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-ambient-page) 3.5%, transparent),
+      transparent 45%
+    );
 }
 
 /* The single horizon line is intentionally barely visible. */
@@ -104,7 +112,12 @@ textarea:focus-visible {
   right: 8%;
   left: 8%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(158, 201, 192, 0.055), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-accent-secondary) 5.5%, transparent),
+    transparent
+  );
 }
 .portfolioPresentation[data-hidden="true"] {
   position: fixed;

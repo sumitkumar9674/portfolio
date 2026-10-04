@@ -1,21 +1,9 @@
 import type { ReactNode } from "react";
+import { siteLinks } from "../../config/siteLinks";
+import { siteContent } from "../../content/siteContent";
 import "./SocialLinks.css";
 
 type SocialIconName = "instagram" | "x" | "reddit" | "github" | "linkedin";
-
-type SocialPlatform = {
-  name: string;
-  url: string;
-  icon: SocialIconName;
-};
-
-const socialPlatforms: SocialPlatform[] = [
-  { name: "Instagram", url: "", icon: "instagram" },
-  { name: "X", url: "", icon: "x" },
-  { name: "Reddit", url: "", icon: "reddit" },
-  { name: "GitHub", url: "", icon: "github" },
-  { name: "LinkedIn", url: "", icon: "linkedin" },
-];
 
 const socialIcons: Record<SocialIconName, ReactNode> = {
   instagram: (
@@ -69,12 +57,12 @@ export default function SocialLinks({ cubeSize }: SocialLinksProps) {
   return (
     <section
       className="socialLinks"
-      aria-label="Social media links"
+      aria-label={siteContent.social.ariaLabel}
       style={{ "--cube-size": `${cubeSize}px` } as React.CSSProperties}
     >
-      <span className="socialLinksLabel">FIND ME ONLINE</span>
+      <span className="socialLinksLabel">{siteContent.social.heading}</span>
       <ul className="socialLinksList">
-        {socialPlatforms.map((platform) => (
+        {siteLinks.social.map((platform) => (
           <li key={platform.name}>
             {platform.url ? (
               <a
@@ -91,8 +79,8 @@ export default function SocialLinks({ cubeSize }: SocialLinksProps) {
               <button
                 className="socialLinkControl"
                 type="button"
-                aria-label={`${platform.name} link coming soon`}
-                title={`${platform.name} link coming soon`}
+                aria-label={`${platform.name}${siteContent.social.comingSoonSuffix}`}
+                title={`${platform.name}${siteContent.social.comingSoonSuffix}`}
               >
                 {socialIcons[platform.icon]}
               </button>

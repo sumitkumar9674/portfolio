@@ -44,10 +44,10 @@ export default function NeonFrame({
   width = "fit-content",
   height = "fit-content",
 
-  backgroundColor = "#000000",
+  backgroundColor = "var(--palette-black)",
 
-  borderColor = "#00ffff",
-  cornerColor = "#ffad00",
+  borderColor = "var(--color-accent-secondary)",
+  cornerColor = "var(--color-accent-tertiary)",
 
   borderWidth = 6,
   cornerWidth = 6,
@@ -261,7 +261,7 @@ export default function NeonFrame({
      * No active light.
      */
     if (activeSide === -1 || !flickerOn) {
-      return "rgba(0, 0, 0, 0.96)";
+      return "color-mix(in srgb, var(--palette-black) 96%, transparent)";
     }
 
     /*
@@ -271,15 +271,15 @@ export default function NeonFrame({
       return `
         linear-gradient(
           to right,
-          rgba(0, 0, 0, 0)
+          transparent
           0%,
-          rgba(0, 0, 0, 0.12)
+          color-mix(in srgb, var(--palette-black) 12%, transparent)
           18%,
-          rgba(0, 0, 0, 0.50)
+          color-mix(in srgb, var(--palette-black) 50%, transparent)
           48%,
-          rgba(0, 0, 0, 0.85)
+          color-mix(in srgb, var(--palette-black) 85%, transparent)
           75%,
-          rgba(0, 0, 0, 0.96)
+          color-mix(in srgb, var(--palette-black) 96%, transparent)
           100%
         )
       `;
@@ -292,15 +292,15 @@ export default function NeonFrame({
       return `
         linear-gradient(
           to bottom,
-          rgba(0, 0, 0, 0)
+          transparent
           0%,
-          rgba(0, 0, 0, 0.12)
+          color-mix(in srgb, var(--palette-black) 12%, transparent)
           18%,
-          rgba(0, 0, 0, 0.50)
+          color-mix(in srgb, var(--palette-black) 50%, transparent)
           48%,
-          rgba(0, 0, 0, 0.85)
+          color-mix(in srgb, var(--palette-black) 85%, transparent)
           75%,
-          rgba(0, 0, 0, 0.96)
+          color-mix(in srgb, var(--palette-black) 96%, transparent)
           100%
         )
       `;
@@ -313,15 +313,15 @@ export default function NeonFrame({
       return `
         linear-gradient(
           to left,
-          rgba(0, 0, 0, 0)
+          transparent
           0%,
-          rgba(0, 0, 0, 0.12)
+          color-mix(in srgb, var(--palette-black) 12%, transparent)
           18%,
-          rgba(0, 0, 0, 0.50)
+          color-mix(in srgb, var(--palette-black) 50%, transparent)
           48%,
-          rgba(0, 0, 0, 0.85)
+          color-mix(in srgb, var(--palette-black) 85%, transparent)
           75%,
-          rgba(0, 0, 0, 0.96)
+          color-mix(in srgb, var(--palette-black) 96%, transparent)
           100%
         )
       `;
@@ -333,15 +333,15 @@ export default function NeonFrame({
     return `
       linear-gradient(
         to top,
-        rgba(0, 0, 0, 0)
+        transparent
         0%,
-        rgba(0, 0, 0, 0.12)
+        color-mix(in srgb, var(--palette-black) 12%, transparent)
         18%,
-        rgba(0, 0, 0, 0.50)
+        color-mix(in srgb, var(--palette-black) 50%, transparent)
         48%,
-        rgba(0, 0, 0, 0.85)
+        color-mix(in srgb, var(--palette-black) 85%, transparent)
         75%,
-        rgba(0, 0, 0, 0.96)
+        color-mix(in srgb, var(--palette-black) 96%, transparent)
         100%
       )
     `;
@@ -354,11 +354,10 @@ export default function NeonFrame({
     if (finished) {
       return `
         0 8px 18px
-        rgba(
-          0,
-          255,
-          255,
-          ${0.12 * shadowStrength}
+        color-mix(
+          in srgb,
+          var(--color-neon-frame-glow) ${12 * shadowStrength}%,
+          transparent
         )
       `;
     }
@@ -366,18 +365,17 @@ export default function NeonFrame({
     if (activeSide !== -1 && flickerOn) {
       return `
         0 7px 16px
-        rgba(
-          0,
-          255,
-          255,
-          ${0.25 * shadowStrength}
+        color-mix(
+          in srgb,
+          var(--color-neon-frame-glow) ${25 * shadowStrength}%,
+          transparent
         )
       `;
     }
 
     return `
       0 8px 18px
-      rgba(0, 0, 0, 0.35)
+      color-mix(in srgb, var(--palette-black) 35%, transparent)
     `;
   };
 
@@ -469,7 +467,7 @@ export default function NeonFrame({
 
           height: borderWidth,
 
-          backgroundColor: isSideOn(1) ? borderColor : "#d8d8d8",
+          backgroundColor: isSideOn(1) ? borderColor : "var(--color-frame-inactive)",
 
           opacity: 1,
 
@@ -481,7 +479,7 @@ export default function NeonFrame({
             ? pipeGlow
             : `
               0 1px 2px
-              rgba(0, 0, 0, 0.25)
+              color-mix(in srgb, var(--palette-black) 25%, transparent)
             `,
         }}
       />
@@ -500,7 +498,7 @@ export default function NeonFrame({
 
           width: borderWidth,
 
-          backgroundColor: isSideOn(2) ? borderColor : "#d8d8d8",
+          backgroundColor: isSideOn(2) ? borderColor : "var(--color-frame-inactive)",
 
           opacity: 1,
 
@@ -515,7 +513,7 @@ export default function NeonFrame({
             `
             : `
               0 1px 2px
-              rgba(0, 0, 0, 0.25)
+              color-mix(in srgb, var(--palette-black) 25%, transparent)
             `,
         }}
       />
@@ -534,7 +532,7 @@ export default function NeonFrame({
 
           height: borderWidth,
 
-          backgroundColor: isSideOn(3) ? borderColor : "#d8d8d8",
+          backgroundColor: isSideOn(3) ? borderColor : "var(--color-frame-inactive)",
 
           opacity: 1,
 
@@ -549,7 +547,7 @@ export default function NeonFrame({
             `
             : `
               0 1px 2px
-              rgba(0, 0, 0, 0.25)
+              color-mix(in srgb, var(--palette-black) 25%, transparent)
             `,
         }}
       />
@@ -568,7 +566,7 @@ export default function NeonFrame({
 
           width: borderWidth,
 
-          backgroundColor: isSideOn(0) ? borderColor : "#d8d8d8",
+          backgroundColor: isSideOn(0) ? borderColor : "var(--color-frame-inactive)",
 
           opacity: 1,
 
@@ -583,7 +581,7 @@ export default function NeonFrame({
             `
             : `
               0 1px 2px
-              rgba(0, 0, 0, 0.25)
+              color-mix(in srgb, var(--palette-black) 25%, transparent)
             `,
         }}
       />

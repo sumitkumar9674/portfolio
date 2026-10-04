@@ -8,8 +8,8 @@ type WireframeGameControllerProps = {
 
 export default function WireframeGameController({
   size = 180,
-  color = "rgba(255, 255, 255, 0.08)",
-  glowColor = "#00ffff",
+  color = "color-mix(in srgb, var(--palette-white) 8%, transparent)",
+  glowColor = "var(--color-accent-secondary)",
 }: WireframeGameControllerProps) {
   return (
     <div

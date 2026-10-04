@@ -22,7 +22,7 @@ type WireframeCubeObjectProps = {
 
 export default function WireframeCubeObject({
   size = 100,
-  color = "#00ffff",
+  color = "var(--color-accent-secondary)",
   lineWidth = 2,
 
   x = 0,

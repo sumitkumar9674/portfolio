@@ -1,18 +1,19 @@
 import { blogPosts } from "../../data/blogPosts";
+import { siteContent } from "../../content/siteContent";
 import "./BlogsPage.css";
 
 export default function BlogsPage() {
   return (
     <main className="journalPage">
-      <nav className="journalNav" aria-label="Journal navigation">
-        <a href="#/">← Back to portfolio</a>
-        <span>STICKFORYOU <span aria-hidden="true">/</span> JOURNAL</span>
+      <nav className="journalNav" aria-label={siteContent.journal.navigationLabel}>
+        <a href="#/">{siteContent.journal.back}</a>
+        <span>{siteContent.brand.name.toUpperCase()} <span aria-hidden="true">/</span> {siteContent.journal.brandSuffix}</span>
       </nav>
       <header className="journalHeader">
-        <p className="journalEyebrow">ENGINEERING NOTES · BUILD LOG</p>
-        <h1 tabIndex={-1}>Notes from<br />the build.</h1>
-        <p>Decisions, experiments, and the work behind the things I make. A record of what is working, what is in progress, and what still needs proving.</p>
-        <span className="journalCount">{String(blogPosts.length).padStart(2, "0")} NOTES / AN OPEN NOTEBOOK</span>
+        <p className="journalEyebrow">{siteContent.blog.meta}</p>
+        <h1 tabIndex={-1}>{siteContent.blog.headingLines[0]}<br />{siteContent.blog.headingLines[1]}</h1>
+        <p>{siteContent.blog.introduction} {siteContent.journal.introductionSecondSentence}</p>
+        <span className="journalCount">{String(blogPosts.length).padStart(2, "0")} {siteContent.journal.countSuffix}</span>
       </header>
       <div className="journalArticles">
         {blogPosts.map((post) => (
@@ -31,15 +32,15 @@ export default function BlogsPage() {
                 </section>
               ))}
             </div>
-            <ul className="journalTags" aria-label="Topics">
+            <ul className="journalTags" aria-label={siteContent.blog.topicsLabel}>
               {post.tags.map((tag) => <li key={tag}>{tag}</li>)}
             </ul>
           </article>
         ))}
       </div>
       <footer className="journalFooter">
-        <span>END OF NOTES / MORE TO BUILD</span>
-        <a href="#/">Back to portfolio ↗</a>
+        <span>{siteContent.journal.footer}</span>
+        <a href="#/">{siteContent.journal.backFooter}</a>
       </footer>
     </main>
   );

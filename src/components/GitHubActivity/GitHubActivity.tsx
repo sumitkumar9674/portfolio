@@ -1,4 +1,8 @@
+import { useState } from "react";
 import { GitHubCalendar } from "react-github-calendar";
+import { siteLinks } from "../../config/siteLinks";
+import { siteContent } from "../../content/siteContent";
+import { getThemeColor } from "../../theme/getThemeColor";
 import "./GitHubActivity.css";
 
 const transformContributions = (
@@ -58,27 +62,35 @@ const transformContributions = (
 };
 
 export default function GitHubActivity() {
+  const [contributionTheme] = useState<[string, string, string, string, string]>(() => [
+    getThemeColor("--color-calendar-level-0"),
+    getThemeColor("--color-calendar-level-1"),
+    getThemeColor("--color-calendar-level-2"),
+    getThemeColor("--color-calendar-level-3"),
+    getThemeColor("--color-calendar-level-4"),
+  ]);
+
   return (
-    <div className="gitHubActivity" aria-label="GitHub contribution activity">
+    <div className="gitHubActivity" aria-label={siteContent.githubActivity.ariaLabel}>
       <GitHubCalendar
-        username="sumitkumar9674"
+        username={siteLinks.github.username}
         year="last"
         colorScheme="dark"
         transformData={transformContributions}
         blockSize={12}
-        blockMargin={3}
+        blockMargin={1}
         blockRadius={0}
         fontSize={13}
         showMonthLabels
         showTotalCount
         showColorLegend
         labels={{
-          totalCount: "{{count}} contributions in the last year",
-          legend: { less: "None", more: "More" },
+          totalCount: siteContent.githubActivity.totalCount,
+          legend: { less: siteContent.githubActivity.less, more: siteContent.githubActivity.more },
         }}
         // Level zero stays visible as an empty day; GitHub counts remain untouched.
         theme={{
-          dark: ["#040404", "#1b1b1bd9", "#2e2e2ed8", "#474747db", "#626262dd"],
+          dark: contributionTheme,
         }}
         style={{ width: "100%", maxWidth: "none", gap: "0.6cqw" }}
       />

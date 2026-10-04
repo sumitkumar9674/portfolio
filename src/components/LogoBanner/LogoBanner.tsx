@@ -1,6 +1,7 @@
 // Displays a centered logo inside a simple rectangular banner.
 
 import "./LogoBanner.css";
+import { siteContent } from "../../content/siteContent";
 type LogoBannerProps = {
   image: string;
   backgroundImage: string;
@@ -40,7 +41,7 @@ export default function LogoBanner({
       <img
         src={image}
         className="logoBannerImage"
-        alt="Company logo"
+        alt={siteContent.companyLogoAlt}
         style={{
           display: "block",
           width: "32%",

@@ -26,5 +26,5 @@
 
 .logoBanner:hover .logoBannerImage {
   transform: translateY(-1px) scale(1.0367);
-  filter: grayscale(0%) drop-shadow(0px 0px 9px #ffffff);
+  filter: grayscale(0%) drop-shadow(0px 0px 9px var(--palette-white));
 }

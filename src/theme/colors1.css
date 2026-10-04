@@ -1,0 +1,105 @@
+/* ------------------------------------------------------------
+   Foundation palette
+------------------------------------------------------------ */
+
+:root {
+  --palette-black: #000000;
+  --palette-white: #ffffff;
+  --palette-white-soft: #f2f5fb;
+  --palette-blue-electric: #65aaff;
+  --palette-blue-cyan: #91caff;
+  --palette-violet-soft: #c995d8;
+  --palette-blue-gray: #aab9cd;
+  --palette-blue-gray-light: #dbe5f2;
+  --palette-neutral-light: #d8d8d8;
+  --palette-neutral-mid: #aaaaaa;
+  --palette-neutral-muted: #888888;
+  --palette-neutral-resolved: #848484;
+  --palette-neutral-unresolved: #3d3d3d;
+  --palette-border-blue: #c6d8f3;
+
+  /* ----------------------------------------------------------
+     Backgrounds and surfaces
+  ---------------------------------------------------------- */
+
+  --color-background-page: #080d19;
+  --color-background-page-top: #0d1524;
+  --color-background-page-middle: #090f1c;
+  --color-background-page-bottom: #070b15;
+  --color-background-deep: #020617;
+  --color-surface-panel: #101a2b;
+  --color-surface-raised: #18263b;
+  --color-surface-cube-edge: #0b1422;
+  --color-surface-cube-panel-start: #111d30;
+  --color-surface-cube-panel-end: #0a1221;
+  --color-surface-control: #091426;
+  --color-surface-project-start: #223751;
+  --color-surface-project-live-start: #1b354f;
+  --color-surface-project-live-end: #111e34;
+  --color-surface-blog-start: #223854;
+  --color-surface-game: #0a1527;
+  --color-surface-game-header: #142640;
+  --color-surface-game-arena-top: #081528;
+  --color-surface-game-arena-middle: #0e233b;
+  --color-surface-navigation: #09101f;
+  --color-surface-social: #091121;
+  --color-surface-contact: #060d1a;
+  --color-surface-forge-activity: #060e1b;
+  --color-surface-forge-card-end: #080f1d;
+  --color-surface-forge-end: #080f1c;
+  --color-shadow-cube-inset: #040812;
+  --color-shadow-game-inset: #040a17;
+
+  /* ----------------------------------------------------------
+     Text and accents
+  ---------------------------------------------------------- */
+
+  --color-text-primary: var(--palette-white-soft);
+  --color-text-secondary: var(--palette-blue-gray);
+  --color-text-designation: var(--palette-blue-gray-light);
+  --color-text-control: var(--palette-neutral-mid);
+  --color-text-placeholder: #889bb5;
+  --color-text-on-accent: #071326;
+  --color-accent-primary: var(--palette-blue-electric);
+  --color-accent-secondary: var(--palette-blue-cyan);
+  --color-accent-tertiary: var(--palette-violet-soft);
+  --color-focus: var(--palette-blue-electric);
+  --color-frame-inactive: var(--palette-neutral-light);
+  --color-profile-frame: #dddddd;
+  --color-neon-frame-glow: #00ffff;
+
+  /* ----------------------------------------------------------
+     Borders, ambient light, and effects
+  ---------------------------------------------------------- */
+
+  --color-border-subtle: rgba(198, 216, 243, 0.17);
+  --color-ambient-page: #6191d5;
+  --color-ambient-splash: #3f65a3;
+  --color-ambient-cube: #355b94;
+  --color-ambient-cube-glow: #71a4eb;
+  --color-ambient-forge: #5182d2;
+  --color-monitor-screen: rgba(220, 250, 255, 0.08);
+
+  /* ----------------------------------------------------------
+     Feedback, game, and data visualization
+  ---------------------------------------------------------- */
+
+  --color-game-target: rgba(101, 170, 255, 0.13);
+  --color-game-impact: var(--palette-violet-soft);
+  --color-calendar-level-0: #0b1428;
+  --color-calendar-level-1: #193458;
+  --color-calendar-level-2: #285892;
+  --color-calendar-level-3: #4186d5;
+  --color-calendar-level-4: #85c2ff;
+
+  /* Existing public names remain stable for current components. */
+  --ink: var(--color-background-page);
+  --panel: var(--color-surface-panel);
+  --panel-raised: var(--color-surface-raised);
+  --paper: var(--color-text-primary);
+  --muted: var(--color-text-secondary);
+  --line: var(--color-border-subtle);
+  --accent: var(--color-accent-primary);
+  --accent-cool: var(--color-accent-secondary);
+  --accent-rose: var(--color-accent-tertiary);
+}

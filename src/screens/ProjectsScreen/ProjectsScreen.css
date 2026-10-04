@@ -1,36 +1,39 @@
-.projectsScreen {
-  --projects-readable-muted: color-mix(in srgb, var(--muted) 78%, var(--paper));
-  width: 88%;
-  height: 88%;
-  gap: 3cqw;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 4.5%;
-  overscroll-behavior: contain;
-  touch-action: pan-y;
-  scrollbar-color: rgba(199, 242, 124, 0.4) transparent;
-  scrollbar-width: thin;
+/* Four fixed face-relative tracks keep collection size out of the screen geometry. */
+.projectsScreen.cubePanel {
+  --projects-muted: color-mix(in srgb, var(--muted) 76%, var(--paper));
+  display: grid;
+  grid-template-rows: minmax(0, 16fr) minmax(0, 42fr) minmax(0, 42fr) minmax(
+      0,
+      5fr
+    );
+  gap: 1%;
+  width: 92%;
+  height: 92%;
+  padding: 3.8%;
+  overflow: clip;
+  container-type: size;
 }
 
-/* ---------------------------------------------------------
-   Header
---------------------------------------------------------- */
+.projectsHeader,
+.projectsFooter {
+  min-width: 0;
+  min-height: 0;
+}
 
 .projectsHeader {
   display: flex;
-  align-items: flex-end;
+  align-items: end;
   justify-content: space-between;
-  gap: 4cqw;
+  gap: 3cqw;
 }
 
 .projectsMeta {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 1cqw;
-  color: var(--projects-readable-muted);
-  font-family: var(--font-mono);
-  font-size: clamp(7px, 2cqw, 11px);
-  letter-spacing: 0.08em;
+  flex: 0 0 auto;
+  color: var(--projects-muted);
+  font: 1.55cqw/1.3 var(--font-mono);
+  letter-spacing: 0.07em;
 }
 
 .projectsMeta span:first-child {
@@ -39,268 +42,35 @@
 
 .projectsIntroduction {
   display: grid;
-  max-width: 58%;
-  gap: 1.4cqw;
+  gap: 1cqw;
+  min-width: 0;
+  width: 58%;
+  justify-items: end;
+  text-align: right;
 }
 
 .projectsIntroduction h1 {
   margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(22px, 7cqw, 38px);
-  font-weight: 400;
+  font: 400 6.5cqw/1 var(--font-display);
   letter-spacing: -0.045em;
-  line-height: 0.98;
 }
 
 .projectsIntroduction p {
   margin: 0;
-  color: var(--projects-readable-muted);
-  font-size: clamp(9px, 2.65cqw, 14px);
-  line-height: 1.45;
+  color: var(--projects-muted);
+  font-size: 2.05cqw;
+  line-height: 1.35;
 }
-
-/* ---------------------------------------------------------
-   Shared section structure
---------------------------------------------------------- */
-
-.projectsWorking,
-.projectsLive {
-  display: grid;
-  gap: 1.6cqw;
-}
-
-.projectsSectionHeading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2cqw;
-  padding-bottom: 1cqw;
-  border-bottom: 1px solid var(--line);
-  font-family: var(--font-mono);
-  font-size: clamp(8px, 2cqw, 11px);
-  letter-spacing: 0.08em;
-}
-
-.projectsSectionHeading h2 {
-  margin: 0;
-  color: var(--accent);
-  font: inherit;
-}
-
-.projectsSectionHeading > span {
-  color: var(--projects-readable-muted);
-}
-
-/* ---------------------------------------------------------
-   Currently working
---------------------------------------------------------- */
-
-.projectsWorkingList {
-  display: grid;
-  gap: 1.3cqw;
-}
-
-.projectsWorkingItem {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 3cqw;
-  padding: 2cqw 2.2cqw;
-  border: 1px solid rgba(225, 239, 222, 0.17);
-  background: rgba(5, 10, 9, 0.38);
-}
-
-.projectsWorkingCopy {
-  min-width: 0;
-}
-
-.projectsWorkingCopy h3 {
-  margin: 0;
-  color: var(--paper);
-  font-size: clamp(11px, 2.8cqw, 15px);
-  font-weight: 600;
-}
-
-.projectsWorkingCopy p {
-  margin: 0.8cqw 0 0;
-  color: var(--projects-readable-muted);
-  font-size: clamp(8px, 2.15cqw, 12px);
-  line-height: 1.45;
-}
-
-.projectsStatus {
-  display: inline-flex;
-  align-items: center;
-  gap: 1cqw;
-  color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: clamp(7px, 1.8cqw, 9px);
-  letter-spacing: 0.06em;
-  white-space: nowrap;
-}
-
-.projectsStatus > span {
-  width: 1cqw;
-  height: 1cqw;
-  flex: 0 0 auto;
-  border-radius: 50%;
-  background: var(--accent);
-}
-
-.projectsQuietState {
-  padding: 2cqw;
-  color: var(--muted);
-  font-size: clamp(8px, 2cqw, 10px);
-}
-
-.projectsQuietState p {
-  margin: 0;
-}
-
-/* ---------------------------------------------------------
-   Live projects
---------------------------------------------------------- */
-
-.projectsLiveGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 2cqw;
-}
-
-.projectsLiveCard {
-  display: grid;
-  min-width: 0;
-  align-content: start;
-  gap: 1.5cqw;
-  padding: 1.5cqw;
-  border: 1px solid rgba(225, 239, 222, 0.17);
-  background: rgba(5, 10, 9, 0.38);
-  color: inherit;
-  text-decoration: none;
-}
-
-a.projectsLiveCard {
-  transition:
-    border-color 180ms ease,
-    background 180ms ease;
-}
-
-a.projectsLiveCard:hover,
-a.projectsLiveCard:focus-visible {
-  border-color: var(--accent);
-  background: rgba(199, 242, 124, 0.05);
-  outline: none;
-}
-
-.projectsLiveImage {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border: 1px solid rgba(225, 239, 222, 0.12);
-  background: rgba(5, 10, 9, 0.54);
-}
-
-.projectsLiveCopy {
-  display: grid;
-  min-width: 0;
-  gap: 1cqw;
-}
-
-.projectsLiveTitleRow {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 2cqw;
-}
-
-.projectsLiveTitleRow h3 {
-  margin: 0;
-  color: var(--paper);
-  font-size: clamp(10px, 2.6cqw, 14px);
-  font-weight: 600;
-}
-
-.projectsLiveTitleRow > span {
-  flex: 0 0 auto;
-  color: var(--accent);
-  font-size: clamp(9px, 2.3cqw, 12px);
-}
-
-.projectsLiveCopy > p {
-  margin: 0;
-  color: var(--projects-readable-muted);
-  font-size: clamp(8px, 2.15cqw, 12px);
-  line-height: 1.45;
-}
-
-.projectsTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8cqw;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.projectsTags li {
-  padding: 0.5cqw 0.8cqw;
-  border: 1px solid rgba(225, 239, 222, 0.15);
-  color: var(--projects-readable-muted);
-  font-family: var(--font-mono);
-  font-size: clamp(7px, 1.7cqw, 9px);
-}
-
-/* ---------------------------------------------------------
-   Empty state
---------------------------------------------------------- */
-
-.projectsEmptyState {
-  display: grid;
-  justify-items: start;
-  gap: 1.3cqw;
-  padding: 4cqw;
-  border: 1px dashed rgba(225, 239, 222, 0.2);
-  background: rgba(5, 10, 9, 0.3);
-}
-
-.projectsEmptyMark {
-  color: var(--accent);
-  font-family: var(--font-mono);
-  font-size: clamp(7px, 1.8cqw, 10px);
-  letter-spacing: 0.1em;
-}
-
-.projectsEmptyState h3 {
-  margin: 0;
-  color: var(--paper);
-  font-family: var(--font-display);
-  font-size: clamp(15px, 4cqw, 22px);
-  font-weight: 400;
-}
-
-.projectsEmptyState p {
-  max-width: 42ch;
-  margin: 0;
-  color: var(--muted);
-  font-size: clamp(8px, 2cqw, 10px);
-  line-height: 1.4;
-}
-
-/* ---------------------------------------------------------
-   Footer
---------------------------------------------------------- */
 
 .projectsFooter {
   display: flex;
+  align-items: end;
   justify-content: space-between;
-  gap: 4cqw;
-  padding-top: 2.5cqw;
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: clamp(6px, 1.65cqw, 8px);
-  letter-spacing: 0.04em;
+  gap: 2cqw;
+  border-top: 0.12cqw solid var(--line);
+  color: var(--projects-muted);
+  font: 1.45cqw/1.2 var(--font-mono);
+  letter-spacing: 0.05em;
 }
 
 .projectsFooter b {

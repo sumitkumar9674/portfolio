@@ -277,7 +277,9 @@ export default function DecodeText({
                         top: 0,
                         left: 0,
                         fontFamily,
-                        color: isResolved ? "#848484" : "#3d3d3d",
+                        color: isResolved
+                          ? "var(--palette-neutral-resolved)"
+                          : "var(--palette-neutral-unresolved)",
                       }}
                     >
                       {character}

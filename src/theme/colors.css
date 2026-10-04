@@ -1,0 +1,169 @@
+/* ------------------------------------------------------------
+   Palette 02
+   Electric Cyan + Deep Navy + Soft Pink
+------------------------------------------------------------ */
+
+:root {
+  /* ----------------------------------------------------------
+     Foundation palette
+  ---------------------------------------------------------- */
+
+  --palette-black: #000000;
+  --palette-white: #ffffff;
+
+  --palette-white-soft: #f3f8ff;
+
+  /* Main identity */
+  --palette-blue-electric: #54d6ff;
+  --palette-blue-cyan: #6d8cff;
+
+  /* Controlled tertiary accent */
+  --palette-violet-soft: #ff8fb8;
+
+  /* Neutral / readable tones */
+  --palette-blue-gray: #a7b8c9;
+  --palette-blue-gray-light: #dce8f2;
+
+  --palette-neutral-light: #d9e0e8;
+  --palette-neutral-mid: #a3adb7;
+  --palette-neutral-muted: #7f8b97;
+  --palette-neutral-resolved: #7b8791;
+  --palette-neutral-unresolved: #34404a;
+
+  --palette-border-blue: #bddcec;
+
+  /* ----------------------------------------------------------
+     Backgrounds and surfaces
+  ---------------------------------------------------------- */
+
+  --color-background-page: #050a12;
+
+  --color-background-page-top: #09131e;
+  --color-background-page-middle: #07101a;
+  --color-background-page-bottom: #04080f;
+
+  --color-background-deep: #01050b;
+
+  --color-surface-panel: #0b1420;
+  --color-surface-raised: #122033;
+
+  --color-surface-cube-edge: #08111c;
+
+  --color-surface-cube-panel-start: #102033;
+  --color-surface-cube-panel-end: #07111e;
+
+  --color-surface-control: #081425;
+
+  --color-surface-project-start: #18374d;
+
+  --color-surface-project-live-start: #12334b;
+  --color-surface-project-live-end: #0c1d30;
+
+  --color-surface-blog-start: #183a52;
+
+  --color-surface-game: #071525;
+  --color-surface-game-header: #102b45;
+
+  --color-surface-game-arena-top: #041321;
+  --color-surface-game-arena-middle: #0b2940;
+
+  --color-surface-navigation: #07101d;
+  --color-surface-social: #071321;
+  --color-surface-contact: #040b14;
+
+  --color-surface-forge-activity: #04101c;
+  --color-surface-forge-card-end: #061320;
+  --color-surface-forge-end: #06121d;
+
+  --color-shadow-cube-inset: #02070d;
+  --color-shadow-game-inset: #020a12;
+
+  /* ----------------------------------------------------------
+     Text and accents
+  ---------------------------------------------------------- */
+
+  --color-text-primary: var(--palette-white-soft);
+
+  --color-text-secondary: var(--palette-blue-gray);
+
+  --color-text-designation: var(--palette-blue-gray-light);
+
+  --color-text-control: var(--palette-neutral-mid);
+
+  --color-text-placeholder: #8298aa;
+
+  --color-text-on-accent: #03131c;
+
+  /* Electric cyan — primary site identity */
+  --color-accent-primary: var(--palette-blue-electric);
+
+  /* Cool blue — supporting technical accent */
+  --color-accent-secondary: var(--palette-blue-cyan);
+
+  /* Soft pink — rare tertiary emphasis */
+  --color-accent-tertiary: var(--palette-violet-soft);
+
+  --color-focus: var(--palette-blue-electric);
+
+  --color-frame-inactive: var(--palette-neutral-light);
+
+  --color-profile-frame: #dbe6ed;
+
+  --color-neon-frame-glow: #68e8ff;
+
+  /* ----------------------------------------------------------
+     Borders, ambient light, and effects
+  ---------------------------------------------------------- */
+
+  --color-border-subtle: rgba(189, 220, 236, 0.17);
+
+  --color-ambient-page: #277ea0;
+
+  --color-ambient-splash: #1f6687;
+
+  --color-ambient-cube: #226b8e;
+
+  --color-ambient-cube-glow: #55c9f3;
+
+  --color-ambient-forge: #368fb4;
+
+  --color-monitor-screen: rgba(220, 247, 255, 0.08);
+
+  /* ----------------------------------------------------------
+     Feedback, game, and data visualization
+  ---------------------------------------------------------- */
+
+  --color-game-target: rgba(84, 214, 255, 0.13);
+
+  /* SpaceDefender gets the strongest pink usage */
+  --color-game-impact: var(--palette-violet-soft);
+
+  /* Forge / GitHub activity intensity */
+  --color-calendar-level-0: #071322;
+  --color-calendar-level-1: #0b3650;
+  --color-calendar-level-2: #126080;
+  --color-calendar-level-3: #27a5cf;
+  --color-calendar-level-4: #7de6ff;
+
+  /* ----------------------------------------------------------
+     Existing public names
+  ---------------------------------------------------------- */
+
+  --ink: var(--color-background-page);
+
+  --panel: var(--color-surface-panel);
+
+  --panel-raised: var(--color-surface-raised);
+
+  --paper: var(--color-text-primary);
+
+  --muted: var(--color-text-secondary);
+
+  --line: var(--color-border-subtle);
+
+  --accent: var(--color-accent-primary);
+
+  --accent-cool: var(--color-accent-secondary);
+
+  --accent-rose: var(--color-accent-tertiary);
+}

@@ -1,5 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
+import { siteContent } from "../content/siteContent";
 import { bulletSources, entitySources, explosionSources, heroSources, markSpaceDefenderReady, preloadSpaceDefender } from "./SpaceDefenderAssets";
+import { getThemeColor } from "../theme/getThemeColor";
 
 const LOGO_PATTERN = [
   "000001111011111011111001111011001000",
@@ -66,6 +68,7 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
     const entities = entitySources.map(loadImage);
     const bulletImages = bulletSources.map(loadImage);
     const blasts = explosionSources.map(loadImage);
+    const targetFill = getThemeColor("--color-game-target");
     const hero = {
       idle: [loadImage(heroSources["../assets/game/hero/idle_01.png"]), loadImage(heroSources["../assets/game/hero/idle_02.png"])],
       left: loadImage(heroSources["../assets/game/hero/moving_left.png"]),
@@ -155,7 +158,7 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
           return;
         }
         const size = tile * 0.86;
-        ctx.fillStyle = "rgba(199, 242, 124, 0.13)";
+        ctx.fillStyle = targetFill;
         ctx.fillRect(target.x - size / 2, target.y - size / 2, size, size);
         if (target.sprite.naturalWidth) {
           const aspect = target.sprite.naturalWidth / target.sprite.naturalHeight;
@@ -276,5 +279,5 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
     };
   }, [onEngage, onHit, onWave]);
 
-  return <canvas ref={canvasRef} className="spaceDefenderCanvas" aria-label="Space Defender play field: move your mouse or drag a finger to move and fire" />;
+  return <canvas ref={canvasRef} className="spaceDefenderCanvas" aria-label={siteContent.spaceDefender.canvasLabel} />;
 }

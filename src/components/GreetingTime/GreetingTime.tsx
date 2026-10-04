@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { siteContent } from "../../content/siteContent";
 import "./GreetingTime.css";
 
 type GreetingTimeProps = {
@@ -21,7 +22,7 @@ export default function GreetingTime({ cubeSize }: GreetingTimeProps) {
   const hour = currentTime.getHours();
 
   const greeting =
-    hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
+    hour < 12 ? siteContent.greeting.morning : hour < 18 ? siteContent.greeting.afternoon : siteContent.greeting.evening;
 
   const time = currentTime.toLocaleTimeString([], {
     hour: "numeric",

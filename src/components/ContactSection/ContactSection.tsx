@@ -1,6 +1,8 @@
 // Displays contact information and social profile links.
 
 import { useState, type ReactNode } from "react";
+import { siteLinks } from "../../config/siteLinks";
+import { siteContent } from "../../content/siteContent";
 import "./ContactSection.css";
 
 type ContactSectionProps = {
@@ -8,11 +10,7 @@ type ContactSectionProps = {
   variant?: "default" | "compact";
 };
 
-type SocialLink = {
-  name: string;
-  url: string;
-  icon: ReactNode;
-};
+type SocialIconName = (typeof siteLinks.social)[number]["icon"];
 
 const Icon = ({ children }: { children: ReactNode }) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -20,11 +18,8 @@ const Icon = ({ children }: { children: ReactNode }) => (
   </svg>
 );
 
-const socialLinks: SocialLink[] = [
-  {
-    name: "Instagram",
-    url: "",
-    icon: (
+const socialIcons: Record<SocialIconName, ReactNode> = {
+  instagram: (
       <Icon>
         <rect
           x="3"
@@ -46,12 +41,8 @@ const socialLinks: SocialLink[] = [
         />
         <circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
       </Icon>
-    ),
-  },
-  {
-    name: "X",
-    url: "",
-    icon: (
+  ),
+  x: (
       <Icon>
         <path
           d="M5 4L19 20M19 4L5 20"
@@ -61,12 +52,8 @@ const socialLinks: SocialLink[] = [
           strokeLinecap="round"
         />
       </Icon>
-    ),
-  },
-  {
-    name: "Reddit",
-    url: "",
-    icon: (
+  ),
+  reddit: (
       <Icon>
         <circle
           cx="12"
@@ -94,24 +81,16 @@ const socialLinks: SocialLink[] = [
         />
         <circle cx="17" cy="3" r="1.2" fill="currentColor" />
       </Icon>
-    ),
-  },
-  {
-    name: "GitHub",
-    url: "",
-    icon: (
+  ),
+  github: (
       <Icon>
         <path
           d="M12 3.5C7.3 3.5 3.5 7.4 3.5 12.1C3.5 16 6 19.3 9.5 20.4V17.3C7.2 17.8 6.5 16.2 6.5 16.2C6 15 5.3 14.6 5.3 14.6C4.3 14 5.4 14 5.4 14C6.6 14.1 7.2 15.3 7.2 15.3C8.2 17 9.8 16.5 10.5 16.2C10.6 15.4 10.9 14.9 11.2 14.7C9.3 14.5 7.3 13.7 7.3 10.5C7.3 9.6 7.6 8.8 8.2 8.1C8.1 7.9 7.9 7 8.3 5.9C8.3 5.9 9.1 5.6 11.2 7C11.9 6.8 12.6 6.7 13.3 6.7C14 6.7 14.7 6.8 15.4 7C17.5 5.6 18.3 5.9 18.3 5.9C18.7 7 18.5 7.9 18.4 8.1C19 8.8 19.3 9.6 19.3 10.5C19.3 13.7 17.3 14.5 15.4 14.7C15.8 15 16.1 15.6 16.1 16.5V20.4C19.6 19.3 22.1 16 22.1 12.1C22.1 7.4 18.3 3.5 13.6 3.5H12Z"
           fill="currentColor"
         />
       </Icon>
-    ),
-  },
-  {
-    name: "LinkedIn",
-    url: "",
-    icon: (
+  ),
+  linkedin: (
       <Icon>
         <rect
           x="4"
@@ -132,9 +111,8 @@ const socialLinks: SocialLink[] = [
           strokeLinecap="round"
         />
       </Icon>
-    ),
-  },
-];
+  ),
+};
 
 export default function ContactSection({
   cubeSize,
@@ -181,7 +159,7 @@ export default function ContactSection({
         type="button"
         className="contactCopyButton"
         onClick={() => copyToClipboard(value)}
-        aria-label={isCopied ? `Copied ${value}` : `Copy ${value}`}
+        aria-label={isCopied ? `${siteContent.contact.copied}${value}` : `${siteContent.contact.copy}${value}`}
       >
         {isCopied ? "✓" : "⧉"}
       </button>
@@ -222,9 +200,9 @@ export default function ContactSection({
             </Icon>
           </span>
 
-          <span className="contactValue">sumitkumar9674@gmail.com</span>
+          <span className="contactValue">{siteLinks.email}</span>
 
-          {renderCopyButton("sumitkumar9674@gmail.com")}
+          {renderCopyButton(siteLinks.email)}
         </div>
 
         <div className="contactItem">
@@ -241,15 +219,15 @@ export default function ContactSection({
             </Icon>
           </span>
 
-          <span className="contactValue">9764536604</span>
+          <span className="contactValue">{siteLinks.phone}</span>
 
-          {renderCopyButton("9764536604")}
+          {renderCopyButton(siteLinks.phone)}
         </div>
       </div>
 
       {variant === "default" && (
         <div className="contactSocials">
-          {socialLinks.map((social) => (
+          {siteLinks.social.map((social) => (
             <a
               key={social.name}
               href={social.url || undefined}
@@ -262,7 +240,7 @@ export default function ContactSection({
                 }
               }}
             >
-              {social.icon}
+              {socialIcons[social.icon]}
             </a>
           ))}
         </div>

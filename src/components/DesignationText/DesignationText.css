@@ -16,7 +16,7 @@
 
 .designationTextStatic {
   overflow: hidden;
-  color: #d3ddd4;
+  color: var(--color-text-designation);
   text-overflow: ellipsis;
   white-space: nowrap;
 }

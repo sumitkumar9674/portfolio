@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { siteContent } from "../content/siteContent";
 
 // Profile photo assets
 import background from "../assets/Profile_Photo/background.png";
@@ -300,7 +301,7 @@ export default function ProfilePhoto({
       {/* Current profile image */}
       <img
         src={getProfileImage()}
-        alt="Portrait of Sumit Kumar"
+        alt={`${siteContent.home.portraitAltPrefix}${siteContent.home.name}`}
         draggable={false}
         style={{
           position: "absolute",

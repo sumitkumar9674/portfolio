@@ -4,10 +4,10 @@
   display: flex;
   gap: 5px;
   padding: 6px;
-  border: 1px solid rgba(220, 239, 219, 0.16);
+  border: 1px solid color-mix(in srgb, var(--palette-border-blue) 16%, transparent);
   border-radius: 4px;
-  background: rgba(10, 16, 15, 0.78);
-  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.2);
+  background: color-mix(in srgb, var(--color-surface-navigation) 78%, transparent);
+  box-shadow: 0 8px 26px color-mix(in srgb, var(--palette-black) 20%, transparent);
   backdrop-filter: blur(12px);
 }
 
@@ -38,7 +38,7 @@
   border: 1px solid transparent;
   border-radius: 2px;
   background: transparent;
-  color: #adb8b0;
+  color: var(--color-text-secondary);
   font-family: var(--font-mono, ui-monospace, monospace);
   /* Fit the longest label within each of the six equal-width buttons. */
   font-size: min(10px, calc((100vw - 71px - min(132px, 9vw)) * 0.0195));
@@ -49,17 +49,17 @@
 }
 
 .cubeScreenNavigation button:hover {
-  border-color: rgba(220, 239, 219, 0.15);
-  color: var(--paper, #f1f0e8);
+  border-color: color-mix(in srgb, var(--palette-border-blue) 15%, transparent);
+  color: var(--paper);
 }
 
 .cubeScreenNavigation button[aria-current="page"] {
-  border-color: rgba(199, 242, 124, 0.3);
-  background: rgba(199, 242, 124, 0.08);
-  color: var(--accent, #c7f27c);
+  border-color: color-mix(in srgb, var(--color-accent-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--color-accent-primary) 8%, transparent);
+  color: var(--accent);
 }
 
 .cubeScreenNavigation button:focus-visible {
-  outline: 2px solid var(--accent, #c7f27c);
+  outline: 2px solid var(--accent);
   outline-offset: 1px;
 }

@@ -29,7 +29,7 @@ export default function WireframePhoneObject({
   rotateY = -20,
   rotateZ = 0,
 
-  color = "#00f0ff",
+  color = "var(--color-accent-secondary)",
 }: WireframePhoneObjectProps) {
   return (
     <div

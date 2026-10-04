@@ -8,8 +8,8 @@ type WireframeMonitorObjectProps = {
 
 export default function WireframeMonitorObject({
   size = 180,
-  glowColor = "#00ffff",
-  screenColor = "rgba(220, 250, 255, 0.08)",
+  glowColor = "var(--color-accent-secondary)",
+  screenColor = "var(--color-monitor-screen)",
 }: WireframeMonitorObjectProps) {
   return (
     <div

@@ -8,8 +8,8 @@ type WireframePCObjectProps = {
 
 export default function WireframePCObject({
   size = 180,
-  color = "#a93097",
-  glowColor = "#00ffff",
+  color = "var(--color-accent-tertiary)",
+  glowColor = "var(--color-accent-secondary)",
 }: WireframePCObjectProps) {
   return (
     <div

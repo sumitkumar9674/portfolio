@@ -44,6 +44,7 @@ type Quaternion = {
 // ------------------------------------------------------------
 
 type Direction = "left" | "right" | "up" | "down";
+type RotationEasing = "ease-in-out" | "ease-in" | "linear" | "ease-out";
 
 // ------------------------------------------------------------
 // Screen names
@@ -209,6 +210,17 @@ function slerpQuaternion(
 
     w: start.w * weightStart + endQuaternion.w * weightEnd,
   };
+}
+
+// Match the slope of chained rolls at their exact 90° boundaries.
+function easeRotationProgress(progress: number, easing: RotationEasing): number {
+  if (easing === "ease-in") return progress * progress * (2 - progress);
+  if (easing === "linear") return progress;
+  if (easing === "ease-out") return progress + progress * progress - progress ** 3;
+
+  return progress < 0.5
+    ? 2 * progress * progress
+    : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 }
 
 // ------------------------------------------------------------
@@ -630,6 +642,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     startRotation: Quaternion,
     targetRotation: Quaternion,
     onComplete?: () => void,
+    easing: RotationEasing = "ease-in-out",
   ) {
     const startTime = performance.now();
     const prefersReducedMotion = window.matchMedia(
@@ -643,13 +656,11 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
       const rawProgress = Math.min(elapsed / movementDuration, 1);
 
       // ------------------------------------------------------
-      // Smooth ease-in / ease-out.
+      // Chained rolls share the same boundary speed; a standalone
+      // roll or orientation correction keeps the original easing.
       // ------------------------------------------------------
 
-      const progress =
-        rawProgress < 0.5
-          ? 2 * rawProgress * rawProgress
-          : 1 - Math.pow(-2 * rawProgress + 2, 2) / 2;
+      const progress = easeRotationProgress(rawProgress, easing);
 
       // ------------------------------------------------------
       // Calculate current physical cube orientation.
@@ -831,13 +842,26 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
   function performNavigationRoll(
     direction: Direction,
     currentRotation: Quaternion,
+    targetScreen: ScreenId,
+    isFirstRoll: boolean,
     onComplete: (nextRotation: Quaternion) => void,
   ) {
     const targetRotation = getMovementRotation(direction, currentRotation);
 
-    animateCubeTo(currentRotation, targetRotation, () => {
-      onComplete(targetRotation);
-    });
+    // Anticipate the endpoint only to choose its easing. The search
+    // still checks the physical front face after this exact roll.
+    const endsOnTarget = getFrontScreen(targetRotation) === targetScreen;
+    let easing: RotationEasing = isFirstRoll ? "ease-in" : "linear";
+    if (endsOnTarget) {
+      easing = isFirstRoll ? "ease-in-out" : "ease-out";
+    }
+
+    animateCubeTo(
+      currentRotation,
+      targetRotation,
+      () => onComplete(targetRotation),
+      easing,
+    );
   }
 
   // ----------------------------------------------------------
@@ -923,6 +947,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
     const firstAxis = Math.random() < 0.5 ? "horizontal" : "vertical";
 
     const secondAxis = firstAxis === "horizontal" ? "vertical" : "horizontal";
+    let hasStartedNavigationRoll = false;
 
     // --------------------------------------------------------
     // Search one axis.
@@ -978,23 +1003,32 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
       // Perform exactly one physical 90° roll.
       // ------------------------------------------------------
 
-      performNavigationRoll(direction, currentRotation, (nextRotation) => {
-        // --------------------------------------------------
-        // Check immediately after the completed 90° roll.
-        // --------------------------------------------------
+      const isFirstRoll = !hasStartedNavigationRoll;
+      hasStartedNavigationRoll = true;
 
-        if (getFrontScreen(nextRotation) === targetScreen) {
-          onFinished(true, nextRotation);
+      performNavigationRoll(
+        direction,
+        currentRotation,
+        targetScreen,
+        isFirstRoll,
+        (nextRotation) => {
+          // --------------------------------------------------
+          // Check immediately after the completed 90° roll.
+          // --------------------------------------------------
 
-          return;
-        }
+          if (getFrontScreen(nextRotation) === targetScreen) {
+            onFinished(true, nextRotation);
 
-        // --------------------------------------------------
-        // Continue the same axis sweep.
-        // --------------------------------------------------
+            return;
+          }
 
-        searchAxis(axis, nextRotation, rollCount + 1, onFinished);
-      });
+          // --------------------------------------------------
+          // Continue the same axis sweep.
+          // --------------------------------------------------
+
+          searchAxis(axis, nextRotation, rollCount + 1, onFinished);
+        },
+      );
     };
 
     // --------------------------------------------------------
@@ -1164,7 +1198,7 @@ export default function CubeTest({ rotationDuration = 350 }: CubeTestProps) {
           >
             <WireframeCubeObject
               size={cubeSize * 1.09}
-              color="#c7f27c45"
+              color="color-mix(in srgb, var(--color-accent-primary) 27.0588%, transparent)"
               lineWidth={1.25}
               x={0}
               y={0}

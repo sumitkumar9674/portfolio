@@ -37,7 +37,7 @@ export default function NeonText({
   fontFamily = "Arial",
   fontSize = "32px",
 
-  textColor = "#00ffff",
+  textColor = "var(--color-accent-secondary)",
   backgroundColor = "transparent",
 
   initialDelay = 500,

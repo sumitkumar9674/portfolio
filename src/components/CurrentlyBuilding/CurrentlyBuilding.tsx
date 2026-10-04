@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import DesignationText from "../DesignationText/DesignationText";
 import DecodeText from "../DecodeText/DecodeText";
+import { siteContent } from "../../content/siteContent";
 import "./CurrentlyBuilding.css";
 
 type Project = {
@@ -120,7 +121,7 @@ export default function CurrentlyBuilding({
       }
     >
       <div className="currentlyBuildingHeader">
-        <div className="currentlyBuildingLabel">Currently Working</div>
+        <div className="currentlyBuildingLabel">{siteContent.currentlyBuilding.heading}</div>
 
         <div className="currentlyBuildingProject">
           <DesignationText

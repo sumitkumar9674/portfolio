@@ -8,43 +8,20 @@ import NeonFrame from "../../components/NeonFrame";
 import NeonText from "../../components/NeonText";
 import ProfilePhoto from "../../components/ProfilePhoto";
 import SocialLinks from "../../components/SocialLinks/SocialLinks";
+import { siteContent } from "../../content/siteContent";
 
 type HomeScreenProps = {
   cubeSize: number;
   isActive: boolean;
   isFirstOpen: boolean;
+  presentation?: "cube" | "vertical";
 };
-
-const capabilities = [
-  {
-    number: "01",
-    title: "Product interfaces",
-    description: "Clear flows with thoughtful visual detail.",
-  },
-  {
-    number: "02",
-    title: "Web + mobile",
-    description: "Useful experiences on every screen.",
-  },
-  {
-    number: "03",
-    title: "Custom software",
-    description: "Tools and systems shaped to fit.",
-  },
-  {
-    number: "04",
-    title: "Interactive experiences",
-    description: "Distinctive moments with depth and purpose.",
-  },
-];
-
-const introduction =
-  "We turn ambitious ideas into polished digital products—from clear interfaces and mobile experiences to custom tools and interactive systems.";
 
 export default function HomeScreen({
   cubeSize,
   isActive,
   isFirstOpen,
+  presentation = "cube",
 }: HomeScreenProps) {
   const profilePhotoSize = cubeSize * 0.29;
   const profileCornerRadius = Math.min(profilePhotoSize * 0.06, 18);
@@ -62,19 +39,19 @@ export default function HomeScreen({
       <div className="homeScreen3DLayer" aria-hidden="true" />
 
       <div className="homeScreenContent">
-        <header className="homeScreenHeader" aria-label="StickForYou">
-          <span className="homeHeaderLabel">DIGITAL PRODUCTS · MADE WITH CARE</span>
-          <img className="homeLogo" src={flatLogo} alt="StickForYou" />
+        <header className="homeScreenHeader" aria-label={siteContent.brand.name}>
+          <span className="homeHeaderLabel">{siteContent.home.headerLabel}</span>
+          <img className="homeLogo" src={flatLogo} alt={siteContent.brand.name} />
         </header>
 
         <main className="homeScreenMain">
-          <section className="homeProfileContainer" aria-label="Introduction">
+          <section className="homeProfileContainer" aria-label={siteContent.home.introductionLabel}>
             <div className="homeProfileFrame">
               <NeonFrame
                 width="100%"
                 height="100%"
-                borderColor="#ddddddab"
-                cornerColor="#dddddd79"
+                borderColor="color-mix(in srgb, var(--color-profile-frame) 67.0588%, transparent)"
+                cornerColor="color-mix(in srgb, var(--color-profile-frame) 47.451%, transparent)"
                 cornerRadius={profileCornerRadius}
                 padding={0}
               >
@@ -83,43 +60,39 @@ export default function HomeScreen({
             </div>
 
             <div className="homeProfileInfo">
-              <span className="homeIdentityEyebrow">FOUNDER · STICKFORYOU</span>
+              <span className="homeIdentityEyebrow">{siteContent.home.founderPrefix}{siteContent.brand.name.toUpperCase()}</span>
               <div className="homeProfileName">
                 {isFirstOpen ? (
                   <NeonText
-                    text="Sumit Kumar"
+                    text={siteContent.home.name}
                     isActive={isActive}
                     fontSize="6.5cqw"
-                    textColor="#f1f0e8"
+                    textColor="var(--color-text-primary)"
                     fontFamily="array"
                   />
                 ) : (
                   <span className="homeProfileNameStatic">
-                    Sumit Kumar
+                    {siteContent.home.name}
                   </span>
                 )}
               </div>
               <DesignationText
-                designations={[
-                  "Product designer & developer",
-                  "Interactive experience builder",
-                  "Software product creator",
-                ]}
-                fontSize="2.2cqw"
+                designations={siteContent.home.designations}
+                fontSize={presentation === "vertical" ? "0.8rem" : "2.2cqw"}
               />
             </div>
             <div className="homePitch">
-              <h1 id="home-title">Thoughtful software, made for people.</h1>
+              <h1 id="home-title">{siteContent.home.headline}</h1>
               <div className="homeIntroductionCopy">
                 {isFirstOpen ? (
                   <DecodeText
-                    text={introduction}
-                    fontSize="1.8cqw"
+                    text={siteContent.home.introduction}
+                    fontSize={presentation === "vertical" ? "0.85rem" : "1.8cqw"}
                     padding="0"
                     wrap
                   />
                 ) : (
-                  <p>{introduction}</p>
+                  <p>{siteContent.home.introduction}</p>
                 )}
               </div>
             </div>
@@ -127,11 +100,11 @@ export default function HomeScreen({
 
           <section className="homeCapabilities" aria-labelledby="home-capabilities-title">
             <header className="homeCapabilitiesHeader">
-              <h2 id="home-capabilities-title">WHAT WE CAN BUILD</h2>
-              <span>DESIGN → PRODUCT → SYSTEM</span>
+              <h2 id="home-capabilities-title">{siteContent.home.capabilitiesTitle}</h2>
+              <span>{siteContent.home.capabilitiesFlow}</span>
             </header>
             <div className="homeCapabilityGrid">
-              {capabilities.map((capability) => (
+              {siteContent.home.capabilities.map((capability) => (
                 <article className="homeCapability" key={capability.number}>
                   <span className="homeCapabilityNumber">{capability.number}</span>
                   <div>
@@ -144,10 +117,10 @@ export default function HomeScreen({
             </div>
           </section>
 
-          <footer className="homeContactContainer" aria-label="Contact information">
+          <footer className="homeContactContainer" aria-label={siteContent.home.contactLabel}>
             <div className="homeContactHeading">
-              <span>HAVE SOMETHING IN MIND?</span>
-              <span className="homeContactPrompt">LET’S TALK <b aria-hidden="true">↓</b></span>
+              <span>{siteContent.home.contactQuestion}</span>
+              <span className="homeContactPrompt">{siteContent.home.contactPrompt} <b aria-hidden="true">↓</b></span>
             </div>
             <ContactSection cubeSize={cubeSize} variant="compact" />
           </footer>

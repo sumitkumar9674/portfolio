@@ -8,8 +8,8 @@ type CubeObjectProps = {
 
 export default function CubeObject({
   size = 80,
-  color = "#020617",
-  glowColor = "#00ffff",
+  color = "var(--color-background-deep)",
+  glowColor = "var(--color-accent-secondary)",
 }: CubeObjectProps) {
   const halfSize = size / 2;
 

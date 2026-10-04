@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, type ReactNode } from "react";
 import { useBlogsPage } from "../hooks/useBlogsPage";
 import BlogsPage from "../pages/Blogs/BlogsPage";
+import { siteContent } from "../content/siteContent";
 
 export default function SiteShell({ children }: { children: ReactNode }) {
   const showingBlogs = useBlogsPage();
@@ -12,7 +13,7 @@ export default function SiteShell({ children }: { children: ReactNode }) {
     document.documentElement.dataset.page = showingBlogs ? "blogs" : "portfolio";
     if (showingBlogs) {
       returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      document.title = "Build notes · StickForYou";
+      document.title = `${siteContent.journal.documentTitlePrefix}${siteContent.brand.name}`;
       reader.current?.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true });
     } else {
       returnFocus.current?.focus({ preventScroll: true });
@@ -27,7 +28,7 @@ export default function SiteShell({ children }: { children: ReactNode }) {
   return (
     <div className="siteShell">
       <div className="siteBackground" aria-hidden="true" />
-      {/* Keep the cube mounted and measured, including while the journal is open. */}
+      {/* Keep the selected portfolio presentation mounted while the journal is open. */}
       <div className="portfolioPresentation" data-hidden={showingBlogs} inert={showingBlogs} aria-hidden={showingBlogs}>
         {children}
       </div>

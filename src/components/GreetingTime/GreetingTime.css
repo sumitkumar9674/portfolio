@@ -6,16 +6,16 @@
   justify-content: space-between;
   box-sizing: border-box;
   padding: 0 calc(var(--cube-size) * 0.01);
-  border: 1px solid #ffffff;
+  border: 1px solid var(--palette-white);
 }
 
 .greetingTimeText {
   font-size: calc(var(--cube-size) * 0.021);
-  color: #ffffff;
+  color: var(--palette-white);
   font-family: "Quicksand", sans-serif;
 }
 
 .greetingTimeClock {
   font-size: calc(var(--cube-size) * 0.017);
-  color: #888888;
+  color: var(--palette-neutral-muted);
 }

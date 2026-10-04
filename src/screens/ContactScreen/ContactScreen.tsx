@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { siteContent } from "../../content/siteContent";
 import "./ContactScreen.css";
 
 export type ContactInquiry = {
@@ -33,7 +34,7 @@ export default function ContactScreen({ isActive, isFirstOpen }: ContactScreenPr
     };
 
     // Keep a clean, typed payload ready for a future email or API handler.
-    setStatus(`Brief prepared for ${inquiry.name}. Nothing has been sent.`);
+    setStatus(`${siteContent.contact.statusBeforeName}${inquiry.name}${siteContent.contact.statusAfterName}`);
   }
 
   return (
@@ -47,59 +48,54 @@ export default function ContactScreen({ isActive, isFirstOpen }: ContactScreenPr
     >
       <header className="contactHeading">
         <div>
-          <span className="screenEyebrow">START A CONVERSATION · 06</span>
-          <h1 id="contact-title">What are you working on?</h1>
+          <span className="screenEyebrow">{siteContent.contact.eyebrow}</span>
+          <h1 id="contact-title">{siteContent.contact.heading}</h1>
         </div>
-        <span className="contactHeadingNote">A little context makes for a better first conversation.</span>
+        <span className="contactHeadingNote">{siteContent.contact.introduction}</span>
       </header>
 
       <form className="contactForm" onSubmit={handleSubmit}>
         <div className="contactField">
-          <label htmlFor="contact-name">Your name <span aria-hidden="true">*</span></label>
-          <input id="contact-name" name="name" autoComplete="name" placeholder="How should I address you?" required />
+          <label htmlFor="contact-name">{siteContent.contact.labels.name} <span aria-hidden="true">*</span></label>
+          <input id="contact-name" name="name" autoComplete="name" placeholder={siteContent.contact.placeholders.name} required />
         </div>
         <div className="contactField">
-          <label htmlFor="contact-email">Email <span aria-hidden="true">*</span></label>
-          <input id="contact-email" name="email" type="email" autoComplete="email" placeholder="you@company.com" required />
+          <label htmlFor="contact-email">{siteContent.contact.labels.email} <span aria-hidden="true">*</span></label>
+          <input id="contact-email" name="email" type="email" autoComplete="email" placeholder={siteContent.contact.placeholders.email} required />
         </div>
         <div className="contactField">
-          <label htmlFor="contact-company">Company <span className="optionalLabel">OPTIONAL</span></label>
-          <input id="contact-company" name="company" autoComplete="organization" placeholder="Your team or business" />
+          <label htmlFor="contact-company">{siteContent.contact.labels.company} <span className="optionalLabel">{siteContent.contact.labels.optional}</span></label>
+          <input id="contact-company" name="company" autoComplete="organization" placeholder={siteContent.contact.placeholders.company} />
         </div>
         <div className="contactField">
-          <label htmlFor="contact-type">What do you need? <span aria-hidden="true">*</span></label>
+          <label htmlFor="contact-type">{siteContent.contact.labels.type} <span aria-hidden="true">*</span></label>
           <select id="contact-type" name="projectType" defaultValue="" required>
-            <option value="" disabled>Select a project type</option>
-            <option>Website or web app</option>
-            <option>Mobile app</option>
-            <option>Product design</option>
-            <option>Something else</option>
+            <option value="" disabled>{siteContent.contact.placeholders.type}</option>
+            {siteContent.contact.projectTypes.map((type) => <option key={type}>{type}</option>)}
           </select>
         </div>
         <div className="contactField">
-          <label htmlFor="contact-budget">Approx. budget <span className="optionalLabel">OPTIONAL</span></label>
-          <input id="contact-budget" name="budget" placeholder="Range and currency, if known" />
+          <label htmlFor="contact-budget">{siteContent.contact.labels.budget} <span className="optionalLabel">{siteContent.contact.labels.optional}</span></label>
+          <input id="contact-budget" name="budget" placeholder={siteContent.contact.placeholders.budget} />
         </div>
         <div className="contactField">
-          <label htmlFor="contact-timeline">Ideal timing <span className="optionalLabel">OPTIONAL</span></label>
+          <label htmlFor="contact-timeline">{siteContent.contact.labels.timing} <span className="optionalLabel">{siteContent.contact.labels.optional}</span></label>
           <select id="contact-timeline" name="timeline" defaultValue="">
-            <option value="">Still exploring</option>
-            <option>As soon as possible</option>
-            <option>Within 1–3 months</option>
-            <option>Later this year</option>
+            <option value="">{siteContent.contact.timelines[0]}</option>
+            {siteContent.contact.timelines.slice(1).map((timing) => <option key={timing}>{timing}</option>)}
           </select>
         </div>
         <div className="contactField contactFieldWide">
-          <label htmlFor="contact-goals">A little about the project <span aria-hidden="true">*</span></label>
-          <textarea id="contact-goals" name="goals" placeholder="What are you hoping to make, and what would success look like?" rows={3} required />
+          <label htmlFor="contact-goals">{siteContent.contact.labels.goals} <span aria-hidden="true">*</span></label>
+          <textarea id="contact-goals" name="goals" placeholder={siteContent.contact.placeholders.goals} rows={3} required />
         </div>
         <div className="contactFormActions">
-          <p id="contact-form-note">No email is sent yet. This form is a preview of the future inquiry flow.</p>
-          <button type="submit">Prepare project brief <span aria-hidden="true">↗</span></button>
+          <p id="contact-form-note">{siteContent.contact.formNote}</p>
+          <button type="submit">{siteContent.contact.submit} <span aria-hidden="true">↗</span></button>
         </div>
         <p className="contactFormStatus" role="status" aria-live="polite">{status}</p>
       </form>
-      <footer className="contactFooter"><span>NO COMMITMENT · JUST A GOOD PLACE TO START</span><span>HELLO, FUTURE COLLABORATION</span></footer>
+      <footer className="contactFooter"><span>{siteContent.contact.footerLeft}</span><span>{siteContent.contact.footerRight}</span></footer>
     </section>
   );
 }

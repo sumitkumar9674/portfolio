@@ -9,7 +9,7 @@ import SiteShell from "./components/SiteShell";
 import "./styles.css";
 
 // Load the cube prototype only when /cube-test is opened.
-// The normal portfolio continues to use App.tsx unchanged.
+// The normal portfolio uses App.tsx to choose its presentation at boot.
 const isCubeTest = window.location.pathname === "/cube-test";
 
 createRoot(document.getElementById("root")!).render(

@@ -12,7 +12,7 @@
 
   box-sizing: border-box;
 
-  border: 1px solid #ffffff17;
+  border: 1px solid color-mix(in srgb, var(--palette-white) 9.0196%, transparent);
 
   overflow: hidden;
 }
@@ -36,7 +36,7 @@
 .currentlyBuildingLabel {
   font-size: calc(var(--cube-size) * 0.021);
 
-  color: #ffffff;
+  color: var(--palette-white);
 
   white-space: nowrap;
 }

@@ -5,13 +5,22 @@
 // The splash screen stays visible while initial resources load.
 // ------------------------------------------------------------
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import CubeTest from "./pages/CubeTest/CubeTest";
+import VerticalPortfolio from "./pages/VerticalPortfolio/VerticalPortfolio";
 import SplashScreen from "./components/SplashScreen/SplashScreen";
 import { preloadSpaceDefender, spaceDefenderReady } from "./components/SpaceDefenderAssets";
 
+// The module is evaluated once per page load; resizing never reselects a presentation.
+const bootPresentation = window.innerWidth > window.innerHeight ? "landscape" : "portrait";
+
 function App() {
   const [isBooted, setIsBooted] = useState(false);
+
+  useLayoutEffect(() => {
+    document.documentElement.dataset.presentation = bootPresentation;
+    return () => { delete document.documentElement.dataset.presentation; };
+  }, []);
 
   useEffect(() => {
     Promise.all([preloadSpaceDefender(), spaceDefenderReady])
@@ -26,7 +35,7 @@ function App() {
 
   return (
     <>
-      <CubeTest />
+      {bootPresentation === "landscape" ? <CubeTest /> : <VerticalPortfolio />}
       {!isBooted && <SplashScreen />}
     </>
   );

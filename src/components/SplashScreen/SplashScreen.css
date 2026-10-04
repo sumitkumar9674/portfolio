@@ -6,16 +6,20 @@
   place-items: center;
   overflow: hidden;
   background:
-    radial-gradient(ellipse at center, rgba(73, 99, 79, 0.2), transparent 52%),
-    #090d0d;
-  color: var(--paper, #f1f0e8);
+    radial-gradient(
+      ellipse at center,
+      color-mix(in srgb, var(--color-ambient-splash) 20%, transparent),
+      transparent 52%
+    ),
+    var(--color-background-page);
+  color: var(--paper);
 }
 
 .splashScreen::before {
   position: absolute;
   width: min(70vw, 70vh, 520px);
   aspect-ratio: 1;
-  border: 1px solid rgba(199, 242, 124, 0.11);
+  border: 1px solid color-mix(in srgb, var(--color-accent-primary) 11%, transparent);
   transform: rotate(45deg);
   content: "";
 }
@@ -30,12 +34,12 @@
 }
 
 .splashScreenText span {
-  color: var(--muted, #9ca9a2);
+  color: var(--muted);
   font-size: 10px;
 }
 
 .splashScreenText strong {
-  color: var(--paper, #f1f0e8);
+  color: var(--paper);
   font-family: var(--font-display, sans-serif);
   font-size: clamp(26px, 6vw, 42px);
   font-weight: 400;
@@ -46,14 +50,14 @@
   width: 72px;
   height: 2px;
   overflow: hidden;
-  background: rgba(199, 242, 124, 0.18);
+  background: color-mix(in srgb, var(--color-accent-primary) 18%, transparent);
 }
 
 .splashScreenText i::after {
   display: block;
   width: 38%;
   height: 100%;
-  background: var(--accent, #c7f27c);
+  background: var(--accent);
   animation: loading-line 1300ms ease-in-out infinite alternate;
   content: "";
 }

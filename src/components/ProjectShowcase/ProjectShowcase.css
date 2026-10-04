@@ -1,0 +1,281 @@
+.projectShowcase {
+  --showcase-accent: var(--accent);
+  display: grid;
+  grid-template-rows: minmax(0, 16fr) minmax(0, 70fr) minmax(0, 14fr);
+  gap: 0.5cqw;
+  min-width: 0;
+  min-height: 0;
+  container-type: inline-size;
+}
+
+.projectShowcase[data-category="live"] {
+  --showcase-accent: var(--accent-cool);
+}
+
+.projectShowcaseHeading,
+.projectShowcaseControls,
+.projectShowcaseCardMeta,
+.projectShowcaseCardTail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5cqw;
+  min-width: 0;
+  font-family: var(--font-mono);
+}
+
+.projectShowcaseHeading {
+  border-bottom: 0.12cqw solid var(--line);
+  color: var(--projects-muted, var(--muted));
+  font-size: 1.8cqw;
+  letter-spacing: 0.08em;
+}
+
+.projectShowcaseHeading h2 {
+  margin: 0;
+  color: var(--showcase-accent);
+  font: inherit;
+}
+
+.projectShowcaseStage {
+  position: relative;
+  min-height: 0;
+  overflow: clip;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-accent-secondary) 2.3529%, transparent) 18%,
+    color-mix(in srgb, var(--color-accent-secondary) 2.3529%, transparent) 82%,
+    transparent
+  );
+}
+
+.projectShowcaseCards {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+}
+
+.projectShowcaseCard {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 1cqw;
+  width: 70%;
+  height: 96%;
+  min-width: 0;
+  padding: 1.6cqw 2.2cqw;
+  overflow: hidden;
+  border: 0.14cqw solid color-mix(in srgb, var(--showcase-accent) 45%, transparent);
+  border-left-color: var(--showcase-accent);
+  background: linear-gradient(
+    145deg,
+    var(--color-surface-project-start),
+    var(--color-surface-cube-panel-start) 70%
+  );
+  box-shadow: 0 1.3cqw 3cqw
+    color-mix(in srgb, var(--palette-black) 46.6667%, transparent);
+  transform: translate(-50%, -50%);
+  transition: transform 450ms cubic-bezier(0.22, 0.75, 0.25, 1), opacity 450ms ease;
+}
+
+.projectShowcase[data-category="live"] .projectShowcaseCard {
+  background: linear-gradient(
+    145deg,
+    var(--color-surface-project-live-start),
+    var(--color-surface-project-live-end) 70%
+  );
+}
+
+.projectShowcaseCard[data-slot="0"] { z-index: 3; opacity: 1; }
+.projectShowcaseCard[data-slot="-1"] { z-index: 2; opacity: 0.58; transform: translate(-119%, -50%) scale(0.84); }
+.projectShowcaseCard[data-slot="1"] { z-index: 2; opacity: 0.58; transform: translate(19%, -50%) scale(0.84); }
+.projectShowcaseCard[data-slot="-2"] { opacity: 0; transform: translate(-176%, -50%) scale(0.72); }
+.projectShowcaseCard[data-slot="2"] { opacity: 0; transform: translate(76%, -50%) scale(0.72); }
+
+.projectShowcaseCardMeta {
+  color: var(--showcase-accent);
+  font-size: 1.55cqw;
+  letter-spacing: 0.06em;
+}
+
+.projectShowcaseCardMeta span:last-child {
+  font-size: 2.4cqw;
+}
+
+.projectShowcaseCardBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.4cqw;
+  min-width: 0;
+  min-height: 0;
+}
+
+.projectShowcaseCard[data-image="true"] .projectShowcaseCardBody {
+  grid-template-columns: minmax(0, 1fr) 26%;
+}
+
+.projectShowcaseCardCopy {
+  min-width: 0;
+  min-height: 0;
+}
+
+.projectShowcaseCardCopy h3 {
+  margin: 0 0 0.55cqw;
+  color: var(--paper);
+  font: 400 3.95cqw/1.05 var(--font-display);
+  letter-spacing: -0.03em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.projectShowcaseCardCopy p {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--projects-muted, var(--muted));
+  font-size: 2.05cqw;
+  line-height: 1.35;
+}
+
+.projectShowcaseCardBody img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  border: 0.12cqw solid var(--line);
+}
+
+.projectShowcaseCardTail {
+  padding-top: 0.8cqw;
+  border-top: 0.12cqw solid var(--line);
+  color: var(--projects-muted, var(--muted));
+  font-size: 1.45cqw;
+  white-space: nowrap;
+}
+
+.projectShowcaseStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7cqw;
+  color: var(--showcase-accent);
+}
+
+.projectShowcaseStatus > span {
+  width: 0.65cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.projectShowcaseCardTail ul {
+  display: flex;
+  gap: 0.7cqw;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+}
+
+.projectShowcaseCardTail li {
+  max-width: 12cqw;
+  padding: 0.35cqw 0.55cqw;
+  overflow: hidden;
+  border: 0.12cqw solid var(--line);
+  color: var(--showcase-accent);
+  text-overflow: ellipsis;
+}
+
+.projectShowcaseCardTail a {
+  flex: 0 0 auto;
+  color: var(--showcase-accent);
+  text-decoration: none;
+}
+
+.projectShowcaseCardTail a:hover { color: var(--paper); }
+
+.projectShowcaseSide {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  bottom: 0;
+  display: grid;
+  width: 16%;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--showcase-accent);
+  cursor: pointer;
+}
+
+.projectShowcasePrevious { left: 0; }
+.projectShowcaseNext { right: 0; }
+
+.projectShowcaseSide span {
+  display: grid;
+  width: 6cqw;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 0.12cqw solid var(--line);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-surface-control) 87.8431%, transparent);
+  font-size: 2.6cqw;
+}
+
+.projectShowcaseSide:hover span {
+  background: var(--showcase-accent);
+  color: var(--ink);
+}
+
+.projectShowcaseControls {
+  color: var(--projects-muted, var(--muted));
+  font-size: 1.45cqw;
+  letter-spacing: 0.05em;
+}
+
+.projectShowcaseControls b {
+  color: var(--showcase-accent);
+  font-weight: 400;
+}
+
+.projectShowcaseControls button {
+  padding: 0.8cqw 0 0.8cqw 1cqw;
+  border: 0;
+  background: transparent;
+  color: var(--showcase-accent);
+  cursor: pointer;
+  font: inherit;
+}
+
+.projectShowcaseControls button:hover { color: var(--paper); }
+
+.projectShowcaseEmpty {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  width: 70%;
+  height: 96%;
+  margin: auto;
+  border: 0.12cqw dashed var(--line);
+  color: var(--projects-muted, var(--muted));
+  text-align: center;
+}
+
+.projectShowcaseEmpty span { color: var(--showcase-accent); font: 2cqw var(--font-mono); }
+.projectShowcaseEmpty p { max-width: 75%; margin: 1cqw 0 0; font-size: 2cqw; }
+
+.projectShowcase :is(button, a):focus-visible {
+  outline: 0.3cqw solid var(--showcase-accent);
+  outline-offset: -0.3cqw;
+}
+
+.projectShowcase[data-reduced-motion="true"] .projectShowcaseCard { transition: none; }

@@ -9,11 +9,12 @@
   padding: 4.2%;
   overflow: hidden;
   container: defender / size;
-  background: linear-gradient(160deg, #14201a, #0b1210 72%);
+  background: linear-gradient(
+    160deg,
+    var(--color-surface-game-header),
+    var(--color-surface-game) 72%
+  );
   color: var(--paper);
-}
-.spaceDefenderScreen[data-first-open="true"] {
-  animation: panel-arrive 680ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
 }
 .spaceDefenderHeader,
 .spaceDefenderArena,
@@ -51,9 +52,20 @@
   overflow: hidden;
   border: 0.13cqw solid color-mix(in srgb, var(--accent-cool) 32%, transparent);
   background:
-    linear-gradient(90deg, transparent 49.9%, rgba(158, 201, 192, 0.07) 50%, transparent 50.1%),
-    linear-gradient(180deg, #07100e, #0e1b16 62%, #0b1210);
-  box-shadow: inset 0 0 0 0.7cqw rgba(4, 10, 8, 0.4);
+    linear-gradient(
+      90deg,
+      transparent 49.9%,
+      color-mix(in srgb, var(--color-accent-secondary) 7%, transparent) 50%,
+      transparent 50.1%
+    ),
+    linear-gradient(
+      180deg,
+      var(--color-surface-game-arena-top),
+      var(--color-surface-game-arena-middle) 62%,
+      var(--color-surface-game)
+    );
+  box-shadow: inset 0 0 0 0.7cqw
+    color-mix(in srgb, var(--color-shadow-game-inset) 40%, transparent);
 }
 .spaceDefenderArena::before,
 .spaceDefenderArena::after {
@@ -83,5 +95,6 @@
 .spaceDefenderStatus { display: flex; align-items: center; gap: 1cqw; color: var(--accent); }
 .spaceDefenderStatus i { width: 0.8cqw; height: 0.8cqw; border-radius: 50%; background: currentColor; box-shadow: 0 0 1.4cqw currentColor; }
 .spaceDefenderInstruction { color: var(--muted); }
-.spaceDefenderInstruction span, .spaceDefenderHits strong { color: var(--accent); }
+.spaceDefenderInstruction span { color: var(--accent); }
+.spaceDefenderHits strong { color: var(--accent-rose); }
 .spaceDefenderHits strong { font: inherit; }

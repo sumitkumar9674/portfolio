@@ -3,7 +3,7 @@ import "./DesignationText.css";
 import NeonText from "../NeonText";
 
 type DesignationTextProps = {
-  designations: string[];
+  designations: readonly string[];
   fontSize?: string | number;
   padding?: string | number;
 };
@@ -34,7 +34,7 @@ export default function DesignationText({
         text={designations[currentIndex]}
         isActive={true}
         fontSize={fontSize}
-        textColor="#d3ddd4"
+        textColor="var(--color-text-designation)"
         fontFamily="Bespoke Stencil"
         backgroundColor="transparent"
       />

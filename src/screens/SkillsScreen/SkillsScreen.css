@@ -13,10 +13,14 @@
   background:
     radial-gradient(
       ellipse at 52% 36%,
-      rgba(106, 157, 104, 0.13),
+      color-mix(in srgb, var(--color-ambient-forge) 13%, transparent),
       transparent 62%
     ),
-    linear-gradient(145deg, rgba(18, 29, 26, 0.98), rgba(9, 16, 15, 0.99));
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--color-surface-cube-panel-start) 98%, transparent),
+      color-mix(in srgb, var(--color-surface-forge-end) 99%, transparent)
+    );
 }
 
 .forgeHeader,
@@ -129,11 +133,11 @@
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 1.1cqw;
   padding: 1.3cqw 1.5cqw;
-  border: 1px solid rgba(158, 201, 192, 0.19);
+  border: 1px solid color-mix(in srgb, var(--color-accent-secondary) 19%, transparent);
   background: linear-gradient(
     145deg,
-    rgba(158, 201, 192, 0.075),
-    rgba(8, 15, 13, 0.3)
+    color-mix(in srgb, var(--color-accent-secondary) 7.5%, transparent),
+    color-mix(in srgb, var(--color-surface-forge-card-end) 30%, transparent)
   );
 }
 
@@ -175,7 +179,7 @@
   display: block;
   min-width: 0;
   padding-top: 0.7cqw;
-  border-top: 1px solid rgba(230, 239, 224, 0.1);
+  border-top: 1px solid color-mix(in srgb, var(--palette-border-blue) 10%, transparent);
   color: var(--accent-cool);
   font-family: var(--font-mono);
   font-size: 1.55cqw;
@@ -189,8 +193,8 @@
   grid-template-rows: auto minmax(0, 1fr);
   gap: 1cqw;
   padding: 1cqw 1.2cqw;
-  border: 1px solid rgba(158, 201, 192, 0.22);
-  background: rgba(6, 13, 11, 0.58);
+  border: 1px solid color-mix(in srgb, var(--color-accent-secondary) 22%, transparent);
+  background: color-mix(in srgb, var(--color-surface-forge-activity) 58%, transparent);
 }
 
 .forgeActivityLabel {
@@ -220,5 +224,5 @@
   height: 1cqw;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 1.3cqw rgba(199, 242, 124, 0.5);
+  box-shadow: 0 0 1.3cqw color-mix(in srgb, var(--color-accent-primary) 50%, transparent);
 }

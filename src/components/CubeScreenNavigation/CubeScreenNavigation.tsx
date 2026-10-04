@@ -1,5 +1,6 @@
 import "./CubeScreenNavigation.css";
 import { useEffect, useState } from "react";
+import { siteContent } from "../../content/siteContent";
 
 // ------------------------------------------------------------
 // Screen names
@@ -70,7 +71,7 @@ export default function CubeScreenNavigation({
 
   return (
     <div
-      aria-label="Portfolio screens"
+      aria-label={siteContent.navigation.cubeLabel}
       role="navigation"
       className={`cubeScreenNavigation ${
         isPortrait
@@ -82,42 +83,42 @@ export default function CubeScreenNavigation({
         aria-current={activeScreen === "home" ? "page" : undefined}
         onClick={() => onNavigate("home")}
       >
-        HOME
+        {siteContent.navigation.home}
       </button>
 
       <button
         aria-current={activeScreen === "projects" ? "page" : undefined}
         onClick={() => onNavigate("projects")}
       >
-        PROJECTS
+        {siteContent.navigation.projects}
       </button>
 
       <button
         aria-current={activeScreen === "skills" ? "page" : undefined}
         onClick={() => onNavigate("skills")}
       >
-        FORGE
+        {siteContent.navigation.forge}
       </button>
 
       <button
         aria-current={activeScreen === "blog" ? "page" : undefined}
         onClick={() => onNavigate("blog")}
       >
-        BLOG
+        {siteContent.navigation.blog}
       </button>
 
       <button
         aria-current={activeScreen === "contact" ? "page" : undefined}
         onClick={() => onNavigate("contact")}
       >
-        CONTACT
+        {siteContent.navigation.contact}
       </button>
 
       <button
         aria-current={activeScreen === "spaceDefender" ? "page" : undefined}
         onClick={() => onNavigate("spaceDefender")}
       >
-        SPACEDEFENDER
+        {siteContent.navigation.spaceDefender}
       </button>
     </div>
   );

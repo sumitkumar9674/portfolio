@@ -1,6 +1,7 @@
 // Editorial notes displayed on the permanently mounted Blog cube face.
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { blogPosts } from "../../data/blogPosts";
+import { siteContent } from "../../content/siteContent";
 import { useBlogsPage } from "../../hooks/useBlogsPage";
 import "./BlogScreen.css";
 
@@ -77,12 +78,12 @@ export default function BlogScreen({ isActive, isFirstOpen }: BlogScreenProps) {
       }}
     >
       <header className="blogHeader">
-        <div className="blogMeta"><span>BLOG / 04</span><span>ENGINEERING NOTES · BUILD LOG</span></div>
-        <h1 id="blog-title">Notes from the build.</h1>
-        <p>Decisions, experiments, and the work behind the things I make.</p>
+        <div className="blogMeta"><span>{siteContent.blog.eyebrow}</span><span>{siteContent.blog.meta}</span></div>
+        <h1 id="blog-title">{siteContent.blog.headingLines.join(" ")}</h1>
+        <p>{siteContent.blog.introduction}</p>
       </header>
 
-      <div className="blogCarousel" role="region" aria-roledescription="carousel" aria-label="Engineering notes">
+      <div className="blogCarousel" role="region" aria-roledescription="carousel" aria-label={siteContent.blog.carouselLabel}>
         <div className="blogCardStage">
           {slots.map((slot) => {
             const cardPosition = position + slot;
@@ -98,7 +99,7 @@ export default function BlogScreen({ isActive, isFirstOpen }: BlogScreenProps) {
                 <div className="blogPreviewMeta"><span>{post.category}</span><span>{post.index}</span></div>
                 <h2>{post.title}</h2>
                 <p>{post.summary}</p>
-                <ul className="blogPreviewTags" aria-label="Topics">
+                <ul className="blogPreviewTags" aria-label={siteContent.blog.topicsLabel}>
                   {post.tags.map((tag) => <li key={tag}>{tag}</li>)}
                 </ul>
                 <div className="blogPreviewStatus"><span className="blogStatusDot" />{post.status}<span aria-hidden="true">↗</span></div>
@@ -107,8 +108,8 @@ export default function BlogScreen({ isActive, isFirstOpen }: BlogScreenProps) {
           })}
         </div>
         {/* Stationary hit targets retain keyboard focus as the visual cards exchange places. */}
-        <button className="blogSideTarget blogSidePrevious" onClick={() => manuallyMove(-1)} aria-label={`Previous article: ${blogPosts[wrap(position - 1)].title}`}><span aria-hidden="true">←</span></button>
-        <button className="blogSideTarget blogSideNext" onClick={() => manuallyMove(1)} aria-label={`Next article: ${blogPosts[wrap(position + 1)].title}`}><span aria-hidden="true">→</span></button>
+        <button className="blogSideTarget blogSidePrevious" onClick={() => manuallyMove(-1)} aria-label={`${siteContent.blog.previousArticle}${blogPosts[wrap(position - 1)].title}`}><span aria-hidden="true">←</span></button>
+        <button className="blogSideTarget blogSideNext" onClick={() => manuallyMove(1)} aria-label={`${siteContent.blog.nextArticle}${blogPosts[wrap(position + 1)].title}`}><span aria-hidden="true">→</span></button>
       </div>
 
       <div className="blogControls">
@@ -116,14 +117,14 @@ export default function BlogScreen({ isActive, isFirstOpen }: BlogScreenProps) {
           <span>{String(wrap(position) + 1).padStart(2, "0")}</span> / {String(blogPosts.length).padStart(2, "0")}
           <span className="blogAccessible"> — {activePost.title}</span>
         </div>
-        <span className="blogBrowseHint">← EXPLORE THE NOTES →</span>
-        <button className="blogRotation" onClick={() => { setPaused((value) => !value); setInteraction((value) => value + 1); }} aria-label={paused ? "Resume automatic rotation" : "Pause automatic rotation"}>
-          {paused ? "▶ PLAY" : "Ⅱ PAUSE"}
+        <span className="blogBrowseHint">{siteContent.blog.explore}</span>
+        <button className="blogRotation" onClick={() => { setPaused((value) => !value); setInteraction((value) => value + 1); }} aria-label={paused ? siteContent.blog.resumeRotation : siteContent.blog.pauseRotation}>
+          {paused ? siteContent.blog.play : siteContent.blog.pause}
         </button>
       </div>
       <footer className="blogFooter">
-        <span>THE FULL STORY, BEYOND THE CUBE.</span>
-        <a href="#/blogs">VIEW ALL BLOGS <span aria-hidden="true">↗</span></a>
+        <span>{siteContent.blog.footer}</span>
+        <a href="#/blogs">{siteContent.blog.viewAll} <span aria-hidden="true">↗</span></a>
       </footer>
     </section>
   );
