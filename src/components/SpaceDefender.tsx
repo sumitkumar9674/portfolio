@@ -1,6 +1,13 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { siteContent } from "../content/siteContent";
-import { bulletSources, entitySources, explosionSources, heroSources, markSpaceDefenderReady, preloadSpaceDefender } from "./SpaceDefenderAssets";
+import {
+  bulletSources,
+  entitySources,
+  explosionSources,
+  heroSources,
+  markSpaceDefenderReady,
+  preloadSpaceDefender,
+} from "./SpaceDefenderAssets";
 import { getThemeColor } from "../theme/getThemeColor";
 
 const LOGO_PATTERN = [
@@ -44,7 +51,12 @@ function loadImage(src: string) {
   return image;
 }
 
-export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: SpaceDefenderProps) {
+export default function SpaceDefender({
+  isOpen,
+  onEngage,
+  onHit,
+  onWave,
+}: SpaceDefenderProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isOpenRef = useRef(isOpen);
   const frameRef = useRef<number | null>(null);
@@ -70,11 +82,21 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
     const blasts = explosionSources.map(loadImage);
     const targetFill = getThemeColor("--color-game-target");
     const hero = {
-      idle: [loadImage(heroSources["../assets/game/hero/idle_01.png"]), loadImage(heroSources["../assets/game/hero/idle_02.png"])],
+      idle: [
+        loadImage(heroSources["../assets/game/hero/idle_01.png"]),
+        loadImage(heroSources["../assets/game/hero/idle_02.png"]),
+      ],
       left: loadImage(heroSources["../assets/game/hero/moving_left.png"]),
       right: loadImage(heroSources["../assets/game/hero/moving_right.png"]),
     };
-    const images = [...entities, ...bulletImages, ...blasts, ...hero.idle, hero.left, hero.right];
+    const images = [
+      ...entities,
+      ...bulletImages,
+      ...blasts,
+      ...hero.idle,
+      hero.left,
+      hero.right,
+    ];
 
     let disposed = false;
     let ready = false;
@@ -98,14 +120,25 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
       const height = canvas.clientHeight;
       if (!width || !height) return;
       const columns = LOGO_PATTERN[0].length;
-      scale = Math.min(width / 700, width * 0.86 / (columns * TILE_SIZE), height * 0.47 / (LOGO_PATTERN.length * TILE_SIZE), 1.12);
+      scale = Math.min(
+        width / 700,
+        (width * 0.86) / (columns * TILE_SIZE),
+        (height * 0.47) / (LOGO_PATTERN.length * TILE_SIZE),
+        1.12,
+      );
       const tile = TILE_SIZE * scale;
       const left = (width - (columns - 1) * tile) / 2;
       const top = height * 0.17;
       targets = [];
       LOGO_PATTERN.forEach((row, r) => {
         [...row].forEach((pixel, c) => {
-          if (pixel === "1") targets.push({ x: left + c * tile, y: top + r * tile, explodingAt: null, sprite: entities[Math.floor(Math.random() * entities.length)] });
+          if (pixel === "1")
+            targets.push({
+              x: left + c * tile,
+              y: top + r * tile,
+              explodingAt: null,
+              sprite: entities[Math.floor(Math.random() * entities.length)],
+            });
         });
       });
       ship.y = height - 42 * scale;
@@ -118,7 +151,10 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
       const height = canvas.clientHeight;
       if (!width || !height) return;
       const active = isOpenRef.current;
-      const delta = active && lastFrameTime ? Math.min((time - lastFrameTime) / 1000, 0.05) : 0;
+      const delta =
+        active && lastFrameTime
+          ? Math.min((time - lastFrameTime) / 1000, 0.05)
+          : 0;
       lastFrameTime = active ? time : 0;
       if (active) gameTime += delta * 1000;
       ctx.clearRect(0, 0, width, height);
@@ -136,7 +172,12 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
           lastIdleSwitch = gameTime;
         }
         if (firing && gameTime - lastShot >= FIRE_INTERVAL) {
-          bullets.push({ x: ship.x, y: ship.y - 22 * scale, sprite: bulletImages[Math.floor(Math.random() * bulletImages.length)] });
+          bullets.push({
+            x: ship.x,
+            y: ship.y - 22 * scale,
+            sprite:
+              bulletImages[Math.floor(Math.random() * bulletImages.length)],
+          });
           lastShot = gameTime;
         }
       }
@@ -144,7 +185,14 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
       const bulletSize = 10 * scale;
       bullets.forEach((bullet) => {
         if (active) bullet.y -= height * 1.18 * delta;
-        if (bullet.sprite.naturalWidth) ctx.drawImage(bullet.sprite, bullet.x - bulletSize / 2, bullet.y - bulletSize / 2, bulletSize, bulletSize);
+        if (bullet.sprite.naturalWidth)
+          ctx.drawImage(
+            bullet.sprite,
+            bullet.x - bulletSize / 2,
+            bullet.y - bulletSize / 2,
+            bulletSize,
+            bulletSize,
+          );
       });
       if (active) bullets = bullets.filter((bullet) => bullet.y > -bulletSize);
 
@@ -154,17 +202,31 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
           const elapsed = gameTime - target.explodingAt;
           const blast = blasts[elapsed < EXPLOSION_TIME / 2 ? 0 : 1];
           const size = tile * 1.5;
-          if (blast?.naturalWidth) ctx.drawImage(blast, target.x - size / 2, target.y - size / 2, size, size);
+          if (blast?.naturalWidth)
+            ctx.drawImage(
+              blast,
+              target.x - size / 2,
+              target.y - size / 2,
+              size,
+              size,
+            );
           return;
         }
         const size = tile * 0.86;
         ctx.fillStyle = targetFill;
         ctx.fillRect(target.x - size / 2, target.y - size / 2, size, size);
         if (target.sprite.naturalWidth) {
-          const aspect = target.sprite.naturalWidth / target.sprite.naturalHeight;
+          const aspect =
+            target.sprite.naturalWidth / target.sprite.naturalHeight;
           const drawWidth = aspect > 1 ? size : size * aspect;
           const drawHeight = aspect > 1 ? size / aspect : size;
-          ctx.drawImage(target.sprite, target.x - drawWidth / 2, target.y - drawHeight / 2, drawWidth, drawHeight);
+          ctx.drawImage(
+            target.sprite,
+            target.x - drawWidth / 2,
+            target.y - drawHeight / 2,
+            drawWidth,
+            drawHeight,
+          );
         }
       });
 
@@ -172,7 +234,12 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
         let hits = 0;
         const radiusSquared = (tile * 0.55) ** 2;
         bullets.forEach((bullet) => {
-          const target = targets.find((candidate) => candidate.explodingAt === null && (bullet.x - candidate.x) ** 2 + (bullet.y - candidate.y) ** 2 < radiusSquared);
+          const target = targets.find(
+            (candidate) =>
+              candidate.explodingAt === null &&
+              (bullet.x - candidate.x) ** 2 + (bullet.y - candidate.y) ** 2 <
+                radiusSquared,
+          );
           if (target) {
             target.explodingAt = gameTime;
             bullet.y = -bulletSize * 2;
@@ -180,7 +247,11 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
           }
         });
         if (hits) onHit(hits);
-        targets = targets.filter((target) => target.explodingAt === null || gameTime - target.explodingAt < EXPLOSION_TIME);
+        targets = targets.filter(
+          (target) =>
+            target.explodingAt === null ||
+            gameTime - target.explodingAt < EXPLOSION_TIME,
+        );
         if (targets.length === 0) {
           wave++;
           makeWave();
@@ -188,9 +259,21 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
         }
       }
 
-      const image = direction === "left" ? hero.left : direction === "right" ? hero.right : hero.idle[idleFrame];
+      const image =
+        direction === "left"
+          ? hero.left
+          : direction === "right"
+            ? hero.right
+            : hero.idle[idleFrame];
       const shipSize = 67 * scale;
-      if (image.naturalWidth) ctx.drawImage(image, ship.x - shipSize / 2, ship.y - shipSize / 2, shipSize, shipSize);
+      if (image.naturalWidth)
+        ctx.drawImage(
+          image,
+          ship.x - shipSize / 2,
+          ship.y - shipSize / 2,
+          shipSize,
+          shipSize,
+        );
       if (!firstFramePainted) {
         firstFramePainted = true;
         markSpaceDefenderReady();
@@ -199,7 +282,8 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
     };
 
     const schedule = () => {
-      if (!disposed && ready && frameRef.current === null) frameRef.current = requestAnimationFrame(render);
+      if (!disposed && ready && frameRef.current === null)
+        frameRef.current = requestAnimationFrame(render);
     };
     scheduleRef.current = schedule;
     pauseRef.current = () => {
@@ -215,7 +299,14 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
       const dpr = window.devicePixelRatio || 1;
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
-      ctx.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
+      ctx.setTransform(
+        canvas.width / width,
+        0,
+        0,
+        canvas.height / height,
+        0,
+        0,
+      );
       bullets = [];
       ship.x = ship.targetX = width / 2;
       makeWave();
@@ -230,7 +321,13 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
       const width = canvas.clientWidth;
       if (!bounds.width || !width) return;
       const halfShip = 34 * scale;
-      ship.targetX = Math.max(halfShip, Math.min(width - halfShip, (clientX - bounds.left) / bounds.width * width));
+      ship.targetX = Math.max(
+        halfShip,
+        Math.min(
+          width - halfShip,
+          ((clientX - bounds.left) / bounds.width) * width,
+        ),
+      );
       firing = true;
       if (!engaged) {
         engaged = true;
@@ -240,7 +337,9 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
     const mouseMove = (event: MouseEvent) => {
       if (isOpenRef.current) moveShip(event.clientX);
     };
-    const mouseLeave = () => { firing = false; };
+    const mouseLeave = () => {
+      firing = false;
+    };
     const touchMove = (event: TouchEvent) => {
       if (!isOpenRef.current || !event.touches.length) return;
       event.preventDefault();
@@ -255,13 +354,28 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
 
     // Wait for the shared splash preload, then paint exactly one ready frame if inactive.
     preloadSpaceDefender()
-      .then(() => Promise.all(images.map((image) => image.decode())))
+      .catch((error) => {
+        console.error("Failed to preload some SpaceDefender assets:", error);
+      })
+      .then(() =>
+        Promise.all(
+          images.map((image) =>
+            image.decode().catch((error) => {
+              console.error(
+                "Failed to decode SpaceDefender sprite:",
+                image.src,
+                error,
+              );
+            }),
+          ),
+        ),
+      )
       .then(() => {
         if (disposed) return;
+
         ready = true;
         schedule();
-      })
-      .catch((error) => console.error("Failed to prepare SpaceDefender sprites:", error));
+      });
 
     return () => {
       disposed = true;
@@ -279,5 +393,11 @@ export default function SpaceDefender({ isOpen, onEngage, onHit, onWave }: Space
     };
   }, [onEngage, onHit, onWave]);
 
-  return <canvas ref={canvasRef} className="spaceDefenderCanvas" aria-label={siteContent.spaceDefender.canvasLabel} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      className="spaceDefenderCanvas"
+      aria-label={siteContent.spaceDefender.canvasLabel}
+    />
+  );
 }
