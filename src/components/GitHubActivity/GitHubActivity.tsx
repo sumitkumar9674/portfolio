@@ -62,7 +62,9 @@ const transformContributions = (
 };
 
 export default function GitHubActivity() {
-  const [contributionTheme] = useState<[string, string, string, string, string]>(() => [
+  const [contributionTheme] = useState<
+    [string, string, string, string, string]
+  >(() => [
     getThemeColor("--color-calendar-level-0"),
     getThemeColor("--color-calendar-level-1"),
     getThemeColor("--color-calendar-level-2"),
@@ -71,14 +73,17 @@ export default function GitHubActivity() {
   ]);
 
   return (
-    <div className="gitHubActivity" aria-label={siteContent.githubActivity.ariaLabel}>
+    <div
+      className="gitHubActivity"
+      aria-label={siteContent.githubActivity.ariaLabel}
+    >
       <GitHubCalendar
         username={siteLinks.github.username}
         year="last"
         colorScheme="dark"
         transformData={transformContributions}
-        blockSize={12}
-        blockMargin={1}
+        blockSize={21}
+        blockMargin={0.7}
         blockRadius={0}
         fontSize={13}
         showMonthLabels
@@ -86,7 +91,10 @@ export default function GitHubActivity() {
         showColorLegend
         labels={{
           totalCount: siteContent.githubActivity.totalCount,
-          legend: { less: siteContent.githubActivity.less, more: siteContent.githubActivity.more },
+          legend: {
+            less: siteContent.githubActivity.less,
+            more: siteContent.githubActivity.more,
+          },
         }}
         // Level zero stays visible as an empty day; GitHub counts remain untouched.
         theme={{
