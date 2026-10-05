@@ -138,17 +138,12 @@
   cursor: pointer;
   transition:
     background 180ms ease,
-    color 180ms ease,
-    transform 180ms ease;
+    color 180ms ease;
 }
 
 .contactFormActions button:not(:disabled):hover {
   background: transparent;
   color: var(--accent);
-}
-
-.contactFormActions button:not(:disabled):active {
-  transform: translateY(1px);
 }
 
 .contactFormActions button:disabled {
@@ -194,4 +189,47 @@
   font-family: var(--font-mono);
   font-size: clamp(6px, 1.65cqw, 8px);
   letter-spacing: 0.04em;
+}
+
+/* Compact the cube form without changing the portrait form's touch targets.
+   The panel's own gap uses its height, since cqw cannot reference itself. */
+.cubeBottom .contactScreen.cubePanel {
+  gap: 1%;
+  padding-block: 2.5%;
+}
+
+.cubeBottom .contactHeading h1 {
+  margin: 0.6cqw 0 0;
+}
+
+.cubeBottom .contactForm {
+  row-gap: 0.8cqw;
+  padding-top: 0;
+}
+
+.cubeBottom .contactField {
+  gap: 0.5cqw;
+}
+
+.cubeBottom .contactField input,
+.cubeBottom .contactField select,
+.cubeBottom .contactField textarea {
+  min-height: clamp(36px, 8cqw, 44px);
+}
+
+.cubeBottom .contactField textarea {
+  min-height: clamp(60px, 12cqw, 76px);
+  padding-top: 1.5cqw;
+}
+
+.cubeBottom .contactFormActions p {
+  margin: 0;
+}
+
+.cubeBottom .contactFormActions button {
+  min-height: 36px;
+}
+
+.cubeBottom .contactFooter {
+  padding-top: 0.8cqw;
 }
