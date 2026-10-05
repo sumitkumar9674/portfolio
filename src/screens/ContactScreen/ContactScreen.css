@@ -191,11 +191,22 @@
   letter-spacing: 0.04em;
 }
 
-/* Compact the cube form without changing the portrait form's touch targets.
-   The panel's own gap uses its height, since cqw cannot reference itself. */
+/* Keep the form grouped; bounded section gaps absorb spare face height and
+   contract for status content. Tiny cubes still scroll; portrait is unchanged. */
 .cubeBottom .contactScreen.cubePanel {
-  gap: 1%;
+  display: grid;
+  grid-template-rows:
+    max-content
+    minmax(1%, 18%)
+    max-content
+    minmax(1%, 18%)
+    max-content;
+  gap: 0;
   padding-block: 2.5%;
+}
+
+.cubeBottom .contactHeading {
+  grid-row: 1;
 }
 
 .cubeBottom .contactHeading h1 {
@@ -203,7 +214,10 @@
 }
 
 .cubeBottom .contactForm {
-  row-gap: 0.8cqw;
+  grid-row: 3;
+  grid-auto-rows: max-content;
+  align-content: start;
+  row-gap: clamp(0px, 0.8cqw, 6px);
   padding-top: 0;
 }
 
@@ -231,5 +245,6 @@
 }
 
 .cubeBottom .contactFooter {
+  grid-row: 5;
   padding-top: 0.8cqw;
 }
