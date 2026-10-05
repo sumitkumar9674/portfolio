@@ -10,7 +10,7 @@ export const siteContent = {
     headerLabel: "THE RIGHT MAN · THE WRONG PLACE",
     introductionLabel: "PLAYER PROFILE",
     founderPrefix: "CAPTAIN · ",
-    name: "Sumit Kumar",
+    name: "Sumit Kumar 07",
     designations: [
       "UI / UX focused developer",
       "Designing systems that scale",
