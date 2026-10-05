@@ -142,19 +142,46 @@
     transform 180ms ease;
 }
 
-.contactFormActions button:hover {
+.contactFormActions button:not(:disabled):hover {
   background: transparent;
   color: var(--accent);
 }
 
-.contactFormActions button:active {
+.contactFormActions button:not(:disabled):active {
   transform: translateY(1px);
+}
+
+.contactFormActions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
 }
 
 .contactFormStatus {
   min-height: 1.4em;
+  display: grid;
+  gap: 0.45cqw;
   color: var(--accent);
   font-size: clamp(8px, 2.1cqw, 11px);
+}
+
+.contactFormStatus strong,
+.contactFormStatus p,
+.contactFormStatus span {
+  margin: 0;
+}
+
+.contactFormStatus p {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.contactFormStatus span {
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+.contactFormStatus[data-state="error"] strong {
+  color: var(--accent-rose);
 }
 
 .contactFooter {
