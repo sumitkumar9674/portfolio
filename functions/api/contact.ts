@@ -8,6 +8,7 @@ interface Env {
 type ContactFunctionContext = {
   request: Request;
   env: Env;
+  waitUntil(promise: Promise<unknown>): void;
 };
 
 type ContactRequest = {
@@ -24,6 +25,23 @@ type CloudflareEmailResult = {
   success?: boolean;
   errors?: Array<{ code?: number }>;
 };
+
+type EmailPayload = {
+  to: string[];
+  from: string;
+  reply_to: string;
+  subject: string;
+  text: string;
+  html: string;
+};
+
+type EmailSendResult =
+  | { success: true }
+  | {
+      success: false;
+      status?: number;
+      errorCodes?: Array<number | undefined>;
+    };
 
 const FIELD_LIMITS = {
   name: 100,
@@ -102,7 +120,7 @@ function displayValue(value: string) {
   return value || "Not provided";
 }
 
-function buildEmailContent(contact: ContactRequest) {
+function buildNotificationContent(contact: ContactRequest) {
   const fields = [
     ["Name", contact.name],
     ["Email", contact.email],
@@ -133,6 +151,29 @@ function buildEmailContent(contact: ContactRequest) {
   return { text, html };
 }
 
+function buildAcknowledgementContent(contact: ContactRequest) {
+  const name = contact.name.replace(/\s+/g, " ");
+  const text = `Hi ${name},
+
+Thanks for reaching out through sfysumit.app.
+
+Your message made it through successfully. I've received your enquiry and I'll get back to you as soon as I can.
+
+If you'd like to add anything else, you can reply directly to this email.
+
+— Sumit
+sfysumit.app`;
+  const html = `
+    <p>Hi ${escapeHtml(name)},</p>
+    <p>Thanks for reaching out through sfysumit.app.</p>
+    <p>Your message made it through successfully. I've received your enquiry and I'll get back to you as soon as I can.</p>
+    <p>If you'd like to add anything else, you can reply directly to this email.</p>
+    <p>— Sumit<br />sfysumit.app</p>
+  `;
+
+  return { text, html };
+}
+
 function hasEmailConfiguration(env: Env) {
   return Boolean(
     env.CF_ACCOUNT_ID &&
@@ -140,6 +181,66 @@ function hasEmailConfiguration(env: Env) {
     env.CONTACT_TO_EMAIL &&
     env.CONTACT_FROM_EMAIL,
   );
+}
+
+async function sendEmail(env: Env, payload: EmailPayload): Promise<EmailSendResult> {
+  try {
+    const response = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${env.CF_ACCOUNT_ID}/email/sending/send`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.CF_EMAIL_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      },
+    );
+
+    let result: CloudflareEmailResult | null = null;
+    try {
+      result = (await response.json()) as CloudflareEmailResult;
+    } catch {
+      // A missing or malformed result is treated as a rejected send below.
+    }
+
+    if (!response.ok || result?.success !== true) {
+      return {
+        success: false,
+        status: response.status,
+        errorCodes: result?.errors?.map((error) => error.code),
+      };
+    }
+
+    return { success: true };
+  } catch {
+    return { success: false };
+  }
+}
+
+function logEmailFailure(message: string, result: EmailSendResult) {
+  if (result.success) return;
+
+  console.error(message, {
+    status: result.status,
+    errorCodes: result.errorCodes,
+  });
+}
+
+async function sendVisitorAcknowledgement(env: Env, contact: ContactRequest) {
+  const { text, html } = buildAcknowledgementContent(contact);
+  const result = await sendEmail(env, {
+    to: [contact.email],
+    from: env.CONTACT_FROM_EMAIL,
+    reply_to: env.CONTACT_FROM_EMAIL,
+    subject: "Message received — sfysumit.app",
+    text,
+    html,
+  });
+
+  if (!result.success) {
+    logEmailFailure("Visitor acknowledgement email failed.", result);
+  }
 }
 
 export async function onRequestPost(
@@ -169,43 +270,32 @@ export async function onRequestPost(
       throw new Error("Contact email environment is incomplete.");
     }
 
-    const { text, html } = buildEmailContent(contact);
-    const emailResponse = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${context.env.CF_ACCOUNT_ID}/email/sending/send`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${context.env.CF_EMAIL_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: [context.env.CONTACT_TO_EMAIL],
-          from: context.env.CONTACT_FROM_EMAIL,
-          reply_to: contact.email,
-          subject: `Portfolio enquiry from ${contact.name.replace(/\s+/g, " ")}`,
-          text,
-          html,
-        }),
-      },
-    );
+    const { text, html } = buildNotificationContent(contact);
+    const notificationResult = await sendEmail(context.env, {
+      to: [context.env.CONTACT_TO_EMAIL],
+      from: context.env.CONTACT_FROM_EMAIL,
+      reply_to: contact.email,
+      subject: `Portfolio enquiry from ${contact.name.replace(/\s+/g, " ")}`,
+      text,
+      html,
+    });
 
-    let emailResult: CloudflareEmailResult | null = null;
-    try {
-      emailResult = (await emailResponse.json()) as CloudflareEmailResult;
-    } catch {
-      // A missing or malformed result is treated as a rejected send below.
-    }
-
-    if (!emailResponse.ok || emailResult?.success !== true) {
-      console.error("Cloudflare email send failed.", {
-        status: emailResponse.status,
-        errorCodes: emailResult?.errors?.map((error) => error.code),
-      });
-
+    if (!notificationResult.success) {
+      logEmailFailure("Main contact notification email failed.", notificationResult);
       return jsonResponse(
         { success: false, message: "Message could not be sent." },
         502,
       );
+    }
+
+    try {
+      context.waitUntil(
+        sendVisitorAcknowledgement(context.env, contact).catch(() => {
+          console.error("Visitor acknowledgement email failed unexpectedly.");
+        }),
+      );
+    } catch {
+      console.error("Visitor acknowledgement email could not be scheduled.");
     }
 
     return jsonResponse({ success: true, message: "Message sent." }, 200);
