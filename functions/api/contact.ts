@@ -3,6 +3,7 @@ interface Env {
   CF_EMAIL_TOKEN: string;
   CONTACT_TO_EMAIL: string;
   CONTACT_FROM_EMAIL: string;
+  RESEND_API_KEY: string;
 }
 
 type ContactFunctionContext = {
@@ -41,6 +42,18 @@ type EmailSendResult =
       success: false;
       status?: number;
       errorCodes?: Array<number | undefined>;
+    };
+
+type ResendErrorResult = {
+  name?: string;
+};
+
+type ResendSendResult =
+  | { success: true }
+  | {
+      success: false;
+      status?: number;
+      errorName?: string;
     };
 
 const FIELD_LIMITS = {
@@ -218,6 +231,41 @@ async function sendEmail(env: Env, payload: EmailPayload): Promise<EmailSendResu
   }
 }
 
+async function sendResendEmail(
+  env: Env,
+  payload: EmailPayload,
+): Promise<ResendSendResult> {
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      let result: ResendErrorResult | null = null;
+      try {
+        result = (await response.json()) as ResendErrorResult;
+      } catch {
+        // The HTTP status is sufficient when Resend does not return JSON.
+      }
+
+      return {
+        success: false,
+        status: response.status,
+        errorName: result?.name,
+      };
+    }
+
+    return { success: true };
+  } catch {
+    return { success: false };
+  }
+}
+
 function logEmailFailure(message: string, result: EmailSendResult) {
   if (result.success) return;
 
@@ -228,10 +276,17 @@ function logEmailFailure(message: string, result: EmailSendResult) {
 }
 
 async function sendVisitorAcknowledgement(env: Env, contact: ContactRequest) {
+  if (!env.RESEND_API_KEY) {
+    console.error(
+      "Visitor acknowledgement email skipped: RESEND_API_KEY is missing.",
+    );
+    return;
+  }
+
   const { text, html } = buildAcknowledgementContent(contact);
-  const result = await sendEmail(env, {
+  const result = await sendResendEmail(env, {
     to: [contact.email],
-    from: env.CONTACT_FROM_EMAIL,
+    from: `Sumit Kumar <${env.CONTACT_FROM_EMAIL}>`,
     reply_to: env.CONTACT_FROM_EMAIL,
     subject: "Message received — sfysumit.app",
     text,
@@ -239,7 +294,10 @@ async function sendVisitorAcknowledgement(env: Env, contact: ContactRequest) {
   });
 
   if (!result.success) {
-    logEmailFailure("Visitor acknowledgement email failed.", result);
+    console.error("Visitor acknowledgement email failed.", {
+      status: result.status,
+      errorName: result.errorName,
+    });
   }
 }
 
