@@ -170,18 +170,22 @@ function buildAcknowledgementContent(contact: ContactRequest) {
 
 Thanks for reaching out through sfysumit.app.
 
-Your message made it through successfully. I've received your enquiry and I'll get back to you as soon as I can.
+I’ve received your message and wanted to let you know it came through successfully. I’m looking forward to hearing more and seeing where the conversation goes.
 
-If you'd like to add anything else, you can reply directly to this email.
+If there’s anything else you’d like to add in the meantime, just reply directly to this email and it’ll reach me.
 
-— Sumit
+Thanks again for getting in touch.
+
+Best,
+Sumit Kumar
 sfysumit.app`;
   const html = `
-    <p>Hi ${escapeHtml(name)},</p>
-    <p>Thanks for reaching out through sfysumit.app.</p>
-    <p>Your message made it through successfully. I've received your enquiry and I'll get back to you as soon as I can.</p>
-    <p>If you'd like to add anything else, you can reply directly to this email.</p>
-    <p>— Sumit<br />sfysumit.app</p>
+    <p style="margin: 0 0 10px;">Hi ${escapeHtml(name)},</p>
+    <p style="margin: 0 0 10px;">Thanks for reaching out through sfysumit.app.</p>
+    <p style="margin: 0 0 10px;">I’ve received your message and wanted to let you know it came through successfully. I’m looking forward to hearing more and seeing where the conversation goes.</p>
+    <p style="margin: 0 0 10px;">If there’s anything else you’d like to add in the meantime, just reply directly to this email and it’ll reach me.</p>
+    <p style="margin: 0 0 10px;">Thanks again for getting in touch.</p>
+    <p style="margin: 0;">Best,<br />Sumit Kumar<br />sfysumit.app</p>
   `;
 
   return { text, html };
@@ -288,7 +292,7 @@ async function sendVisitorAcknowledgement(env: Env, contact: ContactRequest) {
     to: [contact.email],
     from: `Sumit Kumar <${env.CONTACT_FROM_EMAIL}>`,
     reply_to: env.CONTACT_FROM_EMAIL,
-    subject: "Message received — sfysumit.app",
+    subject: "Thanks for reaching out — sfysumit.app",
     text,
     html,
   });
