@@ -24,12 +24,20 @@
   font-size: clamp(22px, 7cqw, 38px);
 }
 
+.contactHeadingAside {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5cqw;
+}
+
 .contactHeadingNote {
   max-width: 22ch;
-  padding-bottom: 1cqw;
   color: var(--muted);
   font-size: clamp(8px, 2.4cqw, 12px);
   line-height: 1.45;
+  text-align: right;
 }
 
 .contactForm {
@@ -191,15 +199,15 @@
   letter-spacing: 0.04em;
 }
 
-/* Keep the form grouped; bounded section gaps absorb spare face height and
-   contract for status content. Tiny cubes still scroll; portrait is unchanged. */
+/* Keep the form grouped; section gaps absorb spare face height and contract
+   for status content. Tiny cubes still scroll; portrait uses its own flow. */
 .cubeBottom .contactScreen.cubePanel {
   display: grid;
   grid-template-rows:
     max-content
-    minmax(1%, 18%)
+    minmax(0, 1fr)
     max-content
-    minmax(1%, 18%)
+    minmax(0, 1fr)
     max-content;
   gap: 0;
   padding-block: 2.5%;
@@ -219,6 +227,10 @@
   align-content: start;
   row-gap: clamp(0px, 0.8cqw, 6px);
   padding-top: 0;
+}
+
+.cubeBottom .contactFormStatus {
+  min-height: calc(5.5em + 0.8cqw);
 }
 
 .cubeBottom .contactField {

@@ -49,17 +49,18 @@ const socialIcons: Record<SocialIconName, ReactNode> = {
 };
 
 type SocialLinksProps = {
-  cubeSize: number;
+  cubeSize?: number;
+  variant?: "default" | "compact";
 };
 
-export default function SocialLinks({ cubeSize }: SocialLinksProps) {
+export default function SocialLinks({ cubeSize, variant = "default" }: SocialLinksProps) {
   return (
     <section
-      className="socialLinks"
+      className={`socialLinks${variant === "compact" ? " socialLinksCompact" : ""}`}
       aria-label={siteContent.social.ariaLabel}
-      style={{ "--cube-size": `${cubeSize}px` } as React.CSSProperties}
+      style={cubeSize === undefined ? undefined : { "--cube-size": `${cubeSize}px` } as React.CSSProperties}
     >
-      <span className="socialLinksLabel">{siteContent.social.heading}</span>
+      {variant === "default" && <span className="socialLinksLabel">{siteContent.social.heading}</span>}
       <ul className="socialLinksList">
         {siteLinks.social.map((platform) => (
           <li key={platform.name}>
@@ -78,6 +79,7 @@ export default function SocialLinks({ cubeSize }: SocialLinksProps) {
               <button
                 className="socialLinkControl"
                 type="button"
+                disabled
                 aria-label={`${platform.name}${siteContent.social.comingSoonSuffix}`}
                 title={`${platform.name}${siteContent.social.comingSoonSuffix}`}
               >

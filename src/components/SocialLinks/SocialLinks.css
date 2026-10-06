@@ -38,7 +38,7 @@
   background: color-mix(in srgb, var(--color-surface-social) 32%, transparent);
   color: var(--accent-cool);
   cursor: pointer;
-  transition: color 160ms ease, border-color 160ms ease, background 160ms ease, transform 160ms ease;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
 
 .socialLinkControl svg {
@@ -63,14 +63,40 @@
   stroke: none;
 }
 
-.socialLinkControl:hover {
-  transform: translateY(-2px);
+.socialLinkControl:not(:disabled):hover {
   border-color: var(--accent);
   background: color-mix(in srgb, var(--color-accent-primary) 8%, transparent);
   color: var(--accent);
 }
 
+.socialLinkControl:not(:disabled):active {
+  background: color-mix(in srgb, var(--color-accent-primary) 16%, transparent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.socialLinkControl:disabled {
+  cursor: default;
+}
+
 .socialLinkControl:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+.socialLinksCompact {
+  width: auto;
+  min-height: 0;
+  flex: 0 0 auto;
+  gap: 0;
+  padding: 0;
+  border: 0;
+}
+
+.socialLinksCompact .socialLinksList {
+  gap: 0.5cqw;
+}
+
+.socialLinksCompact .socialLinkControl {
+  width: max(32px, 4cqw);
+  height: max(32px, 4cqw);
 }

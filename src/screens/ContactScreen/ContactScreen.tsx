@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import SocialLinks from "../../components/SocialLinks/SocialLinks";
 import { siteContent } from "../../content/siteContent";
 import {
   sendContactMessage,
@@ -170,7 +171,10 @@ export default function ContactScreen({ isActive, isFirstOpen }: ContactScreenPr
           <span className="screenEyebrow">{siteContent.contact.eyebrow}</span>
           <h1 id="contact-title">{siteContent.contact.heading}</h1>
         </div>
-        <span className="contactHeadingNote">{siteContent.contact.introduction}</span>
+        <div className="contactHeadingAside">
+          <span className="contactHeadingNote">{siteContent.contact.introduction}</span>
+          <SocialLinks variant="compact" />
+        </div>
       </header>
 
       <form className="contactForm" onSubmit={handleSubmit}>
