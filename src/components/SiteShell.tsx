@@ -1,19 +1,22 @@
 import { useLayoutEffect, useRef, type ReactNode } from "react";
-import { useBlogsPage } from "../hooks/useBlogsPage";
+import { useBlogsPage, useContactPage } from "../hooks/useBlogsPage";
 import BlogsPage from "../pages/Blogs/BlogsPage";
+import ContactPage from "../pages/Contact/ContactPage";
 import { siteContent } from "../content/siteContent";
 
 export default function SiteShell({ children }: { children: ReactNode }) {
   const showingBlogs = useBlogsPage();
+  const showingContact = useContactPage();
+  const standalonePage = showingBlogs ? "blogs" : showingContact ? "contact" : null;
   const returnFocus = useRef<HTMLElement | null>(null);
   const reader = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     const previousTitle = document.title;
-    document.documentElement.dataset.page = showingBlogs ? "blogs" : "portfolio";
-    if (showingBlogs) {
+    document.documentElement.dataset.page = standalonePage ?? "portfolio";
+    if (standalonePage) {
       returnFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-      document.title = `${siteContent.journal.documentTitlePrefix}${siteContent.brand.name}`;
+      document.title = `${standalonePage === "blogs" ? siteContent.journal.documentTitlePrefix : siteContent.contact.documentTitlePrefix}${siteContent.brand.name}`;
       reader.current?.querySelector<HTMLElement>("h1")?.focus({ preventScroll: true });
     } else {
       returnFocus.current?.focus({ preventScroll: true });
@@ -23,16 +26,16 @@ export default function SiteShell({ children }: { children: ReactNode }) {
       delete document.documentElement.dataset.page;
       document.title = previousTitle;
     };
-  }, [showingBlogs]);
+  }, [standalonePage]);
 
   return (
     <div className="siteShell">
       <div className="siteBackground" aria-hidden="true" />
-      {/* Keep the selected portfolio presentation mounted while the journal is open. */}
-      <div className="portfolioPresentation" data-hidden={showingBlogs} inert={showingBlogs} aria-hidden={showingBlogs}>
+      {/* Keep the selected portfolio presentation mounted while a full page is open. */}
+      <div className="portfolioPresentation" data-hidden={standalonePage !== null} inert={standalonePage !== null} aria-hidden={standalonePage !== null}>
         {children}
       </div>
-      {showingBlogs && <div ref={reader}><BlogsPage /></div>}
+      {standalonePage && <div ref={reader}>{showingBlogs ? <BlogsPage /> : <ContactPage />}</div>}
     </div>
   );
 }

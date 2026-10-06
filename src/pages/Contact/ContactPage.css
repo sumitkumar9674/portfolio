@@ -1,0 +1,66 @@
+.contactPage {
+  width: min(100%, 76rem);
+  margin-inline: auto;
+  padding: 2rem 6% 5rem;
+  color: var(--paper);
+}
+
+.contactPageNav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line);
+  font: 0.75rem var(--font-mono);
+  letter-spacing: 0.06em;
+}
+
+.contactPageNav a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.contactPageNav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+
+.contactPageNav > span {
+  color: var(--muted);
+}
+
+.contactPageHeader {
+  padding-block: 3rem;
+}
+
+.contactPageHeader > p:first-child {
+  margin: 0;
+  color: var(--accent-cool);
+  font: 0.75rem/1.6 var(--font-mono);
+  letter-spacing: 0.12em;
+}
+
+.contactPageHeader h1 {
+  max-width: 18ch;
+  margin: 1rem 0;
+  font: 400 clamp(2.5rem, 7vw, 5rem)/1.05 var(--font-display);
+  letter-spacing: -0.045em;
+}
+
+.contactPageHeader > p:last-child {
+  max-width: 48ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.contactPageForm {
+  max-width: 52rem;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--color-surface-contact) 54%, transparent);
+  container-type: inline-size;
+}

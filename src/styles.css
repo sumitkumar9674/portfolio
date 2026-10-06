@@ -126,7 +126,7 @@ textarea:focus-visible {
   pointer-events: none;
 }
 
-/* Only the standalone reader unlocks normal document scrolling. */
-html[data-page="blogs"] { overflow-x: clip; overflow-y: auto; overscroll-behavior-y: auto; }
-html[data-page="blogs"] body,
-html[data-page="blogs"] #root { height: auto; min-height: 100%; overflow: visible; overscroll-behavior-y: auto; }
+/* Standalone pages unlock normal document scrolling. */
+html:is([data-page="blogs"], [data-page="contact"]) { overflow-x: clip; overflow-y: auto; overscroll-behavior-y: auto; }
+html:is([data-page="blogs"], [data-page="contact"]) body,
+html:is([data-page="blogs"], [data-page="contact"]) #root { height: auto; min-height: 100%; overflow: visible; overscroll-behavior-y: auto; }

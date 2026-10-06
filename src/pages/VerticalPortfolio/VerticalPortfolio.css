@@ -1,5 +1,5 @@
 /* The portrait presentation uses normal document flow; cube overflow rules stay scoped away. */
-html[data-presentation="portrait"]:not([data-page="blogs"]) {
+html[data-presentation="portrait"]:not(:is([data-page="blogs"], [data-page="contact"])) {
   height: auto;
   min-height: 100%;
   overflow-x: clip;
@@ -7,14 +7,14 @@ html[data-presentation="portrait"]:not([data-page="blogs"]) {
   overscroll-behavior-y: auto;
 }
 
-html[data-presentation="portrait"]:not([data-page="blogs"]) body,
-html[data-presentation="portrait"]:not([data-page="blogs"]) #root {
+html[data-presentation="portrait"]:not(:is([data-page="blogs"], [data-page="contact"])) body,
+html[data-presentation="portrait"]:not(:is([data-page="blogs"], [data-page="contact"])) #root {
   height: auto;
   min-height: 100%;
   overflow: visible;
 }
 
-html[data-presentation="portrait"]:not([data-page="blogs"]) { scroll-behavior: smooth; }
+html[data-presentation="portrait"]:not(:is([data-page="blogs"], [data-page="contact"])) { scroll-behavior: smooth; }
 
 .verticalPortfolio {
   width: 100%;
@@ -192,25 +192,13 @@ html[data-presentation="portrait"]:not([data-page="blogs"]) { scroll-behavior: s
 .verticalBlog .blogHeader h1 { margin: 0; font-size: clamp(1.6rem, 7.2cqw, 2.6rem); }
 .verticalBlog .blogHeader > p { font-size: max(0.7rem, 2.5cqw); }
 
-/* Contact's form belongs to document flow; only the page has a vertical scrollbar. */
-.verticalContact .contactScreen.cubePanel {
+/* The Contact invitation stays square in the portrait presentation. */
+.verticalContact .contactGateway.cubePanel {
   width: 100%;
   height: auto;
-  overflow: visible;
+  aspect-ratio: 1;
   touch-action: auto;
-  container-type: inline-size;
-  gap: 1.5rem;
 }
-.verticalContact .contactHeading { display: grid; gap: 0.5rem; }
-.verticalContact .contactHeading h1 { margin: 0.65rem 0 0; font-size: clamp(1.6rem, 7cqw, 2.4rem); line-height: 1.05; }
-.verticalContact .contactHeadingNote { max-width: none; font-size: 0.75rem; }
-.verticalContact .contactForm {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
-  gap: 1rem;
-}
-.verticalContact .contactFormActions { flex-wrap: wrap; }
-.verticalContact .contactFormActions p { margin: 0; }
-.verticalContact .contactFooter { flex-wrap: wrap; }
 
 /* The mounted game paints its ready frame during boot; visibility controls play. */
 .verticalDefender .spaceDefenderScreen {

@@ -9,3 +9,7 @@ function subscribe(onChange: () => void) {
 export function useBlogsPage() {
   return useSyncExternalStore(subscribe, () => window.location.hash === "#/blogs", () => false);
 }
+
+export function useContactPage() {
+  return useSyncExternalStore(subscribe, () => window.location.hash === "#/contact", () => false);
+}

@@ -175,6 +175,21 @@ export const siteContent = {
     eyebrow: "OPEN COMMS · 05",
     heading: "Your story could start here.",
     introduction: "Give me the outline. We’ll figure out the rest together.",
+    documentTitlePrefix: "Contact · ",
+    pageNavigationLabel: "Contact page navigation",
+    pageBack: "← Back to portfolio",
+    pageBrandSuffix: "CONTACT",
+    gateway: {
+      status: "CHANNEL / OPEN",
+      heading: "Let's make something worth talking about.",
+      introduction: "Have an idea, a product that needs shaping, or a problem worth solving?",
+      categories: [
+        { number: "01", title: "BUILD SOMETHING", detail: "Web · Mobile · Backend" },
+        { number: "02", title: "IMPROVE SOMETHING", detail: "Product · UI · Systems" },
+        { number: "03", title: "JUST TALK", detail: "Questions · Ideas · Opportunities" },
+      ],
+      action: "OPEN A CONVERSATION",
+    },
     labels: {
       name: "Your name",
       email: "Email",
